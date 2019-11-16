@@ -11,12 +11,13 @@
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>12</java.version>
+        <java.version>11</java.version>
         <guava.version>28.1-jre</guava.version>
     </properties>
 
     <modules>
         <module>hw01-maven</module>
+        <module>hw02-collections</module>
     </modules>
 
     <dependencies>
@@ -25,6 +26,18 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.2</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>
