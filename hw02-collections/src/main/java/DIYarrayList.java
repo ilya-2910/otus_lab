@@ -40,7 +40,7 @@ public class DIYarrayList<T> implements List<T> {
     @Override
     public boolean add(T t) {
         if (array.length == size) {
-            array = Arrays.copyOf(array, size + 1);
+            array = Arrays.copyOf(array, size + 10);
         }
         array[size] = t;
         size++;
@@ -84,6 +84,7 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T get(int i) {
+        Objects.checkIndex(i, size);
         return (T) array[i];
     }
 
@@ -143,6 +144,7 @@ public class DIYarrayList<T> implements List<T> {
 
         @Override
         public T next() {
+            Objects.checkIndex(cursor, size);
             return (T) DIYarrayList.this.array[cursor++];
         }
 
