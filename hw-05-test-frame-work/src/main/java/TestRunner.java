@@ -4,63 +4,83 @@ import java.util.List;
 
 public class TestRunner {
 
-    public static void main(String[] args) {
-        TestRunner.test("TestTest");
+    private List<Method> befores = new ArrayList<>();
+    private List<Method> afters = new ArrayList<>();
+    private List<Method> tests = new ArrayList<>();
+
+    private enum Status {
+        SUCCESS,
+        BEFORE_ERROR,
+        IN_TEST_ERROR,
+        AFTER_ERROR,
     }
 
-    private static List<Method> befores = new ArrayList<>();
-    private static List<Method> afters = new ArrayList<>();
-    private static List<Method> tests = new ArrayList<>();
-
-    public static void test(String className) {
+    public void test(String className) {
         try {
             Class<?> clazz = Class.forName(className);
             Method[] methods = clazz.getMethods();
 
-            for(Method mt : methods) {
-                if (mt.isAnnotationPresent(Before.class)) {
-                    befores.add(mt);
-                }
+            collectMethods(methods);
 
-                if (mt.isAnnotationPresent(Test.class)) {
-                    tests.add(mt);
-                }
-
-                if (mt.isAnnotationPresent(After.class)) {
-                    afters.add(mt);
-                }
-            }
-
-            int allCount = 0;
             int successedCount = 0;
-            int failedCount = 0;
             for (Method test : tests) {
+                Object instance = clazz.getDeclaredConstructors()[0].newInstance();
+
+                Status status = Status.SUCCESS;
                 try {
-                    Object instance = clazz.getDeclaredConstructors()[0].newInstance();
                     for (Method before : befores) {
                         before.invoke(instance);
                     }
-
-                    test.invoke(instance);
-
-                    for (Method after : afters) {
-                        after.invoke(instance);
-                    }
-                    successedCount++;
                 } catch (Exception e) {
-                    failedCount++;
+                    status = Status.BEFORE_ERROR;
                 }
+
+                try {
+                    test.invoke(instance);
+                } catch (Exception e) {
+                    status = Status.IN_TEST_ERROR;
+                }
+
+                if (Status.IN_TEST_ERROR != status) {
+                    try {
+                        for (Method after : afters) {
+                            after.invoke(instance);
+                        }
+                    } catch (Exception e) {
+                        status = Status.AFTER_ERROR;
+                    }
+                }
+
+                if (status == Status.SUCCESS) successedCount++;
             }
             System.out.println("all=" + tests.size());
             System.out.println("successedCount=" + successedCount);
-            System.out.println("failedCount=" + failedCount);
+            System.out.println("failedCount=" + (tests.size() - successedCount));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
+
+    private void collectMethods(Method[] methods) {
+        befores.clear();
+        tests.clear();
+        afters.clear();
+
+        for(Method mt : methods) {
+            if (mt.isAnnotationPresent(Before.class)) {
+                befores.add(mt);
+            }
+
+            if (mt.isAnnotationPresent(Test.class)) {
+                tests.add(mt);
+            }
+
+            if (mt.isAnnotationPresent(After.class)) {
+                afters.add(mt);
+            }
+        }
+    }
+
 
 }
