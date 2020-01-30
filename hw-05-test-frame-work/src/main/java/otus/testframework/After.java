@@ -1,3 +1,5 @@
+package otus.testframework;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 

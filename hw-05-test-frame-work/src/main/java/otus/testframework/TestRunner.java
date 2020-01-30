@@ -1,3 +1,5 @@
+package otus.testframework;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +12,7 @@ public class TestRunner {
 
     private enum Status {
         SUCCESS,
-        BEFORE_ERROR,
-        IN_TEST_ERROR,
-        AFTER_ERROR,
+        ERROR
     }
 
     public void test(String className) {
@@ -31,23 +31,14 @@ public class TestRunner {
                     for (Method before : befores) {
                         before.invoke(instance);
                     }
-                } catch (Exception e) {
-                    status = Status.BEFORE_ERROR;
-                }
 
-                try {
                     test.invoke(instance);
-                } catch (Exception e) {
-                    status = Status.IN_TEST_ERROR;
-                }
 
-                if (Status.IN_TEST_ERROR != status) {
-                    try {
-                        for (Method after : afters) {
-                            after.invoke(instance);
-                        }
-                    } catch (Exception e) {
-                        status = Status.AFTER_ERROR;
+                } catch (Exception e) {
+                    status = Status.ERROR;
+                } finally {
+                    for (Method after : afters) {
+                        after.invoke(instance);
                     }
                 }
 

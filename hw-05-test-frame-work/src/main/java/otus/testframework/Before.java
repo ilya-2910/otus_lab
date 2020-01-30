@@ -1,3 +1,5 @@
+package otus.testframework;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -6,6 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD)
 @Retention(RUNTIME)
-public @interface Test {
+public @interface Before {
 
 }
