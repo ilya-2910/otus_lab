@@ -1,6 +1,6 @@
 package otus.atm;
 
-public class NoExitsNomimal extends Exception {
+public class NoExitsNomimal extends RuntimeException {
 
     public NoExitsNomimal() {
     }
