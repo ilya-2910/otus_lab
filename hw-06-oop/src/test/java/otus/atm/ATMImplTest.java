@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 class ATMImplTest {
@@ -22,8 +20,8 @@ class ATMImplTest {
 
     @Test
     void availableAmount() {
-        TreeMap<Nominal, AtomicInteger> recieved = atm.get(500);
-        Assertions.assertTrue(recieved.size() == 1 && recieved.get(Nominal._500).get() == 1);
+        ATMStorage recieved = atm.get(500);
+        Assertions.assertTrue(recieved.getNominals().size() == 1 && recieved.getNominals().get(Nominal._500).getCount() == 1);
 
         ATMImpl atm2 = new ATMImpl();
         atm2.receive(List.of(Nominal._10, Nominal._10, Nominal._10, Nominal._1000));

@@ -2,14 +2,14 @@ package otus.atm;
 
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public interface ATM {
 
     void receive(List<Nominal> nominals);
 
-    TreeMap<Nominal, AtomicInteger> get(Integer amount);
+    ATMStorage get(Integer amount);
 
-    TreeMap<Nominal, AtomicInteger> getAvailable();
+    TreeMap<Nominal, ATMCell> getAvailable();
 
+    boolean compare(TreeMap<Nominal, ATMCell> toCompare);
 }
