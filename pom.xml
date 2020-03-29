@@ -22,6 +22,7 @@
         <module>hw-04-bytecodes</module>
         <module>hw-05-test-frame-work</module>
         <module>hw-06-oop</module>
+        <module>hw-07-structural-patterns</module>
     </modules>
 
     <dependencies>
