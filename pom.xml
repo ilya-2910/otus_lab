@@ -13,6 +13,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
         <guava.version>28.1-jre</guava.version>
+        <gson.version>2.8.6</gson.version>
+        <javax.json-api.version>1.1.4</javax.json-api.version>
+        <javax.json.version>1.1.4</javax.json.version>
     </properties>
 
     <modules>
@@ -23,6 +26,7 @@
         <module>hw-05-test-frame-work</module>
         <module>hw-06-oop</module>
         <module>hw-07-structural-patterns</module>
+        <module>hw-08-json-object-writer</module>
     </modules>
 
     <dependencies>

@@ -7,11 +7,12 @@ import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class ObjectJsonMapper {
@@ -24,16 +25,42 @@ public class ObjectJsonMapper {
         private Object value;
     }
 
-    public String toJson(Object o) {
-        if (null == o) return "null";
-        ArrayList<MyField> myFields = new ArrayList<>();
-        Class<? extends Object> c = o.getClass();
+    public String toJson(Object object) {
+        if (null == object) return "null";
+
+        if (isPrimitiveOrPrimitiveWrapperOrString(object.getClass())) {
+            if (object.getClass() == String.class || object.getClass() == Character.class) {
+                return String.format("\"%s\"", object);
+            }
+            return object.toString();
+        }
+
+        if (object.getClass().isArray()) {
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            int length = Array.getLength(object);
+            for (int i = 0; i < length; i ++) {
+                Object arrayElement = Array.get(object, i);
+                addArrayElementValue(jsonArrayBuilder, arrayElement);
+            }
+            return jsonArrayBuilder.build().toString();
+        }
+
+        if (object instanceof Iterable) {
+            JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+            for (Object field : (Iterable)object) {
+                addArrayElementValue(jsonArrayBuilder, field);
+            }
+            return jsonArrayBuilder.build().toString();
+        }
+
+        List<MyField> myFields = new ArrayList<>();
+        Class<?> c = object.getClass();
         Field[] fields = c.getDeclaredFields();
         for (Field field : fields) {
             String name = field.getName();
             field.setAccessible(true);
             try {
-                myFields.add(new MyField(field.getType(), name, field.get(o)));
+                myFields.add(new MyField(field.getType(), name, field.get(object)));
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -52,9 +79,9 @@ public class ObjectJsonMapper {
                         addObjectValue(jsonBuilder, entry.getKey(), entry.getValue());
                     }
                     jsonObjectBuilder.add(myField.getName(), jsonBuilder);
-                } if (value instanceof Collection) {
+                } if (value instanceof Iterable) {
                     JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-                    for (Object field : (Collection)value) {
+                    for (Object field : (Iterable)value) {
                         addArrayElementValue(jsonArrayBuilder, field);
                     }
                     jsonObjectBuilder.add(myField.getName(), jsonArrayBuilder);
@@ -72,6 +99,13 @@ public class ObjectJsonMapper {
 
         JsonObject jsonObject = jsonObjectBuilder.build();
         return jsonObject.toString();
+    }
+
+    private boolean isPrimitiveOrPrimitiveWrapperOrString(Class<?> type) {
+        return (type.isPrimitive() && type != void.class) ||
+                type == Double.class || type == Float.class || type == Long.class ||
+                type == Integer.class || type == Short.class || type == Character.class ||
+                type == Byte.class || type == Boolean.class || type == String.class || type == Character.class;
     }
 
     private void addObjectValue(JsonObjectBuilder jsonObjectBuilder, String name, Object value) {
