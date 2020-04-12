@@ -5,10 +5,10 @@ import java.util.Optional;
 import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 
-public interface UserDao {
-  Optional<User> findById(long id);
+public interface EntityDao<T> {
 
-  long saveUser(User user);
+  long create(T objectData);
+  Optional<T> load(long id, Class<T> clazz);
 
   SessionManager getSessionManager();
 }

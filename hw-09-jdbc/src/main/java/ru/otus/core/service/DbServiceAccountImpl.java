@@ -3,22 +3,23 @@ package ru.otus.core.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.dao.EntityDao;
+import ru.otus.core.model.Account;
 import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 
 import java.util.Optional;
 
-public class DbServiceUserImpl implements DBServiceUser {
-  private static Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
+public class DbServiceAccountImpl implements DBServiceAccount {
+  private static Logger logger = LoggerFactory.getLogger(DbServiceAccountImpl.class);
 
-  private final EntityDao<User> entityDao;
+  private final EntityDao<Account> entityDao;
 
-  public DbServiceUserImpl(EntityDao<User> entityDao) {
+  public DbServiceAccountImpl(EntityDao<Account> entityDao) {
     this.entityDao = entityDao;
   }
 
   @Override
-  public long saveUser(User user) {
+  public long saveAccount(Account user) {
     try (SessionManager sessionManager = entityDao.getSessionManager()) {
       sessionManager.beginSession();
       try {
@@ -37,11 +38,11 @@ public class DbServiceUserImpl implements DBServiceUser {
 
 
   @Override
-  public Optional<User> getUser(long id) {
+  public Optional<Account> getAccount(long id) {
     try (SessionManager sessionManager = entityDao.getSessionManager()) {
       sessionManager.beginSession();
       try {
-        Optional<User> userOptional = entityDao.load(id, User.class);
+        Optional<Account> userOptional = entityDao.load(id, Account.class);
 
         logger.info("user: {}", userOptional.orElse(null));
         return userOptional;

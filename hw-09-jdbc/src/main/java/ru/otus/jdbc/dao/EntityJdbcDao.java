@@ -3,37 +3,37 @@ package ru.otus.jdbc.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.core.dao.UserDao;
-import ru.otus.core.dao.UserDaoException;
+import ru.otus.core.dao.EntityDao;
+import ru.otus.core.dao.EntityDaoException;
 import ru.otus.jdbc.DbExecutor;
-import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
 
-public class UserDaoJdbc implements UserDao {
-  private static Logger logger = LoggerFactory.getLogger(UserDaoJdbc.class);
+public class EntityJdbcDao<T> implements EntityDao<T> {
+  private static Logger logger = LoggerFactory.getLogger(EntityJdbcDao.class);
 
   private final SessionManagerJdbc sessionManager;
-  private final DbExecutor<User> dbExecutor;
+  private final DbExecutor<T> dbExecutor;
+  private final JdbcMapper<T> jdbcMapper = new JdbcMapperImpl();
 
-  public UserDaoJdbc(SessionManagerJdbc sessionManager, DbExecutor<User> dbExecutor) {
+  public EntityJdbcDao(SessionManagerJdbc sessionManager, DbExecutor<T> dbExecutor) {
     this.sessionManager = sessionManager;
     this.dbExecutor = dbExecutor;
   }
 
-
   @Override
-  public Optional<User> findById(long id) {
+  public Optional<T> load(long id, Class<T> clazz) {
     try {
-      return dbExecutor.selectRecord(getConnection(), "select id, name from user where id  = ?", id, resultSet -> {
+      Query query = jdbcMapper.getSelectQuery(id, clazz);
+      return dbExecutor.selectRecord(getConnection(), query.getQuery(), id, resultSet -> {
         try {
           if (resultSet.next()) {
-            return new User(resultSet.getLong("id"), resultSet.getString("name"));
+            T  result = jdbcMapper.getEntity(clazz, resultSet);
+            return result;
           }
         } catch (SQLException e) {
           logger.error(e.getMessage(), e);
@@ -46,14 +46,14 @@ public class UserDaoJdbc implements UserDao {
     return Optional.empty();
   }
 
-
   @Override
-  public long saveUser(User user) {
+  public long create(T objectData) {
     try {
-      return dbExecutor.insertRecord(getConnection(), "insert into user(name) values (?)", Collections.singletonList(user.getName()));
+      Query query = jdbcMapper.getInsertQuery(objectData);
+      return dbExecutor.insertRecord(getConnection(), query.getQuery(), query.getQueryParams());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
-      throw new UserDaoException(e);
+      throw new EntityDaoException(e);
     }
   }
 
