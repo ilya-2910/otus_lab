@@ -27,6 +27,7 @@
         <module>hw-06-oop</module>
         <module>hw-07-structural-patterns</module>
         <module>hw-08-json-object-writer</module>
+        <module>hw-09-jdbc</module>
     </modules>
 
     <dependencies>
