@@ -71,6 +71,12 @@ public class UserDaoHibernate implements EntityDao<User> {
 
   @Override
   public Optional<User> load(long id, Class<User> clazz) {
+    DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+    try {
+      return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, id));
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+    }
     return Optional.empty();
   }
 

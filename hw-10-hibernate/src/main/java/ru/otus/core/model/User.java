@@ -1,16 +1,24 @@
 package ru.otus.core.model;
 
-import ru.otus.jdbc.dao.Id;
 
-/**
- * @author sergey
- * created on 03.02.19.
- */
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "users")
+@ToString
 public class User {
 
   @Id
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @Column(name = "id")
+  private long id;
+
+  @Column(name = "name")
   private String name;
+
 
   public User() {
   }
@@ -20,19 +28,42 @@ public class User {
     this.name = name;
   }
 
+  @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+  private AddressDataSet addressDataSet;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+  private List<PhoneDataSet> phoneDataSet;
+
   public long getId() {
     return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getName() {
     return name;
   }
 
-  @Override
-  public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        '}';
+  public void setName(String name) {
+    this.name = name;
   }
+
+  public AddressDataSet getAddressDataSet() {
+    return addressDataSet;
+  }
+
+  public void setAddressDataSet(AddressDataSet addressDataSet) {
+    this.addressDataSet = addressDataSet;
+  }
+
+  public List<PhoneDataSet> getPhoneDataSet() {
+    return phoneDataSet;
+  }
+
+  public void setPhoneDataSet(List<PhoneDataSet> phoneDataSet) {
+    this.phoneDataSet = phoneDataSet;
+  }
+
 }
