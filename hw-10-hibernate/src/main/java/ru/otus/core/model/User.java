@@ -12,6 +12,7 @@ import java.util.List;
 public class User {
 
   @Id
+  @ru.otus.jdbc.dao.Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Column(name = "id")
   private long id;
