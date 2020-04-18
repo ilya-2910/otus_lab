@@ -15,7 +15,7 @@ public class User {
   @ru.otus.jdbc.dao.Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Column(name = "id")
-  private Long id;
+  private long id;
 
   @Column(name = "name")
   private String name;
@@ -35,11 +35,11 @@ public class User {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
   private List<PhoneDataSet> phoneDataSet;
 
-  public Long getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
