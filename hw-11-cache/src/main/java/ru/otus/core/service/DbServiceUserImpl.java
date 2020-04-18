@@ -2,6 +2,7 @@ package ru.otus.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.cachehw.Cacheble;
 import ru.otus.core.dao.EntityDao;
 import ru.otus.core.model.User;
 import ru.otus.core.sessionmanager.SessionManager;
@@ -35,8 +36,8 @@ public class DbServiceUserImpl implements DBServiceUser {
     }
   }
 
-
   @Override
+  @Cacheble
   public Optional<User> getUser(long id) {
     try (SessionManager sessionManager = entityDao.getSessionManager()) {
       sessionManager.beginSession();

@@ -5,12 +5,17 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="org.hibernate.type" additivity="false" >
-        <level value="TRACE" />
-        <appender-ref ref="STDOUT" />
+<!--    <logger name="org.hibernate.type" additivity="false" >-->
+<!--        <level value="TRACE" />-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--    </logger>-->
+
+    <logger name="org.hibernate">
+        <level value="info"/>
     </logger>
+
 </configuration>
