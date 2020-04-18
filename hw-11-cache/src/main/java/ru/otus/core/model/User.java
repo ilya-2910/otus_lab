@@ -12,9 +12,10 @@ import java.util.List;
 public class User {
 
   @Id
+  @ru.otus.jdbc.dao.Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Column(name = "id")
-  private long id;
+  private Long id;
 
   @Column(name = "name")
   private String name;
@@ -34,11 +35,11 @@ public class User {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
   private List<PhoneDataSet> phoneDataSet;
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

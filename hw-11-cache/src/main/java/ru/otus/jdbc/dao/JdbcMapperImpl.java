@@ -47,7 +47,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         EntityInfo entityInfo = getEntityInfo(entity, null);
         String fieldNames = entityInfo.getFieldsNames();
         String placeHolders = entityInfo.getFieldEntities().stream().map(fieldEntity -> "?").collect(Collectors.joining(", "));
-        String query = "insert into " + entity.getClass().getSimpleName() + "(" + fieldNames + ")" + "values (" + placeHolders + ")";
+        String query = "insert into " + entity.getClass().getSimpleName() + "(" + fieldNames + ")" + " values (" + placeHolders + ")";
 
         List<String> fieldValues = entityInfo.getFieldEntities().stream().map(fieldEntity -> getValueString(fieldEntity.getValue())).collect(Collectors.toList());
 
@@ -70,6 +70,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         for (Field field : fields) {
             String name = field.getName();
             field.setAccessible(true);
+            if (!isPrimitiveOrPrimitiveWrapperOrString(field.getType())) continue;
             try {
                 if (field.isAnnotationPresent(Id.class)) {
                     if (id == null) {
@@ -94,6 +95,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         try {
             T object = clazz.getDeclaredConstructor().newInstance();
             for (Field field : clazz.getDeclaredFields()) {
+                if (!isPrimitiveOrPrimitiveWrapperOrString(field.getType())) continue;
                 String name = field.getName();
                 field.setAccessible(true);
                 Object value = rst.getObject(name);
@@ -115,6 +117,14 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
         return (type == int.class || type == long.class || type == double.class || type == float.class
                 || type == boolean.class || type == byte.class || type == char.class || type == short.class);
     }
+
+    private boolean isPrimitiveOrPrimitiveWrapperOrString(Class<?> type) {
+        return (type.isPrimitive() && type != void.class) ||
+                type == Double.class || type == Float.class || type == Long.class ||
+                type == Integer.class || type == Short.class || type == Character.class ||
+                type == Byte.class || type == Boolean.class || type == String.class || type == Character.class;
+    }
+
 
     public static Class<?> boxPrimitiveClass(Class<?> type) {
         if (type == int.class) {
