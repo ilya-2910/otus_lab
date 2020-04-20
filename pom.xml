@@ -28,6 +28,7 @@
         <module>hw-07-structural-patterns</module>
         <module>hw-08-json-object-writer</module>
         <module>hw-09-jdbc</module>
+        <module>hw-10-hibernate</module>
     </modules>
 
     <dependencies>
