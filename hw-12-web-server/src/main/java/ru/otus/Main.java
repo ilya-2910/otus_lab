@@ -4,9 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.LoginService;
+import org.hibernate.SessionFactory;
+import ru.otus.core.model.AddressDataSet;
+import ru.otus.core.model.PhoneDataSet;
+import ru.otus.core.model.User;
+import ru.otus.core.service.DBServiceUser;
+import ru.otus.core.service.DbServiceUserImpl;
 import ru.otus.dao.InMemoryUserDao;
 import ru.otus.dao.UserDao;
 import ru.otus.helpers.FileSystemHelper;
+import ru.otus.hibernate.HibernateUtils;
+import ru.otus.hibernate.dao.UserDaoHibernate;
+import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.server.UsersWebServer;
 import ru.otus.server.UsersWebServerImpl;
 import ru.otus.services.TemplateProcessor;
@@ -37,10 +46,19 @@ public class Main {
     public static void main(String[] args) throws Exception {
         String hashLoginServiceConfigPath = FileSystemHelper.localFileNameOrResourceNameToFullPath(HASH_LOGIN_SERVICE_CONFIG_NAME);
 
-        UserDao userDao = new InMemoryUserDao();
-        UserAuthService userAuthServiceForFilterBasedSecurity = new UserAuthServiceImpl(userDao);
+        SessionFactory sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml",
+                User.class, AddressDataSet.class, PhoneDataSet.class);
+        SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
+        ru.otus.core.dao.UserDao userDao = new UserDaoHibernate(sessionManager);
+        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
+
+        User admin = new User(0, "admin");
+        admin.setLogin("admin");
+        admin.setPassword("admin");
+        dbServiceUser.saveUser(admin);
+
+        UserAuthService userAuthServiceForFilterBasedSecurity = new UserAuthServiceImpl(dbServiceUser);
         LoginService loginServiceForBasicSecurity = new HashLoginService(REALM_NAME, hashLoginServiceConfigPath);
-        //LoginService loginServiceForBasicSecurity = new InMemoryLoginServiceImpl(userDao);
 
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
@@ -49,7 +67,7 @@ public class Main {
                 FILTER_BASED,
                 userAuthServiceForFilterBasedSecurity,
                 loginServiceForBasicSecurity,
-                userDao,
+                dbServiceUser,
                 gson,
                 templateProcessor);
 

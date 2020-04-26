@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.dao.EntityDao;
+import ru.otus.core.dao.UserDao;
 import ru.otus.core.model.AddressDataSet;
 import ru.otus.core.model.PhoneDataSet;
 import ru.otus.core.model.User;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class DbServiceDemoHibernate {
-  private static Logger logger = LoggerFactory.getLogger(DbServiceDemo.class);
+  private static Logger logger = LoggerFactory.getLogger(DbServiceDemoHibernate.class);
 
   public static void main(String[] args) {
     // Все главное см в тестах
@@ -25,18 +26,13 @@ public class DbServiceDemoHibernate {
             User.class, AddressDataSet.class, PhoneDataSet.class);
 
     SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
-    EntityDao<User> userDao = new UserDaoHibernate(sessionManager);
+    UserDao userDao = new UserDaoHibernate(sessionManager);
     DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
 
-    User вася = new User(0, "Вася");
-    AddressDataSet addressDataSet = new AddressDataSet(0l, "пушкина 41");
-    addressDataSet.setUser(вася);
-    вася.setAddressDataSet(addressDataSet);
-    ArrayList<PhoneDataSet> list = new ArrayList<>();
-    list.add(new PhoneDataSet(вася, null,"2-12-86-06"));
-    list.add(new PhoneDataSet(вася,null, "2-12-86-07"));
-    вася.setPhoneDataSet(list);
-    long id = dbServiceUser.saveUser(вася);
+    User admin = new User(0, "admin");
+    admin.setLogin("admin");
+    admin.setPassword("admin");
+    long id = dbServiceUser.saveUser(admin);
 
     Optional<User> mayBeCreatedUser = dbServiceUser.getUser(id);
 

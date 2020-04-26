@@ -11,14 +11,12 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
-import ru.otus.dao.UserDao;
+import ru.otus.core.dao.UserDao;
+import ru.otus.core.service.DBServiceUser;
 import ru.otus.helpers.FileSystemHelper;
 import ru.otus.services.TemplateProcessor;
 import ru.otus.services.UserAuthService;
-import ru.otus.servlet.AuthorizationFilter;
-import ru.otus.servlet.LoginServlet;
-import ru.otus.servlet.UsersApiServlet;
-import ru.otus.servlet.UsersServlet;
+import ru.otus.servlet.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,21 +33,21 @@ public class UsersWebServerImpl implements UsersWebServer {
     private final SecurityType securityType;
     private final UserAuthService userAuthServiceForFilterBasedSecurity;
     private final LoginService loginServiceForBasicSecurity;
-    private final UserDao userDao;
+    private final DBServiceUser dbServiceUser;
     private final Gson gson;
     private final TemplateProcessor templateProcessor;
     private final Server server;
 
     public UsersWebServerImpl(int port, SecurityType securityType,
                               UserAuthService userAuthServiceForFilterBasedSecurity,
-                              LoginService loginServiceForBasicSecurity, UserDao userDao,
+                              LoginService loginServiceForBasicSecurity, DBServiceUser dbServiceUser,
                               Gson gson,
                               TemplateProcessor templateProcessor) {
         this.port = port;
         this.securityType = securityType;
         this.userAuthServiceForFilterBasedSecurity = userAuthServiceForFilterBasedSecurity;
         this.loginServiceForBasicSecurity = loginServiceForBasicSecurity;
-        this.userDao = userDao;
+        this.dbServiceUser = dbServiceUser;
         this.gson = gson;
         this.templateProcessor = templateProcessor;
         server = initContext();
@@ -94,8 +92,10 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, dbServiceUser)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(dbServiceUser, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new AddUserApiServlet(dbServiceUser, gson)), "/api/user/add/*");
+        servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)), "/admin/*");
         return servletContextHandler;
     }
 
@@ -103,10 +103,10 @@ public class UsersWebServerImpl implements UsersWebServer {
         if (securityType == SecurityType.NONE){
             return servletContextHandler;
         } else if (securityType == SecurityType.FILTER_BASED) {
-            applyFilterBasedSecurity(servletContextHandler, "/users", "/api/user/*");
+            applyFilterBasedSecurity(servletContextHandler, "/users", "/api/user/*", "/admin/*");
             return servletContextHandler;
         } else if (securityType == SecurityType.BASIC) {
-            return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/api/user/*");
+            return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/api/user/*", "/admin/*");
         } else {
             throw new InvalidSecurityTypeException(securityType);
         }

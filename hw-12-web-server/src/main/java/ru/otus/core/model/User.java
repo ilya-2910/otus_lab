@@ -12,7 +12,6 @@ import java.util.List;
 public class User {
 
   @Id
-  @ru.otus.jdbc.dao.Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Column(name = "id")
   private long id;
@@ -20,6 +19,11 @@ public class User {
   @Column(name = "name")
   private String name;
 
+  @Column(name = "login")
+  private String login;
+
+  @Column(name = "password")
+  private String password;
 
   public User() {
   }
@@ -67,4 +71,19 @@ public class User {
     this.phoneDataSet = phoneDataSet;
   }
 
+  public String getLogin() {
+    return login;
+  }
+
+  public void setLogin(String login) {
+    this.login = login;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }
