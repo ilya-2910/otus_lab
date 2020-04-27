@@ -9,7 +9,6 @@ public interface UserDao extends EntityDao<User> {
 
     Optional<User> findByLogin(String login);
     Optional<User> findRandomUser();
-    Optional<User> findById(long id);
     List<User> findAll();
 
 }

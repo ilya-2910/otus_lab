@@ -10,7 +10,7 @@
             if (login == '' || password == '' || name == '') {
                 alert('Заполните все поля')
             }
-            fetch("api/user/add",
+            fetch("api/user",
                 {
                     headers: {
                         'Accept': 'application/json',
@@ -40,7 +40,6 @@
 <div>Имя: </div><input type="text" id="newName" value="" placeholder="имя" autocomplete="off">
 <div>Пароль: </div><input type="password" id="newPassword" value="" placeholder="пароль" autocomplete="new-password">
 <button onclick="addUser()">Добавить</button>
-<pre id = "userDataContainer"></pre>
 
 <h4>Список пользователей</h4>
 <table style="width: 400px">

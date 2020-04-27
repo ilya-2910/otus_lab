@@ -1,6 +1,5 @@
 package ru.otus.server;
 
-import com.google.gson.Gson;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -10,23 +9,19 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.core.service.DBServiceUser;
 import ru.otus.helpers.FileSystemHelper;
 import ru.otus.services.TemplateProcessor;
-import ru.otus.servlet.AddUserApiServlet;
 import ru.otus.servlet.AdminServlet;
-import ru.otus.servlet.UsersApiServlet;
-import ru.otus.servlet.UsersServlet;
+import ru.otus.servlet.UserApiServlet;
 
 public class UsersWebServerSimple implements UsersWebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
     private final DBServiceUser dbServiceUser;
-    private final Gson gson;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public UsersWebServerSimple(int port, DBServiceUser dbServiceUser, Gson gson, TemplateProcessor templateProcessor) {
+    public UsersWebServerSimple(int port, DBServiceUser dbServiceUser, TemplateProcessor templateProcessor) {
         this.dbServiceUser = dbServiceUser;
-        this.gson = gson;
         this.templateProcessor = templateProcessor;
         server = new Server(port);
     }
@@ -56,8 +51,7 @@ public class UsersWebServerSimple implements UsersWebServer {
 
         HandlerList handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*", "/admin/*"));
-
+        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user", "/admin/*"));
 
         server.setHandler(handlers);
         return server;
@@ -77,9 +71,7 @@ public class UsersWebServerSimple implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, dbServiceUser)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(dbServiceUser, gson)), "/api/user/*");
-        servletContextHandler.addServlet(new ServletHolder(new AddUserApiServlet(dbServiceUser, gson)), "/api/user/add/*");
+        servletContextHandler.addServlet(new ServletHolder(new UserApiServlet(dbServiceUser)), "/api/user");
         servletContextHandler.addServlet(new ServletHolder(new AdminServlet(templateProcessor, dbServiceUser)), "/admin/*");
         return servletContextHandler;
     }
