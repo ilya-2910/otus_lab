@@ -97,11 +97,6 @@ public class UserDaoHibernate implements UserDao {
   }
 
   @Override
-  public Optional<User> findById(long id) {
-    return Optional.empty();
-  }
-
-  @Override
   public List<User> findAll() {
     DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
     try {
