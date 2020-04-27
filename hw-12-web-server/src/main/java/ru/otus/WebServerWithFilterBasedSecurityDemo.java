@@ -41,18 +41,14 @@ public class WebServerWithFilterBasedSecurityDemo {
         ru.otus.core.dao.UserDao userDao = new UserDaoHibernate(sessionManager);
         DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
 
-        User admin = new User(0, "admin");
-        admin.setLogin("admin");
-        admin.setPassword("admin");
-        dbServiceUser.saveUser(admin);
+        DBUserInitializer dbUserInitializer = new DBUserInitializer(dbServiceUser);
+        dbUserInitializer.createAdminUser();
 
-
-        Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
         UserAuthService authService = new UserAuthServiceImpl(dbServiceUser);
 
         UsersWebServer usersWebServer = new UsersWebServerWithFilterBasedSecurity(WEB_SERVER_PORT,
-                authService, dbServiceUser, gson, templateProcessor);
+                authService, dbServiceUser, templateProcessor);
 
         usersWebServer.start();
         usersWebServer.join();

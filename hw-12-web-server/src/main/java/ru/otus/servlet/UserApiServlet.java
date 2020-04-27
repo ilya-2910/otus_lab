@@ -14,16 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class AddUserApiServlet extends HttpServlet {
-
-    private static final int ID_PATH_PARAM_POSITION = 1;
+public class UserApiServlet extends HttpServlet {
 
     private final DBServiceUser dbServiceUser;
-    private final Gson gson;
 
-    public AddUserApiServlet(DBServiceUser dbServiceUser, Gson gson) {
+    public UserApiServlet(DBServiceUser dbServiceUser) {
         this.dbServiceUser = dbServiceUser;
-        this.gson = gson;
     }
 
     @Override
@@ -42,15 +38,8 @@ public class AddUserApiServlet extends HttpServlet {
             out.print(gson.toJson("user already exist"));
         } else {
             dbServiceUser.saveUser(user);
-            List<User> users = dbServiceUser.getAllUser();
-            out.print(gson.toJson(users));
+            out.print(gson.toJson(user));
         }
-    }
-
-    private long extractIdFromRequest(HttpServletRequest request) {
-        String[] path = request.getPathInfo().split("/");
-        String id = (path.length > 1)? path[ID_PATH_PARAM_POSITION]: String.valueOf(- 1);
-        return Long.parseLong(id);
     }
 
 }
