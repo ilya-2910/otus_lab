@@ -29,12 +29,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
         Map<String, Object> paramsMap = new HashMap<>();
-
-        dbServiceUser.getAllUser();
         paramsMap.put(ALL_USERS, dbServiceUser.getAllUser());
-
-        dbServiceUser.findRandomUser().ifPresent(randomUser -> paramsMap.put(TEMPLATE_ATTR_RANDOM_USER, randomUser));
-
         response.setContentType("text/html");
         response.getWriter().println(templateProcessor.getPage(USERS_PAGE_TEMPLATE, paramsMap));
     }
