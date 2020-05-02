@@ -4,7 +4,8 @@ package ru.otus.hibernate.dao;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.otus.core.dao.EntityDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 //import ru.otus.core.dao.UserDao;
 import ru.otus.core.dao.EntityDaoException;
 import ru.otus.core.dao.UserDao;
@@ -19,14 +20,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+@Repository
 public class UserDaoHibernate implements UserDao {
   private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 
-  private final SessionManagerHibernate sessionManager;
-
-  public UserDaoHibernate(SessionManagerHibernate sessionManager) {
-    this.sessionManager = sessionManager;
-  }
+  @Autowired
+  private SessionManagerHibernate sessionManager;
 
   @Override
   public long create(User user) {

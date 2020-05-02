@@ -1,8 +1,9 @@
 package ru.otus.services;
 
-import ru.otus.core.dao.UserDao;
+import org.springframework.stereotype.Service;
 import ru.otus.core.service.DBServiceUser;
 
+@Service
 public class UserAuthServiceImpl implements UserAuthService {
 
     private final DBServiceUser dbServiceUser;

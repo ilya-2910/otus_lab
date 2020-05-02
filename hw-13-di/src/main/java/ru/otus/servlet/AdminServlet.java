@@ -1,37 +1,28 @@
 package ru.otus.servlet;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import ru.otus.core.model.User;
 import ru.otus.core.service.DBServiceUser;
-import ru.otus.services.TemplateProcessor;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
-public class AdminServlet extends HttpServlet {
-
-    private static final String USERS_PAGE_TEMPLATE = "admin.html";
-    private static final String TEMPLATE_ATTR_RANDOM_USER = "randomUser";
-    private static final String ALL_USERS = "allUsers";
-
+@Controller
+public class AdminServlet {
 
     private final DBServiceUser dbServiceUser;
-    private final TemplateProcessor templateProcessor;
 
-    public AdminServlet(TemplateProcessor templateProcessor, DBServiceUser dbServiceUser) {
-        this.templateProcessor = templateProcessor;
+    public AdminServlet(DBServiceUser dbServiceUser) {
         this.dbServiceUser = dbServiceUser;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
-        Map<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put(ALL_USERS, dbServiceUser.getAllUser());
-        response.setContentType("text/html");
-        response.getWriter().println(templateProcessor.getPage(USERS_PAGE_TEMPLATE, paramsMap));
+    @GetMapping({"/admin"})
+    public String userListView(Model model) {
+        List<User> users = dbServiceUser.getAllUser();
+        model.addAttribute("users", users);
+        return "admin.html";
     }
 
 }

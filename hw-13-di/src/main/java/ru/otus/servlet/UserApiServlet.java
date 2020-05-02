@@ -1,20 +1,18 @@
 package ru.otus.servlet;
 
-import com.google.gson.Gson;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import ru.otus.core.model.User;
 import ru.otus.core.service.DBServiceUser;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 
-public class UserApiServlet extends HttpServlet {
+@RestController
+public class UserApiServlet {
 
     private final DBServiceUser dbServiceUser;
 
@@ -22,23 +20,14 @@ public class UserApiServlet extends HttpServlet {
         this.dbServiceUser = dbServiceUser;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user;
-        BufferedReader reader = request.getReader();
-        Gson gson = new Gson();
-        user = gson.fromJson(reader, User.class);
-
+    @PostMapping(value = "api/user", consumes = "application/json", produces = "application/json")
+    protected ResponseEntity saveUser(@RequestBody User user) {
         Optional<User> existLogin = dbServiceUser.findByLogin(user.getLogin());
-
-        response.setContentType("application/json;charset=UTF-8");
-        ServletOutputStream out = response.getOutputStream();
         if (existLogin.isPresent()) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print(gson.toJson("user already exist"));
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             dbServiceUser.saveUser(user);
-            out.print(gson.toJson(user));
+            return new ResponseEntity(user, HttpStatus.OK);
         }
     }
 
