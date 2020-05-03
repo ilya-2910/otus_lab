@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Пользователи</title>
+    <script th:inline="javascript">
+
+         function addUser() {
+            const login = document.getElementById('newLogin').value;
+            const password = document.getElementById('newPassword').value;
+            const name = document.getElementById('newName').value;
+            if (login == '' || password == '' || name == '') {
+                alert('Заполните все поля')
+            }
+            fetch([[@{/api/user}]],
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({login: login, password: password, name: name})
+                })
+                .then((response) => {
+                    if (response.status === 200) {
+                        response.json().then(function(object) {
+                            location.reload();
+                        })
+                    } else {
+                        response.json().then(function(error) {
+                            alert('Ошибка при добавлении пользователя: ' + error);
+                        })
+                    }
+                })
+        }
+    </script>
+</head>
+
+<body>
+<h4>Добавить пользователя</h4>
+<div>Логин: </div><input type="text" id="newLogin" value="" placeholder="логин" autocomplete="new-password">
+<div>Имя: </div><input type="text" id="newName" value="" placeholder="имя" autocomplete="off">
+<div>Пароль: </div><input type="password" id="newPassword" value="" placeholder="пароль" autocomplete="new-password">
+<button onclick="addUser()">Добавить</button>
+
+<h4>Список пользователей</h4>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.login}"></td>
+            <td th:text="${user.password}"></td>
+        </tr>
+    </#list>
+    </tbody>
+</table>
+</body>
+</html>
