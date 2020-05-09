@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.otus.core.model.User;
 import ru.otus.core.service.DBServiceUser;
+import ru.otus.front.FrontendService;
 
 import java.util.List;
 
