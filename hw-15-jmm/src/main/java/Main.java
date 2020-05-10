@@ -8,20 +8,22 @@ public class Main {
     private String last = "thread_1";
 
     private synchronized void print(String thread) {
-        for (int i = 0; i <= 20; i++) {
-            int j = i;
-            if (i > 10) {
-                j = 20 - i;
-            }
-            try {
-                while (last.equals(thread)) {
-                    this.wait();
+        while (true) {
+            for (int i = 0; i <= 20; i++) {
+                int j = i;
+                if (i > 10) {
+                    j = 20 - i;
                 }
-                System.out.println(j);
-                last = thread;
-                notifyAll();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    while (last.equals(thread)) {
+                        this.wait();
+                    }
+                    System.out.println(thread + ":" + j);
+                    last = thread;
+                    notifyAll();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
