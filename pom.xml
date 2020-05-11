@@ -33,6 +33,7 @@
         <module>hw-13-di</module>
         <module>hw-14-web-socket</module>
         <module>hw-15-jmm</module>
+        <module>hw-16-multiprocess</module>
     </modules>
 
     <dependencies>
