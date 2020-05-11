@@ -1,11 +1,11 @@
-public class Main {
+public class PingPongByWaitNotify {
 
     public static void main(String[] args) {
-        Main counter = new Main();
+        PingPongByWaitNotify counter = new PingPongByWaitNotify();
         counter.go();
     }
 
-    private String last = "thread_1";
+    private String last = "thread_2";
 
     private synchronized void print(String thread) {
         while (true) {
@@ -20,11 +20,20 @@ public class Main {
                     }
                     System.out.println(thread + ":" + j);
                     last = thread;
+                    sleep();
                     notifyAll();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    private static void sleep() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
