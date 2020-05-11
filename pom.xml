@@ -30,6 +30,7 @@
         <module>hw-09-jdbc</module>
         <module>hw-10-hibernate</module>
         <module>hw-11-cache</module>
+        <module>hw-13-di</module>
     </modules>
 
     <dependencies>
