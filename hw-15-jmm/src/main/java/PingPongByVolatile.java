@@ -1,8 +1,13 @@
 public final class PingPongByVolatile {
-    private static volatile long pingValue = -1;
-    private static volatile long pongValue = -1;
+    private volatile long pingValue = -1;
+    private volatile long pongValue = -1;
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
+        PingPongByVolatile pongByVolatile = new PingPongByVolatile();
+        pongByVolatile.go();
+    }
+
+    private void go() {
         final Thread pongThread = new Thread(new PongRunner());
         final Thread pingThread = new Thread(new PingRunner());
         pongThread.setName("pong-thread");
@@ -11,18 +16,17 @@ public final class PingPongByVolatile {
         pingThread.start();
     }
 
-    public static class PingRunner implements Runnable {
+    public class PingRunner implements Runnable {
         public void run() {
-            while (true)
-            {
-                for(int i = 0; i < 20; ++i) {
+            while (true) {
+                for (int i = 0; i < 20; ++i) {
                     int j = i;
                     if (i > 10) {
                         j = 20 - i;
                     }
                     System.out.println("thread_1: " + j);
                     pingValue = i;
-                    while(i != pongValue){
+                    while (i != pongValue) {
                     }
                     sleep();
                 }
@@ -30,11 +34,10 @@ public final class PingPongByVolatile {
         }
     }
 
-    public static class PongRunner implements Runnable {
+    public class PongRunner implements Runnable {
         public void run() {
-            while (true)
-            {
-                for(int i = 0; i < 20; ++i) {
+            while (true) {
+                for (int i = 0; i < 20; ++i) {
                     int j = i;
                     if (i > 10) {
                         j = 20 - i;
