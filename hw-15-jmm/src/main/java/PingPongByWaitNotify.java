@@ -5,19 +5,30 @@ public class PingPongByWaitNotify {
         counter.go();
     }
 
-    private volatile String last = "thread_2";
+    private String last = "thread_2";
 
-    private void print(String thread) {
+    private synchronized void print(String thread) {
         for (int i = 1; i < 20; i++) {
             int j = i;
             if (i > 10) {
                 j = 20 - i;
             }
-            while (last.equals(thread)) {
+            try {
+                while (last.equals(thread)) {
+                    if (last.equals("thread_2")) {
+                        Thread.sleep(2400);
+                    } else if (last.equals("thread_1")) {
+                        Thread.sleep(800);
+                    }
+                    this.wait();
+                }
+                System.out.println(thread + ":" + j);
+                last = thread;
+                sleep();
+                notifyAll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println(thread + ":" + j);
-            last = thread;
-            sleep();
         }
     }
 
