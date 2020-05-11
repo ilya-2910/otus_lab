@@ -1,54 +1,23 @@
-public final class PingPongByVolatile {
-    private volatile long pingValue = -1;
-    private volatile long pongValue = -1;
+public class PingPongByVolatile {
 
-    public static void main(final String[] args) {
-        PingPongByVolatile pongByVolatile = new PingPongByVolatile();
-        pongByVolatile.go();
+    public static void main(String[] args) {
+        PingPongByVolatile counter = new PingPongByVolatile();
+        counter.go();
     }
 
-    private void go() {
-        final Thread pongThread = new Thread(new PongRunner());
-        final Thread pingThread = new Thread(new PingRunner());
-        pongThread.setName("pong-thread");
-        pongThread.setName("ping-thread");
-        pongThread.start();
-        pingThread.start();
-    }
+    private volatile String last = "thread_2";
 
-    public class PingRunner implements Runnable {
-        public void run() {
-            while (true) {
-                for (int i = 0; i < 20; ++i) {
-                    int j = i;
-                    if (i > 10) {
-                        j = 20 - i;
-                    }
-                    System.out.println("thread_1: " + j);
-                    pingValue = i;
-                    while (i != pongValue) {
-                    }
-                    sleep();
-                }
+    private void print(String thread) {
+        for (int i = 1; i < 20; i++) {
+            int j = i;
+            if (i > 10) {
+                j = 20 - i;
             }
-        }
-    }
-
-    public class PongRunner implements Runnable {
-        public void run() {
-            while (true) {
-                for (int i = 0; i < 20; ++i) {
-                    int j = i;
-                    if (i > 10) {
-                        j = 20 - i;
-                    }
-                    while (i != pingValue) {
-                    }
-                    pongValue = i;
-                    System.out.println("thread_2: " + j);
-                    sleep();
-                }
+            while (last.equals(thread)) {
             }
+            System.out.println(thread + ":" + j);
+            last = thread;
+            sleep();
         }
     }
 
@@ -58,6 +27,13 @@ public final class PingPongByVolatile {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void go() {
+        Thread thread1 = new Thread(() -> print("thread_1"));
+        Thread thread2 = new Thread(() -> print("thread_2"));
+        thread1.start();
+        thread2.start();
     }
 
 }
