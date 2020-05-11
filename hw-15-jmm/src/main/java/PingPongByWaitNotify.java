@@ -22,7 +22,7 @@ public class PingPongByWaitNotify {
                     }
                     this.wait();
                 }
-                System.out.println(thread + ":" + j);
+                System.out.println(thread + ": " + j);
                 last = thread;
                 sleep();
                 notifyAll();
