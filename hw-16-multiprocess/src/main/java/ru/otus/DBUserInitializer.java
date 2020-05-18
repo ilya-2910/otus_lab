@@ -6,7 +6,7 @@ import ru.otus.core.service.DBServiceUser;
 
 import javax.annotation.PostConstruct;
 
-@Component
+//@Component
 public class DBUserInitializer {
 
     private DBServiceUser dbServiceUser;

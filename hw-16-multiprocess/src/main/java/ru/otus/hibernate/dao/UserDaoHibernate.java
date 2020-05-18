@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@Repository
+//@Repository
 public class UserDaoHibernate implements UserDao {
   private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
 

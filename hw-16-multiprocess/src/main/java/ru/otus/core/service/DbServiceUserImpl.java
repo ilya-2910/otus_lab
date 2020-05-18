@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 public class DbServiceUserImpl implements DBServiceUser {
   private static Logger logger = LoggerFactory.getLogger(DbServiceUserImpl.class);
 
