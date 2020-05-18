@@ -32,6 +32,7 @@
         <module>hw-11-cache</module>
         <module>hw-13-di</module>
         <module>hw-14-web-socket</module>
+        <module>hw-15-jmm</module>
     </modules>
 
     <dependencies>
