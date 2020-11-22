@@ -18,6 +18,8 @@
     "lodash": "4.17.15",
     "moment": "2.24.0",
     "react": "16.13.1",
+    "react-calendar-timeline": "^0.27.0",
+    "interactjs": "^1.3.4",
     "react-dom": "16.13.1",
     "react-hot-loader": "4.12.20",
     "react-jhipster": "0.11.0",
