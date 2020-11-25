@@ -82,6 +82,9 @@ export const Visit = (props: IVisitProps) => {
                 <th>
                   <Translate contentKey="courseWorkApp.visit.pet">Pet</Translate>
                 </th>
+                <th>
+                  <Translate contentKey="courseWorkApp.visit.vet">Vet</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -96,6 +99,7 @@ export const Visit = (props: IVisitProps) => {
                   <td>{visit.startDate ? <TextFormat type="date" value={visit.startDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.endDate ? <TextFormat type="date" value={visit.endDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.id}</Link> : ''}</td>
+                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${visit.id}`} color="info" size="sm">

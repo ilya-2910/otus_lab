@@ -1,12 +1,8 @@
 {
-  "name": "Owner",
+  "name": "Vet",
   "fields": [
     {
       "fieldName": "name",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "address",
       "fieldType": "String"
     },
     {
@@ -17,13 +13,13 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "pet",
-      "otherEntityRelationshipName": "owner",
-      "relationshipName": "pets"
+      "otherEntityName": "visit",
+      "otherEntityRelationshipName": "vet",
+      "relationshipName": "visits"
     }
   ],
-  "changelogDate": "20201125212713",
-  "entityTableName": "owner",
+  "changelogDate": "20201125212813",
+  "entityTableName": "vet",
   "dto": "no",
   "pagination": "no",
   "service": "serviceImpl",

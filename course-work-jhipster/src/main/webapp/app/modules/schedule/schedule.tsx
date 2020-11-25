@@ -19,14 +19,14 @@ const items = [
   {
     id: 1,
     group: 1,
-    title: 'Иванов в',
+    title: 'Барсик',
     start_time: moment(),
     end_time: moment().add(1, 'hour')
   },
   {
     id: 2,
     group: 2,
-    title: 'item 2',
+    title: 'Жучка',
     start_time: moment().add(-0.5, 'hour'),
     end_time: moment().add(0.5, 'hour')
   },

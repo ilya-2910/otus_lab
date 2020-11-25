@@ -9,6 +9,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IPet } from 'app/shared/model/pet.model';
 import { getEntities as getPets } from 'app/entities/pet/pet.reducer';
+import { IVet } from 'app/shared/model/vet.model';
+import { getEntities as getVets } from 'app/entities/vet/vet.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './visit.reducer';
 import { IVisit } from 'app/shared/model/visit.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -18,9 +20,10 @@ export interface IVisitUpdateProps extends StateProps, DispatchProps, RouteCompo
 
 export const VisitUpdate = (props: IVisitUpdateProps) => {
   const [petId, setPetId] = useState('0');
+  const [vetId, setVetId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { visitEntity, pets, loading, updating } = props;
+  const { visitEntity, pets, vets, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/visit');
@@ -34,6 +37,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
     }
 
     props.getPets();
+    props.getVets();
   }, []);
 
   useEffect(() => {
@@ -124,6 +128,21 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                     : null}
                 </AvInput>
               </AvGroup>
+              <AvGroup>
+                <Label for="visit-vet">
+                  <Translate contentKey="courseWorkApp.visit.vet">Vet</Translate>
+                </Label>
+                <AvInput id="visit-vet" type="select" className="form-control" name="vet.id">
+                  <option value="" key="0" />
+                  {vets
+                    ? vets.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/visit" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -147,6 +166,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
 
 const mapStateToProps = (storeState: IRootState) => ({
   pets: storeState.pet.entities,
+  vets: storeState.vet.entities,
   visitEntity: storeState.visit.entity,
   loading: storeState.visit.loading,
   updating: storeState.visit.updating,
@@ -155,6 +175,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getPets,
+  getVets,
   getEntity,
   updateEntity,
   createEntity,

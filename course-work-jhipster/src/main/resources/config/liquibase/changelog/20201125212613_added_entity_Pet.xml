@@ -8,29 +8,27 @@
 
     
     <!--
-        Added the entity Visit.
+        Added the entity Pet.
     -->
-    <changeSet id="20201125195242-1" author="jhipster">
-        <createTable tableName="visit">
+    <changeSet id="20201125212613-1" author="jhipster">
+        <createTable tableName="pet">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="start_date" type="datetime">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="end_date" type="datetime">
+            <column name="type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="pet_id" type="bigint">
+            <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="visit" columnName="start_date" columnDataType="datetime"/>
-        <dropDefaultValue tableName="visit" columnName="end_date" columnDataType="datetime"/>
     </changeSet>
 
-    <changeSet id="20201125195242-1-relations" author="jhipster">
+    <changeSet id="20201125212613-1-relations" author="jhipster">
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -43,14 +41,14 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20201125195242-1-data" author="jhipster" context="faker">
+    <changeSet id="20201125212613-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/visit.csv"
+                  file="config/liquibase/fake-data/pet.csv"
                   separator=";"
-                  tableName="visit">
+                  tableName="pet">
             <column name="id" type="numeric"/>
-            <column name="start_date" type="datetime"/>
-            <column name="end_date" type="datetime"/>
+            <column name="name" type="string"/>
+            <column name="type" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

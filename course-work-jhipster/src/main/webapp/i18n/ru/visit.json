@@ -18,7 +18,8 @@
       },
       "startDate": "Start Date",
       "endDate": "End Date",
-      "pet": "Pet"
+      "pet": "Pet",
+      "vet": "Vet"
     }
   }
 }

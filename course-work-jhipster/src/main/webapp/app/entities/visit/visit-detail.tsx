@@ -41,6 +41,10 @@ export const VisitDetail = (props: IVisitDetailProps) => {
             <Translate contentKey="courseWorkApp.visit.pet">Pet</Translate>
           </dt>
           <dd>{visitEntity.pet ? visitEntity.pet.id : ''}</dd>
+          <dt>
+            <Translate contentKey="courseWorkApp.visit.vet">Vet</Translate>
+          </dt>
+          <dd>{visitEntity.vet ? visitEntity.vet.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/visit" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

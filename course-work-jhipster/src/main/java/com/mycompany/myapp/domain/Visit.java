@@ -31,6 +31,10 @@ public class Visit implements Serializable {
     @JsonIgnoreProperties(value = "visits", allowSetters = true)
     private Pet pet;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = "visits", allowSetters = true)
+    private Vet vet;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -77,6 +81,19 @@ public class Visit implements Serializable {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public Vet getVet() {
+        return vet;
+    }
+
+    public Visit vet(Vet vet) {
+        this.vet = vet;
+        return this;
+    }
+
+    public void setVet(Vet vet) {
+        this.vet = vet;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

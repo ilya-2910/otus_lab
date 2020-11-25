@@ -6,13 +6,19 @@
     <!--
         Added the constraints for entity Visit.
     -->
-    <changeSet id="20201124202100-2" author="jhipster">
+    <changeSet id="20201125212513-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="pet_id"
                                  baseTableName="visit"
                                  constraintName="fk_visit_pet_id"
                                  referencedColumnNames="id"
                                  referencedTableName="pet"/>
+
+        <addForeignKeyConstraint baseColumnNames="vet_id"
+                                 baseTableName="visit"
+                                 constraintName="fk_visit_vet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vet"/>
 
     </changeSet>
 </databaseChangeLog>

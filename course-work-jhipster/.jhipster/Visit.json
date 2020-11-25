@@ -17,9 +17,16 @@
       "otherEntityRelationshipName": "visits",
       "relationshipName": "pet",
       "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "vet",
+      "otherEntityRelationshipName": "visits",
+      "relationshipName": "vet",
+      "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20201125195242",
+  "changelogDate": "20201125212513",
   "entityTableName": "visit",
   "dto": "no",
   "pagination": "no",

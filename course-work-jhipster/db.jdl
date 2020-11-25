@@ -19,9 +19,15 @@ entity Owner {
     phone String
 }
 
+entity Vet {
+	name String,
+    phone String
+}
+
 relationship OneToMany {
 	Owner{pets} to Pet{owner},
-	Pet{visits} to Visit{pet}
+	Pet{visits} to Visit{pet},
+	Vet{visits} to Visit{vet}
 }
 
 service all with serviceImpl

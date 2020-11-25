@@ -11,6 +11,7 @@
         "visit": "Visit",
         "pet": "Pet",
         "owner": "Owner",
+        "vet": "Vet",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

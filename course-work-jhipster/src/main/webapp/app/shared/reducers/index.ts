@@ -24,6 +24,10 @@ import pet, {
 import owner, {
   OwnerState
 } from 'app/entities/owner/owner.reducer';
+// prettier-ignore
+import vet, {
+  VetState
+} from 'app/entities/vet/vet.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -40,6 +44,7 @@ export interface IRootState {
   readonly visit: VisitState;
   readonly pet: PetState;
   readonly owner: OwnerState;
+  readonly vet: VetState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -58,6 +63,7 @@ const rootReducer = combineReducers<IRootState>({
   visit,
   pet,
   owner,
+  vet,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });
