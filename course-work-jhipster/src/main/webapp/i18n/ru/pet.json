@@ -1,0 +1,25 @@
+{
+  "courseWorkApp": {
+    "pet": {
+      "home": {
+        "title": "Pets",
+        "createLabel": "Создать новый Pet",
+        "createOrEditLabel": "Создать или отредактировать Pet",
+        "notFound": "No Pets found"
+      },
+      "created": "Новый Pet создан с идентификатором {{ param }}",
+      "updated": "Pet обновлен с идентификатором {{ param }}",
+      "deleted": "Pet удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Pet {{ id }}?"
+      },
+      "detail": {
+        "title": "Pet"
+      },
+      "name": "Name",
+      "type": "Type",
+      "visits": "Visits",
+      "owner": "Owner"
+    }
+  }
+}

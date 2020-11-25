@@ -93,7 +93,7 @@ export const Home = (props: IHomeProp) => {
         </p>
       </Col>
       <Col md="3" className="pad">
-        <span className="hipster rounded" />
+        {/*<span className="hipster rounded" />*/}
       </Col>
     </Row>
   );

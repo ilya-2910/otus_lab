@@ -1,0 +1,27 @@
+
+entity Visit {
+	startDate Instant,
+	endDate Instant,
+}
+
+entity Pet {
+	name String,
+    type PetType,
+}
+
+enum PetType {
+    Dog, Cat
+}
+
+entity Owner {
+	name String,
+    address String,
+    phone String
+}
+
+relationship OneToMany {
+	Owner{pets} to Pet{owner},
+	Pet{visits} to Visit{pet}
+}
+
+service all with serviceImpl

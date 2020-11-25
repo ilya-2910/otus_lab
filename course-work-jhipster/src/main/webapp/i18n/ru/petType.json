@@ -1,0 +1,9 @@
+{
+  "courseWorkApp": {
+    "PetType": {
+      "null": "",
+      "Dog": "Dog",
+      "Cat": "Cat"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Visit",
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "pet",
+      "otherEntityRelationshipName": "visits",
+      "relationshipName": "pet",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201125195242",
+  "entityTableName": "visit",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
