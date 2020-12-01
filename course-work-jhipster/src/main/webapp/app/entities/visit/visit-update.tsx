@@ -122,7 +122,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                   {pets
                     ? pets.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}
@@ -137,7 +137,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                   {vets
                     ? vets.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}

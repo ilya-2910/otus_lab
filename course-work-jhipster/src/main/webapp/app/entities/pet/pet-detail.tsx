@@ -40,7 +40,7 @@ export const PetDetail = (props: IPetDetailProps) => {
           <dt>
             <Translate contentKey="courseWorkApp.pet.owner">Owner</Translate>
           </dt>
-          <dd>{petEntity.owner ? petEntity.owner.id : ''}</dd>
+          <dd>{petEntity.owner ? petEntity.owner.name : ''}</dd>
         </dl>
         <Button tag={Link} to="/pet" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

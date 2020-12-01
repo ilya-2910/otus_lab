@@ -10,7 +10,7 @@ import { NavLink as Link } from 'react-router-dom';
 
 export const ScheduleMenu = props => (
   <NavItem>
-    <NavLink tag={Link} to="/schedule" className="d-flex align-items-center">
+    <NavLink tag={Link} to="/" className="d-flex align-items-center">
       <FontAwesomeIcon icon="eye" />
       <span>
         <Translate contentKey="global.menu.schedule">Home</Translate>

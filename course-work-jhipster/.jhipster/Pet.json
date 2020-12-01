@@ -26,7 +26,7 @@
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20201125212613",
+  "changelogDate": "20201129172042",
   "entityTableName": "pet",
   "dto": "no",
   "pagination": "no",

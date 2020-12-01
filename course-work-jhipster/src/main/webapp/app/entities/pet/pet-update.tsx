@@ -104,7 +104,7 @@ export const PetUpdate = (props: IPetUpdateProps) => {
                   {owners
                     ? owners.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}

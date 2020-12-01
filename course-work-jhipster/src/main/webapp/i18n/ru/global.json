@@ -1,10 +1,9 @@
 {
   "global": {
-    "title": "Ветеринарная клиника",
+    "title": "CourseWork",
     "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=ru\">обновите ваш браузер</a>.",
     "menu": {
       "home": "Главная",
-      "schedule": "Расписание",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Сущности",

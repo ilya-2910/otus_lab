@@ -15,39 +15,54 @@ import 'react-calendar-timeline/lib/Timeline.css'
 
 export interface IVisitProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
-const groups = [{ id: 1, title: 'Иванов И В' }, { id: 2, title: 'Петров В В' }];
-
-const items = [
-  {
-    id: 1,
-    group: 1,
-    title: 'Иванов в',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour')
-  },
-  {
-    id: 2,
-    group: 2,
-    title: 'item 2',
-    start_time: moment().add(-0.5, 'hour'),
-    end_time: moment().add(0.5, 'hour')
-  },
-  {
-    id: 3,
-    group: 1,
-    title: 'item 3',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour')
-  }
-]
-
-
 export const Visit = (props: IVisitProps) => {
+
+  function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
+    // this limits the timeline to -6 months ... +6 months
+    const minTime = moment().add(-26, 'hours').valueOf();
+    const maxTime = moment().add(26, 'hours').valueOf();
+
+    if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
+      updateScrollCanvas(minTime, maxTime)
+    } else if (visibleTimeStart < minTime) {
+      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
+    } else if (visibleTimeEnd > maxTime) {
+      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
+    } else {
+      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
+    }
+  }
+
+
   useEffect(() => {
     props.getEntities();
   }, []);
 
   const { visitList, match, loading } = props;
+
+  let vetArr = visitList.map(value => value.vet);
+
+  let groups2 = vetArr.map((value, index) => {
+    return {id: value.id, title: value.name};
+  }).filter((value, index, self) => self.map(x => x.id).indexOf(value.id) === index);
+
+  const items2 = visitList.map((value, index) => {
+    return {
+      id: index,
+      group: value.vet.id,
+      title: value.pet.name,
+      start_time: moment(value.startDate),
+      end_time: moment(value.endDate),
+      canResize: false,
+      canMove: false,
+      maxZoom: 60 * 60 * 1000,
+      style: {
+        background: 'fuchsia'
+      }
+
+    }
+  });
+
   return (
     <div>
       <h2 id="visit-heading">
@@ -59,10 +74,17 @@ export const Visit = (props: IVisitProps) => {
         </Link>
       </h2>
       <Timeline
-        groups={groups}
-        items={items}
+        itemsSorted
+        itemTouchSendsClick={false}
+        canMove={false}
+        canResize={false}
+        minZoom={60 * 1000 * 1000}
+        groups={groups2}
+        items={items2}
         defaultTimeStart={moment().add(-12, 'hour')}
         defaultTimeEnd={moment().add(12, 'hour')}
+        sidebarWidth={250}
+        onTimeChange={onTimeChange}
       />
       <p/>
       <div className="table-responsive">
@@ -98,8 +120,8 @@ export const Visit = (props: IVisitProps) => {
                   </td>
                   <td>{visit.startDate ? <TextFormat type="date" value={visit.startDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.endDate ? <TextFormat type="date" value={visit.endDate} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.id}</Link> : ''}</td>
-                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.id}</Link> : ''}</td>
+                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.name}</Link> : ''}</td>
+                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.name}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${visit.id}`} color="info" size="sm">

@@ -8,17 +8,14 @@
 
     
     <!--
-        Added the entity Owner.
+        Added the entity Vet.
     -->
-    <changeSet id="20201125212713-1" author="jhipster">
-        <createTable tableName="owner">
+    <changeSet id="20201129165854-1" author="jhipster">
+        <createTable tableName="vet">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="address" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="phone" type="varchar(255)">
@@ -28,7 +25,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20201125212713-1-relations" author="jhipster">
+    <changeSet id="20201129165854-1-relations" author="jhipster">
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -41,14 +38,13 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20201125212713-1-data" author="jhipster" context="faker">
+    <changeSet id="20201129165854-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/owner.csv"
+                  file="config/liquibase/fake-data/vet.csv"
                   separator=";"
-                  tableName="owner">
+                  tableName="vet">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
-            <column name="address" type="string"/>
             <column name="phone" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
