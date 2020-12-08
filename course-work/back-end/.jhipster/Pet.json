@@ -1,0 +1,40 @@
+{
+  "name": "Pet",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "PetType",
+      "fieldValues": "Dog,Cat"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "visit",
+      "otherEntityRelationshipName": "pet",
+      "relationshipName": "visits"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "pets",
+      "relationshipName": "owner",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201208212104",
+  "entityTableName": "pet",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
