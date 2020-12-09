@@ -1,9 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Visit;
+import com.mycompany.myapp.service.TimeVisitService;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 
+import com.mycompany.myapp.web.rest.errors.VisitTimeOverlapException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -16,9 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Visit}.
@@ -35,9 +34,12 @@ public class VisitResource {
     private String applicationName;
 
     private final VisitService visitService;
+    private final TimeVisitService timeVisitService;
 
-    public VisitResource(VisitService visitService) {
+
+    public VisitResource(VisitService visitService, TimeVisitService timeVisitService) {
         this.visitService = visitService;
+        this.timeVisitService = timeVisitService;
     }
 
     /**
@@ -53,6 +55,11 @@ public class VisitResource {
         if (visit.getId() != null) {
             throw new BadRequestAlertException("A new visit cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        boolean isVisitTimeOverlap = timeVisitService.isVisitTimeOverlap(visit);
+        if (isVisitTimeOverlap) {
+            throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
+        }
+
         Visit result = visitService.save(visit);
         return ResponseEntity.created(new URI("/api/visits/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -73,6 +80,10 @@ public class VisitResource {
         log.debug("REST request to update Visit : {}", visit);
         if (visit.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        boolean isVisitTimeOverlap = timeVisitService.isVisitTimeOverlap(visit);
+        if (isVisitTimeOverlap) {
+            throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
         }
         Visit result = visitService.save(visit);
         return ResponseEntity.ok()
