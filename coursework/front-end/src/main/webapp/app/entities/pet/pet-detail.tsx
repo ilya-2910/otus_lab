@@ -29,10 +29,8 @@ export const PetDetail = (props: IPetDetailProps) => {
             <span id="name">Name</span>
           </dt>
           <dd>{petEntity.name}</dd>
-          <dt>
-            <span id="type">Type</span>
-          </dt>
-          <dd>{petEntity.type}</dd>
+          <dt>Type</dt>
+          <dd>{petEntity.type ? petEntity.type.id : ''}</dd>
           <dt>Owner</dt>
           <dd>{petEntity.owner ? petEntity.owner.id : ''}</dd>
         </dl>

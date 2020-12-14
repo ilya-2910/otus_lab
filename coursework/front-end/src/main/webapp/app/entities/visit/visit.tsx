@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
+import { Button, InputGroup, Col, Row, Table, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { ICrudSearchAction, ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,11 +13,14 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import moment from "moment";
 import Timeline from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
+import {convertDateTimeFromServer, displayDefaultDateTime} from "app/shared/util/date-utils";
 
 export interface IVisitProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Visit = (props: IVisitProps) => {
   const [search, setSearch] = useState('');
+
+  const [date, setDate] = useState('');
 
   useEffect(() => {
     props.getEntities();
@@ -87,6 +90,8 @@ export const Visit = (props: IVisitProps) => {
           &nbsp; Create new Visit
         </Link>
       </h2>
+      {/*<input name="startDate" placeholder="YYYY-MM-DD HH:mm" id="visit-startDate" type="datetime-local"*/}
+      {/*       className="form-control is-untouched is-pristine av-valid form-control" value="2020-12-12T00:00"/>*/}
       <Timeline
         itemsSorted
         itemTouchSendsClick={false}
@@ -95,14 +100,26 @@ export const Visit = (props: IVisitProps) => {
         minZoom={60 * 1000 * 1000}
         groups={groups}
         items={items}
-        defaultTimeStart={moment().add(-12, 'hour')}
-        defaultTimeEnd={moment().add(12, 'hour')}
+        defaultTimeStart={moment().startOf('day')}
+        defaultTimeEnd={moment().endOf('day')}
         sidebarWidth={250}
         onTimeChange={onTimeChange}
       />
       <Row>
         <Col sm="12">
           <AvForm onSubmit={startSearching}>
+            <AvGroup>
+              <Label id="startDateLabel" for="visit-startDate">
+                Start Date
+              </Label>
+              <AvInput
+                id="visit-startDate"
+                type="datetime-local"
+                className="form-control"
+                name="startDate"
+                placeholder={'YYYY-MM-DD HH:mm'}
+              />
+            </AvGroup>
             <AvGroup>
               <InputGroup>
                 <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />
@@ -125,6 +142,8 @@ export const Visit = (props: IVisitProps) => {
                 <th>ID</th>
                 <th>Start Date</th>
                 <th>End Date</th>
+                <th>Description</th>
+                <th>Status</th>
                 <th>Pet</th>
                 <th>Vet</th>
                 <th />
@@ -140,6 +159,8 @@ export const Visit = (props: IVisitProps) => {
                   </td>
                   <td>{visit.startDate ? <TextFormat type="date" value={visit.startDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.endDate ? <TextFormat type="date" value={visit.endDate} format={APP_DATE_FORMAT} /> : null}</td>
+                  <td>{visit.description}</td>
+                  <td>{visit.status}</td>
                   <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.name}</Link> : ''}</td>
                   <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.name}</Link> : ''}</td>
                   <td className="text-right">

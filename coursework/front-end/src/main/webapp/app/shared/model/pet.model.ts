@@ -1,12 +1,12 @@
 import { IVisit } from 'app/shared/model/visit.model';
+import { IPetType } from 'app/shared/model/pet-type.model';
 import { IOwner } from 'app/shared/model/owner.model';
-import { PetType } from 'app/shared/model/enumerations/pet-type.model';
 
 export interface IPet {
   id?: number;
   name?: string;
-  type?: PetType;
   visits?: IVisit[];
+  type?: IPetType;
   owner?: IOwner;
 }
 

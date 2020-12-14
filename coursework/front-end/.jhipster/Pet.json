@@ -4,11 +4,6 @@
     {
       "fieldName": "name",
       "fieldType": "String"
-    },
-    {
-      "fieldName": "type",
-      "fieldType": "PetType",
-      "fieldValues": "Dog,Cat"
     }
   ],
   "relationships": [
@@ -17,6 +12,13 @@
       "otherEntityName": "visit",
       "otherEntityRelationshipName": "pet",
       "relationshipName": "visits"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "petType",
+      "otherEntityRelationshipName": "pet",
+      "relationshipName": "type",
+      "otherEntityField": "id"
     },
     {
       "relationshipType": "many-to-one",

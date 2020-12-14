@@ -21,6 +21,8 @@
     "otherModules": [],
     "enableTranslation": false,
     "blueprints": [],
-    "skipServer": true
+    "skipServer": true,
+    "herokuAppName": "radiant-bastion-45584",
+    "herokuDeployType": "jar"
   }
 }

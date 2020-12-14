@@ -81,7 +81,7 @@ export const Pet = (props: IPetProps) => {
                     </Button>
                   </td>
                   <td>{pet.name}</td>
-                  <td>{pet.type}</td>
+                  <td>{pet.type ? <Link to={`pet-type/${pet.type.id}`}>{pet.type.id}</Link> : ''}</td>
                   <td>{pet.owner ? <Link to={`owner/${pet.owner.id}`}>{pet.owner.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

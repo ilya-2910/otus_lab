@@ -16,6 +16,12 @@
       "otherEntityName": "visit",
       "otherEntityRelationshipName": "vet",
       "relationshipName": "visits"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "vetSchedule",
+      "otherEntityRelationshipName": "vet",
+      "relationshipName": "schedules"
     }
   ],
   "changelogDate": "20201208214518",

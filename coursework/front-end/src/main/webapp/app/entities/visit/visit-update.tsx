@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
-import { AvFeedback, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
+import { ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -11,7 +11,7 @@ import { IPet } from 'app/shared/model/pet.model';
 import { getEntities as getPets } from 'app/entities/pet/pet.reducer';
 import { IVet } from 'app/shared/model/vet.model';
 import { getEntities as getVets } from 'app/entities/vet/vet.reducer';
-import { getEntity, updateEntity, createEntity, reset } from './visit.reducer';
+import { getEntity, updateEntity, createEntity, setBlob, reset } from './visit.reducer';
 import { IVisit } from 'app/shared/model/visit.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
@@ -24,6 +24,8 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
   const { visitEntity, pets, vets, loading, updating } = props;
+
+  const { description } = visitEntity;
 
   const handleClose = () => {
     props.history.push('/visit');
@@ -39,6 +41,14 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
     props.getPets();
     props.getVets();
   }, []);
+
+  const onBlobChange = (isAnImage, name) => event => {
+    setFileData(event, (contentType, data) => props.setBlob(name, data, contentType), isAnImage);
+  };
+
+  const clearBlob = name => () => {
+    props.setBlob(name, undefined, undefined);
+  };
 
   useEffect(() => {
     if (props.updateSuccess) {
@@ -110,6 +120,28 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
+                <Label id="descriptionLabel" for="visit-description">
+                  Description
+                </Label>
+                <AvInput id="visit-description" type="textarea" name="description" />
+              </AvGroup>
+              <AvGroup>
+                <Label id="statusLabel" for="visit-status">
+                  Status
+                </Label>
+                <AvInput
+                  id="visit-status"
+                  type="select"
+                  className="form-control"
+                  name="status"
+                  value={(!isNew && visitEntity.status) || 'NEW'}
+                >
+                  <option value="NEW">NEW</option>
+                  <option value="DONE">DONE</option>
+                  <option value="REJECT">REJECT</option>
+                </AvInput>
+              </AvGroup>
+              <AvGroup>
                 <Label for="visit-pet">Pet</Label>
                 <AvInput id="visit-pet" type="select" className="form-control" name="pet.id">
                   <option value="" key="0" />
@@ -167,6 +199,7 @@ const mapDispatchToProps = {
   getVets,
   getEntity,
   updateEntity,
+  setBlob,
   createEntity,
   reset,
 };

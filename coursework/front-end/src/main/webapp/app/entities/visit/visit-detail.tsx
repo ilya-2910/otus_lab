@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { ICrudGetAction, TextFormat } from 'react-jhipster';
+import { ICrudGetAction, byteSize, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -33,6 +33,14 @@ export const VisitDetail = (props: IVisitDetailProps) => {
             <span id="endDate">End Date</span>
           </dt>
           <dd>{visitEntity.endDate ? <TextFormat value={visitEntity.endDate} type="date" format={APP_DATE_FORMAT} /> : null}</dd>
+          <dt>
+            <span id="description">Description</span>
+          </dt>
+          <dd>{visitEntity.description}</dd>
+          <dt>
+            <span id="status">Status</span>
+          </dt>
+          <dd>{visitEntity.status}</dd>
           <dt>Pet</dt>
           <dd>{visitEntity.pet ? visitEntity.pet.id : ''}</dd>
           <dt>Vet</dt>

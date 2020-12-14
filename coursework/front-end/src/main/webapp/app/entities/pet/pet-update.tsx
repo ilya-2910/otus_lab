@@ -7,6 +7,8 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipste
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IPetType } from 'app/shared/model/pet-type.model';
+import { getEntities as getPetTypes } from 'app/entities/pet-type/pet-type.reducer';
 import { IOwner } from 'app/shared/model/owner.model';
 import { getEntities as getOwners } from 'app/entities/owner/owner.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './pet.reducer';
@@ -17,10 +19,11 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IPetUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const PetUpdate = (props: IPetUpdateProps) => {
+  const [typeId, setTypeId] = useState('0');
   const [ownerId, setOwnerId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { petEntity, owners, loading, updating } = props;
+  const { petEntity, petTypes, owners, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/pet');
@@ -33,6 +36,7 @@ export const PetUpdate = (props: IPetUpdateProps) => {
       props.getEntity(props.match.params.id);
     }
 
+    props.getPetTypes();
     props.getOwners();
   }, []);
 
@@ -83,12 +87,16 @@ export const PetUpdate = (props: IPetUpdateProps) => {
                 <AvField id="pet-name" type="text" name="name" />
               </AvGroup>
               <AvGroup>
-                <Label id="typeLabel" for="pet-type">
-                  Type
-                </Label>
-                <AvInput id="pet-type" type="select" className="form-control" name="type" value={(!isNew && petEntity.type) || 'Dog'}>
-                  <option value="Dog">Dog</option>
-                  <option value="Cat">Cat</option>
+                <Label for="pet-type">Type</Label>
+                <AvInput id="pet-type" type="select" className="form-control" name="type.id">
+                  <option value="" key="0" />
+                  {petTypes
+                    ? petTypes.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
                 </AvInput>
               </AvGroup>
               <AvGroup>
@@ -123,6 +131,7 @@ export const PetUpdate = (props: IPetUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  petTypes: storeState.petType.entities,
   owners: storeState.owner.entities,
   petEntity: storeState.pet.entity,
   loading: storeState.pet.loading,
@@ -131,6 +140,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getPetTypes,
   getOwners,
   getEntity,
   updateEntity,
