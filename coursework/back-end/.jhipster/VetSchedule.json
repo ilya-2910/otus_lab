@@ -1,0 +1,33 @@
+{
+  "name": "VetSchedule",
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "vet",
+      "otherEntityRelationshipName": "schedules",
+      "relationshipName": "vet",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201212124339",
+  "entityTableName": "vet_schedule",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}
