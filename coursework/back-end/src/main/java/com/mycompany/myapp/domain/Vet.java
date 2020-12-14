@@ -32,6 +32,9 @@ public class Vet implements Serializable {
     @OneToMany(mappedBy = "vet")
     private Set<Visit> visits = new HashSet<>();
 
+    @OneToMany(mappedBy = "vet")
+    private Set<VetSchedule> schedules = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -90,6 +93,31 @@ public class Vet implements Serializable {
 
     public void setVisits(Set<Visit> visits) {
         this.visits = visits;
+    }
+
+    public Set<VetSchedule> getSchedules() {
+        return schedules;
+    }
+
+    public Vet schedules(Set<VetSchedule> vetSchedules) {
+        this.schedules = vetSchedules;
+        return this;
+    }
+
+    public Vet addSchedules(VetSchedule vetSchedule) {
+        this.schedules.add(vetSchedule);
+        vetSchedule.setVet(this);
+        return this;
+    }
+
+    public Vet removeSchedules(VetSchedule vetSchedule) {
+        this.schedules.remove(vetSchedule);
+        vetSchedule.setVet(null);
+        return this;
+    }
+
+    public void setSchedules(Set<VetSchedule> vetSchedules) {
+        this.schedules = vetSchedules;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

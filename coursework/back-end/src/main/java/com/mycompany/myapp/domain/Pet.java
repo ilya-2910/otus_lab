@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.mycompany.myapp.domain.enumeration.PetType;
-
 /**
  * A Pet.
  */
@@ -29,12 +27,12 @@ public class Pet implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private PetType type;
-
     @OneToMany(mappedBy = "pet")
     private Set<Visit> visits = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = "pets", allowSetters = true)
+    private PetType type;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "pets", allowSetters = true)
@@ -62,19 +60,6 @@ public class Pet implements Serializable {
         this.name = name;
     }
 
-    public PetType getType() {
-        return type;
-    }
-
-    public Pet type(PetType type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(PetType type) {
-        this.type = type;
-    }
-
     public Set<Visit> getVisits() {
         return visits;
     }
@@ -98,6 +83,19 @@ public class Pet implements Serializable {
 
     public void setVisits(Set<Visit> visits) {
         this.visits = visits;
+    }
+
+    public PetType getType() {
+        return type;
+    }
+
+    public Pet type(PetType petType) {
+        this.type = petType;
+        return this;
+    }
+
+    public void setType(PetType petType) {
+        this.type = petType;
     }
 
     public Owner getOwner() {
@@ -136,7 +134,6 @@ public class Pet implements Serializable {
         return "Pet{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", type='" + getType() + "'" +
             "}";
     }
 }

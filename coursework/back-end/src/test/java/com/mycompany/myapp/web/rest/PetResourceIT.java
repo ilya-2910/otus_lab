@@ -29,7 +29,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.mycompany.myapp.domain.enumeration.PetType;
 /**
  * Integration tests for the {@link PetResource} REST controller.
  */
@@ -41,9 +40,6 @@ public class PetResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final PetType DEFAULT_TYPE = PetType.Dog;
-    private static final PetType UPDATED_TYPE = PetType.Cat;
 
     @Autowired
     private PetRepository petRepository;
@@ -75,8 +71,7 @@ public class PetResourceIT {
      */
     public static Pet createEntity(EntityManager em) {
         Pet pet = new Pet()
-            .name(DEFAULT_NAME)
-            .type(DEFAULT_TYPE);
+            .name(DEFAULT_NAME);
         return pet;
     }
     /**
@@ -87,8 +82,7 @@ public class PetResourceIT {
      */
     public static Pet createUpdatedEntity(EntityManager em) {
         Pet pet = new Pet()
-            .name(UPDATED_NAME)
-            .type(UPDATED_TYPE);
+            .name(UPDATED_NAME);
         return pet;
     }
 
@@ -112,7 +106,6 @@ public class PetResourceIT {
         assertThat(petList).hasSize(databaseSizeBeforeCreate + 1);
         Pet testPet = petList.get(petList.size() - 1);
         assertThat(testPet.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testPet.getType()).isEqualTo(DEFAULT_TYPE);
 
         // Validate the Pet in Elasticsearch
         verify(mockPetSearchRepository, times(1)).save(testPet);
@@ -152,8 +145,7 @@ public class PetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(pet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
     
     @Test
@@ -167,8 +159,7 @@ public class PetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(pet.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
     @Test
     @Transactional
@@ -191,8 +182,7 @@ public class PetResourceIT {
         // Disconnect from session so that the updates on updatedPet are not directly saved in db
         em.detach(updatedPet);
         updatedPet
-            .name(UPDATED_NAME)
-            .type(UPDATED_TYPE);
+            .name(UPDATED_NAME);
 
         restPetMockMvc.perform(put("/api/pets")
             .contentType(MediaType.APPLICATION_JSON)
@@ -204,7 +194,6 @@ public class PetResourceIT {
         assertThat(petList).hasSize(databaseSizeBeforeUpdate);
         Pet testPet = petList.get(petList.size() - 1);
         assertThat(testPet.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testPet.getType()).isEqualTo(UPDATED_TYPE);
 
         // Validate the Pet in Elasticsearch
         verify(mockPetSearchRepository, times(2)).save(testPet);
@@ -264,7 +253,6 @@ public class PetResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(pet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 }

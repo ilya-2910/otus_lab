@@ -8,6 +8,16 @@
     {
       "fieldName": "endDate",
       "fieldType": "Instant"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "VisitStatus",
+      "fieldValues": "NEW,DONE,REJECT"
     }
   ],
   "relationships": [

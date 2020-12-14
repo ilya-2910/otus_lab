@@ -1,12 +1,15 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
+
+import com.mycompany.myapp.domain.enumeration.VisitStatus;
 
 /**
  * A Visit.
@@ -28,6 +31,15 @@ public class Visit implements Serializable {
 
     @Column(name = "end_date")
     private Instant endDate;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "description")
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private VisitStatus status;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "visits", allowSetters = true)
@@ -70,6 +82,32 @@ public class Visit implements Serializable {
 
     public void setEndDate(Instant endDate) {
         this.endDate = endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Visit description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public VisitStatus getStatus() {
+        return status;
+    }
+
+    public Visit status(VisitStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(VisitStatus status) {
+        this.status = status;
     }
 
     public Pet getPet() {
@@ -122,6 +160,8 @@ public class Visit implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", status='" + getStatus() + "'" +
             "}";
     }
 }

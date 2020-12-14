@@ -2,15 +2,20 @@
 entity Visit {
 	startDate Instant,
 	endDate Instant,
+	description TextBlob,
+	status VisitStatus
+}
+
+enum VisitStatus {
+    NEW, DONE, REJECT
 }
 
 entity Pet {
 	name String,
-    type PetType,
 }
 
-enum PetType {
-    Dog, Cat
+entity PetType {
+    type String
 }
 
 entity Owner {
@@ -24,10 +29,21 @@ entity Vet {
     phone String
 }
 
+entity VetSchedule {
+	startDate Instant,
+  	endDate Instant
+}
+
+relationship ManyToOne {
+    Pet{type} to PetType
+}
+
+
 relationship OneToMany {
 	Owner{pets} to Pet{owner},
 	Pet{visits} to Visit{pet},
-	Vet{visits} to Visit{vet}
+	Vet{visits} to Visit{vet},
+	Vet{schedules} to VetSchedule{vet}
 }
 
 service all with serviceImpl

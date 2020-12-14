@@ -18,7 +18,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(255)">
+            <column name="type_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="owner_id" type="bigint">
@@ -48,7 +48,6 @@
                   tableName="pet">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
-            <column name="type" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

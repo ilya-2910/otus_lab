@@ -5,7 +5,6 @@ import com.mycompany.myapp.service.TimeVisitService;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 
-import com.mycompany.myapp.web.rest.errors.VisitTimeOverlapException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -18,6 +17,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Visit}.

@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.mycompany.myapp.domain.enumeration.VisitStatus;
 /**
  * Integration tests for the {@link VisitResource} REST controller.
  */
@@ -45,6 +47,12 @@ public class VisitResourceIT {
 
     private static final Instant DEFAULT_END_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final VisitStatus DEFAULT_STATUS = VisitStatus.NEW;
+    private static final VisitStatus UPDATED_STATUS = VisitStatus.DONE;
 
     @Autowired
     private VisitRepository visitRepository;
@@ -77,7 +85,9 @@ public class VisitResourceIT {
     public static Visit createEntity(EntityManager em) {
         Visit visit = new Visit()
             .startDate(DEFAULT_START_DATE)
-            .endDate(DEFAULT_END_DATE);
+            .endDate(DEFAULT_END_DATE)
+            .description(DEFAULT_DESCRIPTION)
+            .status(DEFAULT_STATUS);
         return visit;
     }
     /**
@@ -89,7 +99,9 @@ public class VisitResourceIT {
     public static Visit createUpdatedEntity(EntityManager em) {
         Visit visit = new Visit()
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .description(UPDATED_DESCRIPTION)
+            .status(UPDATED_STATUS);
         return visit;
     }
 
@@ -114,6 +126,8 @@ public class VisitResourceIT {
         Visit testVisit = visitList.get(visitList.size() - 1);
         assertThat(testVisit.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testVisit.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testVisit.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testVisit.getStatus()).isEqualTo(DEFAULT_STATUS);
 
         // Validate the Visit in Elasticsearch
         verify(mockVisitSearchRepository, times(1)).save(testVisit);
@@ -154,7 +168,9 @@ public class VisitResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(visit.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
     
     @Test
@@ -169,7 +185,9 @@ public class VisitResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(visit.getId().intValue()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
     @Test
     @Transactional
@@ -193,7 +211,9 @@ public class VisitResourceIT {
         em.detach(updatedVisit);
         updatedVisit
             .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+            .endDate(UPDATED_END_DATE)
+            .description(UPDATED_DESCRIPTION)
+            .status(UPDATED_STATUS);
 
         restVisitMockMvc.perform(put("/api/visits")
             .contentType(MediaType.APPLICATION_JSON)
@@ -206,6 +226,8 @@ public class VisitResourceIT {
         Visit testVisit = visitList.get(visitList.size() - 1);
         assertThat(testVisit.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testVisit.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testVisit.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testVisit.getStatus()).isEqualTo(UPDATED_STATUS);
 
         // Validate the Visit in Elasticsearch
         verify(mockVisitSearchRepository, times(2)).save(testVisit);
@@ -266,6 +288,8 @@ public class VisitResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(visit.getId().intValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 }
