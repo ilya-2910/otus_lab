@@ -145,4 +145,4 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
-/target/
+target
