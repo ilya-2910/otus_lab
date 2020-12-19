@@ -8,6 +8,8 @@ import Visit from './visit';
 import Pet from './pet';
 import Owner from './owner';
 import Vet from './vet';
+import VetSchedule from './vet-schedule';
+import PetType from './pet-type';
 /* jhipster-needle-add-route-import - JHipster will add routes here */
 
 const Routes = ({ match }) => (
@@ -18,6 +20,8 @@ const Routes = ({ match }) => (
       <ErrorBoundaryRoute path={`${match.url}pet`} component={Pet} />
       <ErrorBoundaryRoute path={`${match.url}owner`} component={Owner} />
       <ErrorBoundaryRoute path={`${match.url}vet`} component={Vet} />
+      <ErrorBoundaryRoute path={`${match.url}vet-schedule`} component={VetSchedule} />
+      <ErrorBoundaryRoute path={`${match.url}pet-type`} component={PetType} />
       {/* jhipster-needle-add-route-path - JHipster will add routes here */}
     </Switch>
   </div>

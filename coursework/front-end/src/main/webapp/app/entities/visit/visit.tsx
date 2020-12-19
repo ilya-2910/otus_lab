@@ -9,22 +9,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 import { getSearchEntities, getEntities } from './visit.reducer';
 import { IVisit } from 'app/shared/model/visit.model';
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import {
+  APP_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT,
+  APP_LOCAL_DATE_FORMAT_2,
+  APP_LOCAL_DATETIME_FORMAT_Z
+} from 'app/config/constants';
 import moment from "moment";
 import Timeline from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
-import {convertDateTimeFromServer, displayDefaultDateTime} from "app/shared/util/date-utils";
 
 export interface IVisitProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Visit = (props: IVisitProps) => {
   const [search, setSearch] = useState('');
 
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(moment().startOf('day'));
 
   useEffect(() => {
     props.getEntities();
   }, []);
+
+  const changeDate = (dayDiff: number) => {
+    if (date) {
+      setDate(moment(date).add(dayDiff, 'days'));
+      props.getSearchEntities(search);
+    }
+  };
 
   const startSearching = () => {
     if (search) {
@@ -84,14 +95,12 @@ export const Visit = (props: IVisitProps) => {
   return (
     <div>
       <h2 id="visit-heading">
-        Visits
+        Предварительная запись
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
           &nbsp; Create new Visit
         </Link>
       </h2>
-      {/*<input name="startDate" placeholder="YYYY-MM-DD HH:mm" id="visit-startDate" type="datetime-local"*/}
-      {/*       className="form-control is-untouched is-pristine av-valid form-control" value="2020-12-12T00:00"/>*/}
       <Timeline
         itemsSorted
         itemTouchSendsClick={false}
@@ -100,25 +109,38 @@ export const Visit = (props: IVisitProps) => {
         minZoom={60 * 1000 * 1000}
         groups={groups}
         items={items}
-        defaultTimeStart={moment().startOf('day')}
-        defaultTimeEnd={moment().endOf('day')}
+        visibleTimeStart={moment(date).startOf('day')}
+        visibleTimeEnd={moment(date).endOf('day')}
         sidebarWidth={250}
         onTimeChange={onTimeChange}
       />
       <Row>
         <Col sm="12">
+          <div style={{width: 300}}>
           <AvForm onSubmit={startSearching}>
             <AvGroup>
-              <Label id="startDateLabel" for="visit-startDate">
-                Start Date
+              <Label id="startDateLabel" for="visit-date">
+                Дата
               </Label>
+              <InputGroup>
               <AvInput
-                id="visit-startDate"
-                type="datetime-local"
+                id="visit-date"
+                type="date"
                 className="form-control"
                 name="startDate"
-                placeholder={'YYYY-MM-DD HH:mm'}
-              />
+                value={date.format().slice(0, 10)}
+                onChange={ (e) => {
+                  setDate(moment(e.target.value));
+                  startSearching();
+                }}
+                />
+              <Button color={'btn btn-primary'} onClick={() => changeDate(-1)}>
+                &lt;
+              </Button>
+              <Button color={'btn btn-primary'} onClick={() => changeDate(1)}>
+                &gt;
+              </Button>
+                </InputGroup>
             </AvGroup>
             <AvGroup>
               <InputGroup>
@@ -132,6 +154,7 @@ export const Visit = (props: IVisitProps) => {
               </InputGroup>
             </AvGroup>
           </AvForm>
+            </div>
         </Col>
       </Row>
       <div className="table-responsive">
