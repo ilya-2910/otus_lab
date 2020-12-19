@@ -12,7 +12,6 @@ import { IVisit } from 'app/shared/model/visit.model';
 import {
   APP_DATE_FORMAT,
   APP_LOCAL_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT_2,
   APP_LOCAL_DATETIME_FORMAT_Z
 } from 'app/config/constants';
 import moment from "moment";

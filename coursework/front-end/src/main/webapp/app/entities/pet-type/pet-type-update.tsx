@@ -77,13 +77,6 @@ export const PetTypeUpdate = (props: IPetTypeUpdateProps) => {
                 </Label>
                 <AvField id="pet-type-type" type="text" name="type" />
               </AvGroup>
-              <AvGroup>
-                <Label id="testLabel" for="pet-type-test">
-                  Test
-                </Label>
-                <AvField id="pet-type-test" type="date" className="form-control" name="test"
-                />
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/pet-type" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

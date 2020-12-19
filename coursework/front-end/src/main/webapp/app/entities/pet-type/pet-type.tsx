@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudSearchAction, ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import { ICrudSearchAction, ICrudGetAllAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -67,7 +67,6 @@ export const PetType = (props: IPetTypeProps) => {
               <tr>
                 <th>ID</th>
                 <th>Type</th>
-                <th>Test</th>
                 <th />
               </tr>
             </thead>
@@ -80,7 +79,6 @@ export const PetType = (props: IPetTypeProps) => {
                     </Button>
                   </td>
                   <td>{petType.type}</td>
-                  <td>{petType.test ? <TextFormat type="date" value={petType.test} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${petType.id}`} color="info" size="sm">

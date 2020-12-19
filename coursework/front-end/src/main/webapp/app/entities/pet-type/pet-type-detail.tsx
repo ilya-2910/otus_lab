@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { ICrudGetAction, TextFormat } from 'react-jhipster';
+import { ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -29,10 +29,6 @@ export const PetTypeDetail = (props: IPetTypeDetailProps) => {
             <span id="type">Type</span>
           </dt>
           <dd>{petTypeEntity.type}</dd>
-          <dt>
-            <span id="test">Test</span>
-          </dt>
-          <dd>{petTypeEntity.test ? <TextFormat value={petTypeEntity.test} type="date" format={APP_LOCAL_DATE_FORMAT} /> : null}</dd>
         </dl>
         <Button tag={Link} to="/pet-type" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
