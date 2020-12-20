@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
+import locale, { LocaleState } from './locale';
 import authentication, { AuthenticationState } from './authentication';
 import applicationProfile, { ApplicationProfileState } from './application-profile';
 
@@ -20,6 +21,10 @@ import pet, {
   PetState
 } from 'app/entities/pet/pet.reducer';
 // prettier-ignore
+import petType, {
+  PetTypeState
+} from 'app/entities/pet-type/pet-type.reducer';
+// prettier-ignore
 import owner, {
   OwnerState
 } from 'app/entities/owner/owner.reducer';
@@ -31,14 +36,11 @@ import vet, {
 import vetSchedule, {
   VetScheduleState
 } from 'app/entities/vet-schedule/vet-schedule.reducer';
-// prettier-ignore
-import petType, {
-  PetTypeState
-} from 'app/entities/pet-type/pet-type.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
   readonly authentication: AuthenticationState;
+  readonly locale: LocaleState;
   readonly applicationProfile: ApplicationProfileState;
   readonly administration: AdministrationState;
   readonly userManagement: UserManagementState;
@@ -49,16 +51,17 @@ export interface IRootState {
   readonly settings: SettingsState;
   readonly visit: VisitState;
   readonly pet: PetState;
+  readonly petType: PetTypeState;
   readonly owner: OwnerState;
   readonly vet: VetState;
   readonly vetSchedule: VetScheduleState;
-  readonly petType: PetTypeState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
 
 const rootReducer = combineReducers<IRootState>({
   authentication,
+  locale,
   applicationProfile,
   administration,
   userManagement,
@@ -69,10 +72,10 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   visit,
   pet,
+  petType,
   owner,
   vet,
   vetSchedule,
-  petType,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

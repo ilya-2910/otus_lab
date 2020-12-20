@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -64,7 +64,9 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="courseworkApp.vetSchedule.home.createOrEditLabel">Create or edit a VetSchedule</h2>
+          <h2 id="courseworkApp.vetSchedule.home.createOrEditLabel">
+            <Translate contentKey="courseworkApp.vetSchedule.home.createOrEditLabel">Create or edit a VetSchedule</Translate>
+          </h2>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -75,13 +77,15 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
             <AvForm model={isNew ? {} : vetScheduleEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="vet-schedule-id">ID</Label>
+                  <Label for="vet-schedule-id">
+                    <Translate contentKey="global.field.id">ID</Translate>
+                  </Label>
                   <AvInput id="vet-schedule-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
                 <Label id="startDateLabel" for="vet-schedule-startDate">
-                  Start Date
+                  <Translate contentKey="courseworkApp.vetSchedule.startDate">Start Date</Translate>
                 </Label>
                 <AvInput
                   id="vet-schedule-startDate"
@@ -94,7 +98,7 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
               </AvGroup>
               <AvGroup>
                 <Label id="endDateLabel" for="vet-schedule-endDate">
-                  End Date
+                  <Translate contentKey="courseworkApp.vetSchedule.endDate">End Date</Translate>
                 </Label>
                 <AvInput
                   id="vet-schedule-endDate"
@@ -106,7 +110,9 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
                 />
               </AvGroup>
               <AvGroup>
-                <Label for="vet-schedule-vet">Vet</Label>
+                <Label for="vet-schedule-vet">
+                  <Translate contentKey="courseworkApp.vetSchedule.vet">Vet</Translate>
+                </Label>
                 <AvInput id="vet-schedule-vet" type="select" className="form-control" name="vet.id">
                   <option value="" key="0" />
                   {vets
@@ -121,12 +127,15 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
               <Button tag={Link} id="cancel-save" to="/vet-schedule" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
             </AvForm>
           )}

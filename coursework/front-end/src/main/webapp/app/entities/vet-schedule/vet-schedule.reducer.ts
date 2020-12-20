@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -7,7 +7,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IVetSchedule, defaultValue } from 'app/shared/model/vet-schedule.model';
 
 export const ACTION_TYPES = {
-  SEARCH_VETSCHEDULES: 'vetSchedule/SEARCH_VETSCHEDULES',
   FETCH_VETSCHEDULE_LIST: 'vetSchedule/FETCH_VETSCHEDULE_LIST',
   FETCH_VETSCHEDULE: 'vetSchedule/FETCH_VETSCHEDULE',
   CREATE_VETSCHEDULE: 'vetSchedule/CREATE_VETSCHEDULE',
@@ -31,7 +30,6 @@ export type VetScheduleState = Readonly<typeof initialState>;
 
 export default (state: VetScheduleState = initialState, action): VetScheduleState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_VETSCHEDULES):
     case REQUEST(ACTION_TYPES.FETCH_VETSCHEDULE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_VETSCHEDULE):
       return {
@@ -49,7 +47,6 @@ export default (state: VetScheduleState = initialState, action): VetScheduleStat
         updateSuccess: false,
         updating: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_VETSCHEDULES):
     case FAILURE(ACTION_TYPES.FETCH_VETSCHEDULE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_VETSCHEDULE):
     case FAILURE(ACTION_TYPES.CREATE_VETSCHEDULE):
@@ -62,7 +59,6 @@ export default (state: VetScheduleState = initialState, action): VetScheduleStat
         updateSuccess: false,
         errorMessage: action.payload,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_VETSCHEDULES):
     case SUCCESS(ACTION_TYPES.FETCH_VETSCHEDULE_LIST):
       return {
         ...state,
@@ -100,14 +96,8 @@ export default (state: VetScheduleState = initialState, action): VetScheduleStat
 };
 
 const apiUrl = 'api/vet-schedules';
-const apiSearchUrl = 'api/_search/vet-schedules';
 
 // Actions
-
-export const getSearchEntities: ICrudSearchAction<IVetSchedule> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_VETSCHEDULES,
-  payload: axios.get<IVetSchedule>(`${apiSearchUrl}?query=${query}`),
-});
 
 export const getEntities: ICrudGetAllAction<IVetSchedule> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_VETSCHEDULE_LIST,

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -7,7 +7,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IOwner, defaultValue } from 'app/shared/model/owner.model';
 
 export const ACTION_TYPES = {
-  SEARCH_OWNERS: 'owner/SEARCH_OWNERS',
   FETCH_OWNER_LIST: 'owner/FETCH_OWNER_LIST',
   FETCH_OWNER: 'owner/FETCH_OWNER',
   CREATE_OWNER: 'owner/CREATE_OWNER',
@@ -31,7 +30,6 @@ export type OwnerState = Readonly<typeof initialState>;
 
 export default (state: OwnerState = initialState, action): OwnerState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_OWNERS):
     case REQUEST(ACTION_TYPES.FETCH_OWNER_LIST):
     case REQUEST(ACTION_TYPES.FETCH_OWNER):
       return {
@@ -49,7 +47,6 @@ export default (state: OwnerState = initialState, action): OwnerState => {
         updateSuccess: false,
         updating: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_OWNERS):
     case FAILURE(ACTION_TYPES.FETCH_OWNER_LIST):
     case FAILURE(ACTION_TYPES.FETCH_OWNER):
     case FAILURE(ACTION_TYPES.CREATE_OWNER):
@@ -62,7 +59,6 @@ export default (state: OwnerState = initialState, action): OwnerState => {
         updateSuccess: false,
         errorMessage: action.payload,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_OWNERS):
     case SUCCESS(ACTION_TYPES.FETCH_OWNER_LIST):
       return {
         ...state,
@@ -100,14 +96,8 @@ export default (state: OwnerState = initialState, action): OwnerState => {
 };
 
 const apiUrl = 'api/owners';
-const apiSearchUrl = 'api/_search/owners';
 
 // Actions
-
-export const getSearchEntities: ICrudSearchAction<IOwner> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_OWNERS,
-  payload: axios.get<IOwner>(`${apiSearchUrl}?query=${query}`),
-});
 
 export const getEntities: ICrudGetAllAction<IOwner> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_OWNER_LIST,

@@ -1,74 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudSearchAction, ICrudGetAllAction } from 'react-jhipster';
+import { Button, Col, Row, Table } from 'reactstrap';
+import { Translate, ICrudGetAllAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getSearchEntities, getEntities } from './owner.reducer';
+import { getEntities } from './owner.reducer';
 import { IOwner } from 'app/shared/model/owner.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface IOwnerProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Owner = (props: IOwnerProps) => {
-  const [search, setSearch] = useState('');
-
   useEffect(() => {
     props.getEntities();
   }, []);
-
-  const startSearching = () => {
-    if (search) {
-      props.getSearchEntities(search);
-    }
-  };
-
-  const clear = () => {
-    setSearch('');
-    props.getEntities();
-  };
-
-  const handleSearch = event => setSearch(event.target.value);
 
   const { ownerList, match, loading } = props;
   return (
     <div>
       <h2 id="owner-heading">
-        Owners
+        <Translate contentKey="courseworkApp.owner.home.title">Owners</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
-          &nbsp; Create new Owner
+          &nbsp;
+          <Translate contentKey="courseworkApp.owner.home.createLabel">Create new Owner</Translate>
         </Link>
       </h2>
-      <Row>
-        <Col sm="12">
-          <AvForm onSubmit={startSearching}>
-            <AvGroup>
-              <InputGroup>
-                <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />
-                <Button className="input-group-addon">
-                  <FontAwesomeIcon icon="search" />
-                </Button>
-                <Button type="reset" className="input-group-addon" onClick={clear}>
-                  <FontAwesomeIcon icon="trash" />
-                </Button>
-              </InputGroup>
-            </AvGroup>
-          </AvForm>
-        </Col>
-      </Row>
       <div className="table-responsive">
         {ownerList && ownerList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Phone</th>
+                <th>
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.owner.name">Name</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.owner.address">Address</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.owner.phone">Phone</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -86,13 +62,22 @@ export const Owner = (props: IOwnerProps) => {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${owner.id}`} color="info" size="sm">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${owner.id}/edit`} color="primary" size="sm">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${owner.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
                       </Button>
                     </div>
                   </td>
@@ -101,7 +86,11 @@ export const Owner = (props: IOwnerProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No Owners found</div>
+          !loading && (
+            <div className="alert alert-warning">
+              <Translate contentKey="courseworkApp.owner.home.notFound">No Owners found</Translate>
+            </div>
+          )
         )}
       </div>
     </div>
@@ -114,7 +103,6 @@ const mapStateToProps = ({ owner }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSearchEntities,
   getEntities,
 };
 

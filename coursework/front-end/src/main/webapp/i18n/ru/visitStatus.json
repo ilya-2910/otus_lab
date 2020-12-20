@@ -1,0 +1,10 @@
+{
+  "courseworkApp": {
+    "VisitStatus": {
+      "null": "",
+      "NEW": "NEW",
+      "DONE": "DONE",
+      "REJECT": "REJECT"
+    }
+  }
+}

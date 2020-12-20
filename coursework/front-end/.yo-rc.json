@@ -1,5 +1,8 @@
 {
   "generator-jhipster": {
+    "promptValues": {
+      "nativeLanguage": "ru"
+    },
     "jhipsterVersion": "6.9.0",
     "applicationType": "monolith",
     "baseName": "coursework",
@@ -13,16 +16,17 @@
     "databaseType": "sql",
     "devDatabaseType": "sql",
     "prodDatabaseType": "sql",
-    "creationTimestamp": 1607463562962,
+    "creationTimestamp": 1608379788286,
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "enableTranslation": false,
+    "enableTranslation": true,
+    "nativeLanguage": "ru",
+    "languages": ["ru"],
     "blueprints": [],
     "skipServer": true,
-    "herokuAppName": "radiant-bastion-45584",
-    "herokuDeployType": "jar"
+    "searchEngine": false
   }
 }

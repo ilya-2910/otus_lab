@@ -1,0 +1,25 @@
+{
+  "courseworkApp": {
+    "vet": {
+      "home": {
+        "title": "Vets",
+        "createLabel": "Создать новый Vet",
+        "createOrEditLabel": "Создать или отредактировать Vet",
+        "notFound": "No Vets found"
+      },
+      "created": "Новый Vet создан с идентификатором {{ param }}",
+      "updated": "Vet обновлен с идентификатором {{ param }}",
+      "deleted": "Vet удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Vet {{ id }}?"
+      },
+      "detail": {
+        "title": "Vet"
+      },
+      "name": "Name",
+      "phone": "Phone",
+      "visits": "Visits",
+      "schedules": "Schedules"
+    }
+  }
+}

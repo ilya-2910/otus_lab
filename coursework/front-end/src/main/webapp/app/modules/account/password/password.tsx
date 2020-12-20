@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Translate, translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Button } from 'reactstrap';
@@ -32,56 +32,60 @@ export const PasswordPage = (props: IUserPasswordProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="password-title">Password for {props.account.login}</h2>
+          <h2 id="password-title">
+            <Translate contentKey="password.title" interpolate={{ username: props.account.login }}>
+              Password for {props.account.login}
+            </Translate>
+          </h2>
           <AvForm id="password-form" onValidSubmit={handleValidSubmit}>
             <AvField
               name="currentPassword"
-              label="Current password"
-              placeholder={'Current password'}
+              label={translate('global.form.currentpassword.label')}
+              placeholder={translate('global.form.currentpassword.placeholder')}
               type="password"
               validate={{
-                required: { value: true, errorMessage: 'Your password is required.' },
+                required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') },
               }}
             />
             <AvField
               name="newPassword"
-              label="New password"
-              placeholder={'New password'}
+              label={translate('global.form.newpassword.label')}
+              placeholder={translate('global.form.newpassword.placeholder')}
               type="password"
               validate={{
-                required: { value: true, errorMessage: 'Your password is required.' },
-                minLength: { value: 4, errorMessage: 'Your password is required to be at least 4 characters.' },
-                maxLength: { value: 50, errorMessage: 'Your password cannot be longer than 50 characters.' },
+                required: { value: true, errorMessage: translate('global.messages.validate.newpassword.required') },
+                minLength: { value: 4, errorMessage: translate('global.messages.validate.newpassword.minlength') },
+                maxLength: { value: 50, errorMessage: translate('global.messages.validate.newpassword.maxlength') },
               }}
               onChange={updatePassword}
             />
             <PasswordStrengthBar password={password} />
             <AvField
               name="confirmPassword"
-              label="New password confirmation"
-              placeholder="Confirm the new password"
+              label={translate('global.form.confirmpassword.label')}
+              placeholder={translate('global.form.confirmpassword.placeholder')}
               type="password"
               validate={{
                 required: {
                   value: true,
-                  errorMessage: 'Your confirmation password is required.',
+                  errorMessage: translate('global.messages.validate.confirmpassword.required'),
                 },
                 minLength: {
                   value: 4,
-                  errorMessage: 'Your confirmation password is required to be at least 4 characters.',
+                  errorMessage: translate('global.messages.validate.confirmpassword.minlength'),
                 },
                 maxLength: {
                   value: 50,
-                  errorMessage: 'Your confirmation password cannot be longer than 50 characters.',
+                  errorMessage: translate('global.messages.validate.confirmpassword.maxlength'),
                 },
                 match: {
                   value: 'newPassword',
-                  errorMessage: 'The password and its confirmation do not match!',
+                  errorMessage: translate('global.messages.error.dontmatch'),
                 },
               }}
             />
             <Button color="success" type="submit">
-              Save
+              <Translate contentKey="password.form.button">Save</Translate>
             </Button>
           </AvForm>
         </Col>

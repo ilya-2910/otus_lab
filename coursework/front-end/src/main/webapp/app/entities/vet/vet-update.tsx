@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -56,7 +56,9 @@ export const VetUpdate = (props: IVetUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="courseworkApp.vet.home.createOrEditLabel">Create or edit a Vet</h2>
+          <h2 id="courseworkApp.vet.home.createOrEditLabel">
+            <Translate contentKey="courseworkApp.vet.home.createOrEditLabel">Create or edit a Vet</Translate>
+          </h2>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -67,31 +69,36 @@ export const VetUpdate = (props: IVetUpdateProps) => {
             <AvForm model={isNew ? {} : vetEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="vet-id">ID</Label>
+                  <Label for="vet-id">
+                    <Translate contentKey="global.field.id">ID</Translate>
+                  </Label>
                   <AvInput id="vet-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
                 <Label id="nameLabel" for="vet-name">
-                  Name
+                  <Translate contentKey="courseworkApp.vet.name">Name</Translate>
                 </Label>
                 <AvField id="vet-name" type="text" name="name" />
               </AvGroup>
               <AvGroup>
                 <Label id="phoneLabel" for="vet-phone">
-                  Phone
+                  <Translate contentKey="courseworkApp.vet.phone">Phone</Translate>
                 </Label>
                 <AvField id="vet-phone" type="text" name="phone" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/vet" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
             </AvForm>
           )}

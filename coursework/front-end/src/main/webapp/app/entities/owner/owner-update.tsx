@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -56,7 +56,9 @@ export const OwnerUpdate = (props: IOwnerUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="courseworkApp.owner.home.createOrEditLabel">Create or edit a Owner</h2>
+          <h2 id="courseworkApp.owner.home.createOrEditLabel">
+            <Translate contentKey="courseworkApp.owner.home.createOrEditLabel">Create or edit a Owner</Translate>
+          </h2>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -67,37 +69,42 @@ export const OwnerUpdate = (props: IOwnerUpdateProps) => {
             <AvForm model={isNew ? {} : ownerEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="owner-id">ID</Label>
+                  <Label for="owner-id">
+                    <Translate contentKey="global.field.id">ID</Translate>
+                  </Label>
                   <AvInput id="owner-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
                 <Label id="nameLabel" for="owner-name">
-                  Name
+                  <Translate contentKey="courseworkApp.owner.name">Name</Translate>
                 </Label>
                 <AvField id="owner-name" type="text" name="name" />
               </AvGroup>
               <AvGroup>
                 <Label id="addressLabel" for="owner-address">
-                  Address
+                  <Translate contentKey="courseworkApp.owner.address">Address</Translate>
                 </Label>
                 <AvField id="owner-address" type="text" name="address" />
               </AvGroup>
               <AvGroup>
                 <Label id="phoneLabel" for="owner-phone">
-                  Phone
+                  <Translate contentKey="courseworkApp.owner.phone">Phone</Translate>
                 </Label>
                 <AvField id="owner-phone" type="text" name="phone" />
               </AvGroup>
               <Button tag={Link} id="cancel-save" to="/owner" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
             </AvForm>
           )}

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IVetSchedule } from 'app/shared/model/vet-schedule.model';
@@ -33,16 +33,24 @@ export const VetScheduleDeleteDialog = (props: IVetScheduleDeleteDialogProps) =>
   const { vetScheduleEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>Confirm delete operation</ModalHeader>
-      <ModalBody id="courseworkApp.vetSchedule.delete.question">Are you sure you want to delete this VetSchedule?</ModalBody>
+      <ModalHeader toggle={handleClose}>
+        <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
+      </ModalHeader>
+      <ModalBody id="courseworkApp.vetSchedule.delete.question">
+        <Translate contentKey="courseworkApp.vetSchedule.delete.question" interpolate={{ id: vetScheduleEntity.id }}>
+          Are you sure you want to delete this VetSchedule?
+        </Translate>
+      </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+          &nbsp;
+          <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
         <Button id="jhi-confirm-delete-vetSchedule" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          &nbsp;
+          <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
       </ModalFooter>
     </Modal>

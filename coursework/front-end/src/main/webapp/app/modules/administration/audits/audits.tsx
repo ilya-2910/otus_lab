@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Input, Row, Table } from 'reactstrap';
-import { TextFormat, JhiPagination, JhiItemCount, getSortState, IPaginationBaseState } from 'react-jhipster';
+import { Translate, TextFormat, JhiPagination, JhiItemCount, getSortState, IPaginationBaseState } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
@@ -96,27 +96,33 @@ export const AuditsPage = (props: IAuditsPageProps) => {
   return (
     <div>
       <h2 id="audits-page-heading">Audits</h2>
-      <span>from</span>
+      <span>
+        <Translate contentKey="audits.filter.from">from</Translate>
+      </span>
       <Input type="date" value={fromDate} onChange={onChangeFromDate} name="fromDate" id="fromDate" />
-      <span>to</span>
+      <span>
+        <Translate contentKey="audits.filter.to">to</Translate>
+      </span>
       <Input type="date" value={toDate} onChange={onChangeToDate} name="toDate" id="toDate" />
       {audits && audits.length > 0 ? (
         <Table striped responsive>
           <thead>
             <tr>
               <th onClick={sort('auditEventDate')}>
-                Date
+                <Translate contentKey="audits.table.header.date">Date</Translate>
                 <FontAwesomeIcon icon="sort" />
               </th>
               <th onClick={sort('principal')}>
-                User
+                <Translate contentKey="audits.table.header.principal">User</Translate>
                 <FontAwesomeIcon icon="sort" />
               </th>
               <th onClick={sort('auditEventType')}>
-                State
+                <Translate contentKey="audits.table.header.status">State</Translate>
                 <FontAwesomeIcon icon="sort" />
               </th>
-              <th>Extra data</th>
+              <th>
+                <Translate contentKey="audits.table.header.data">Extra data</Translate>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -134,7 +140,9 @@ export const AuditsPage = (props: IAuditsPageProps) => {
           </tbody>
         </Table>
       ) : (
-        <div className="alert alert-warning">No audit found</div>
+        <div className="alert alert-warning">
+          <Translate contentKey="audits.notFound">No audit found</Translate>
+        </div>
       )}
       {props.totalItems ? (
         <div className={audits && audits.length > 0 ? '' : 'd-none'}>

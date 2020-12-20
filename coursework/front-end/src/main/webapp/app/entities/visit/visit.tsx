@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, InputGroup, Col, Row, Table, Label } from 'reactstrap';
+import { Button, Col, Row, Table, InputGroup, Label } from 'reactstrap';
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudSearchAction, ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import { byteSize, Translate, ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getSearchEntities, getEntities } from './visit.reducer';
+import { getEntities } from './visit.reducer';
 import { IVisit } from 'app/shared/model/visit.model';
-import {
-  APP_DATE_FORMAT,
-  APP_LOCAL_DATE_FORMAT,
-  APP_LOCAL_DATETIME_FORMAT_Z
-} from 'app/config/constants';
+import { APP_DATE_FORMAT} from 'app/config/constants';
+
 import moment from "moment";
 import Timeline from 'react-calendar-timeline'
 import 'react-calendar-timeline/lib/Timeline.css'
 
+
 export interface IVisitProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const Visit = (props: IVisitProps) => {
-  const [search, setSearch] = useState('');
 
   const [date, setDate] = useState(moment().startOf('day'));
 
@@ -32,40 +29,12 @@ export const Visit = (props: IVisitProps) => {
   const changeDate = (dayDiff: number) => {
     if (date) {
       setDate(moment(date).add(dayDiff, 'days'));
-      props.getSearchEntities(search);
+      //props.getSearchEntities(search);
     }
   };
-
-  const startSearching = () => {
-    if (search) {
-      props.getSearchEntities(search);
-    }
-  };
-
-  const clear = () => {
-    setSearch('');
-    props.getEntities();
-  };
-
-  const handleSearch = event => setSearch(event.target.value);
 
   const { visitList, match, loading } = props;
 
-  function onTimeChange(visibleTimeStart, visibleTimeEnd, updateScrollCanvas) {
-    // this limits the timeline to -6 months ... +6 months
-    const minTime = moment().add(-26, 'hours').valueOf();
-    const maxTime = moment().add(26, 'hours').valueOf();
-
-    if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
-      updateScrollCanvas(minTime, maxTime)
-    } else if (visibleTimeStart < minTime) {
-      updateScrollCanvas(minTime, minTime + (visibleTimeEnd - visibleTimeStart))
-    } else if (visibleTimeEnd > maxTime) {
-      updateScrollCanvas(maxTime - (visibleTimeEnd - visibleTimeStart), maxTime)
-    } else {
-      updateScrollCanvas(visibleTimeStart, visibleTimeEnd)
-    }
-  }
 
   const visits = visitList.filter(value => !!value.vet && !!value.pet);
   const vets = visits.map(value => value.vet);
@@ -74,15 +43,17 @@ export const Visit = (props: IVisitProps) => {
     return {id: value.id, title: value.name};
   }).filter((value, index, self) => self.map(x => x.id).indexOf(value.id) === index);
 
-  const items = visits.map((value, index) => {
+  const visitItems = visits.map((value, index) => {
     return {
       id: index,
       group: value.vet.id,
       title: value.pet.name,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       start_time: moment(value.startDate),
+      // eslint-disable-next-line @typescript-eslint/camelcase
       end_time: moment(value.endDate),
-      canResize: false,
-      canMove: false,
+      canResize: true,
+      canMove: true,
       maxZoom: 60 * 60 * 1000,
       style: {
         background: 'fuchsia'
@@ -94,29 +65,32 @@ export const Visit = (props: IVisitProps) => {
   return (
     <div>
       <h2 id="visit-heading">
-        Предварительная запись
+        <Translate contentKey="courseworkApp.visit.home.title">Visits</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
-          &nbsp; Create new Visit
+          &nbsp;
+          <Translate contentKey="courseworkApp.visit.home.createLabel">Create new Visit</Translate>
         </Link>
       </h2>
-      <Timeline
-        itemsSorted
-        itemTouchSendsClick={false}
-        canMove={false}
-        canResize={false}
-        minZoom={60 * 1000 * 1000}
-        groups={groups}
-        items={items}
-        visibleTimeStart={moment(date).startOf('day')}
-        visibleTimeEnd={moment(date).endOf('day')}
-        sidebarWidth={250}
-        onTimeChange={onTimeChange}
-      />
+      {!loading ? (
+        <Timeline
+          itemsSorted
+          itemTouchSendsClick={false}
+          canMove={true}
+          canResize={true}
+          minZoom={60 * 1000 * 1000}
+          groups={groups}
+          items={visitItems}
+          visibleTimeStart={moment(date).startOf('day')}
+          visibleTimeEnd={moment(date).add(1, 'day').startOf('day')}
+          sidebarWidth={250}
+        />
+      ) : null}
       <Row>
         <Col sm="12">
           <div style={{width: 300}}>
-          <AvForm onSubmit={startSearching}>
+          {/*<AvForm onSubmit={startSearching}>*/}
+          <AvForm>
             <AvGroup>
               <Label id="startDateLabel" for="visit-date">
                 Дата
@@ -130,7 +104,7 @@ export const Visit = (props: IVisitProps) => {
                 value={date.format().slice(0, 10)}
                 onChange={ (e) => {
                   setDate(moment(e.target.value));
-                  startSearching();
+//                  startSearching();
                 }}
                 />
               <Button color={'btn btn-primary'} onClick={() => changeDate(-1)}>
@@ -141,17 +115,17 @@ export const Visit = (props: IVisitProps) => {
               </Button>
                 </InputGroup>
             </AvGroup>
-            <AvGroup>
-              <InputGroup>
-                <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />
-                <Button className="input-group-addon">
-                  <FontAwesomeIcon icon="search" />
-                </Button>
-                <Button type="reset" className="input-group-addon" onClick={clear}>
-                  <FontAwesomeIcon icon="trash" />
-                </Button>
-              </InputGroup>
-            </AvGroup>
+            {/*<AvGroup>*/}
+            {/*  <InputGroup>*/}
+            {/*    <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />*/}
+            {/*    <Button className="input-group-addon">*/}
+            {/*      <FontAwesomeIcon icon="search" />*/}
+            {/*    </Button>*/}
+            {/*    <Button type="reset" className="input-group-addon" onClick={clear}>*/}
+            {/*      <FontAwesomeIcon icon="trash" />*/}
+            {/*    </Button>*/}
+            {/*  </InputGroup>*/}
+            {/*</AvGroup>*/}
           </AvForm>
             </div>
         </Col>
@@ -161,13 +135,27 @@ export const Visit = (props: IVisitProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Pet</th>
-                <th>Vet</th>
+                <th>
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.startDate">Start Date</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.endDate">End Date</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.description">Description</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.status">Status</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.pet">Pet</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.visit.vet">Vet</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -182,19 +170,30 @@ export const Visit = (props: IVisitProps) => {
                   <td>{visit.startDate ? <TextFormat type="date" value={visit.startDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.endDate ? <TextFormat type="date" value={visit.endDate} format={APP_DATE_FORMAT} /> : null}</td>
                   <td>{visit.description}</td>
-                  <td>{visit.status}</td>
-                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.name}</Link> : ''}</td>
-                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.name}</Link> : ''}</td>
+                  <td>
+                    <Translate contentKey={`courseworkApp.VisitStatus.${visit.status}`} />
+                  </td>
+                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.id}</Link> : ''}</td>
+                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${visit.id}`} color="info" size="sm">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${visit.id}/edit`} color="primary" size="sm">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${visit.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
                       </Button>
                     </div>
                   </td>
@@ -203,7 +202,11 @@ export const Visit = (props: IVisitProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No Visits found</div>
+          !loading && (
+            <div className="alert alert-warning">
+              <Translate contentKey="courseworkApp.visit.home.notFound">No Visits found</Translate>
+            </div>
+          )
         )}
       </div>
     </div>
@@ -216,7 +219,6 @@ const mapStateToProps = ({ visit }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSearchEntities,
   getEntities,
 };
 

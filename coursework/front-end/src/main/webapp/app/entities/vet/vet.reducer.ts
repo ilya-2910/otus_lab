@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -7,7 +7,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IVet, defaultValue } from 'app/shared/model/vet.model';
 
 export const ACTION_TYPES = {
-  SEARCH_VETS: 'vet/SEARCH_VETS',
   FETCH_VET_LIST: 'vet/FETCH_VET_LIST',
   FETCH_VET: 'vet/FETCH_VET',
   CREATE_VET: 'vet/CREATE_VET',
@@ -31,7 +30,6 @@ export type VetState = Readonly<typeof initialState>;
 
 export default (state: VetState = initialState, action): VetState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_VETS):
     case REQUEST(ACTION_TYPES.FETCH_VET_LIST):
     case REQUEST(ACTION_TYPES.FETCH_VET):
       return {
@@ -49,7 +47,6 @@ export default (state: VetState = initialState, action): VetState => {
         updateSuccess: false,
         updating: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_VETS):
     case FAILURE(ACTION_TYPES.FETCH_VET_LIST):
     case FAILURE(ACTION_TYPES.FETCH_VET):
     case FAILURE(ACTION_TYPES.CREATE_VET):
@@ -62,7 +59,6 @@ export default (state: VetState = initialState, action): VetState => {
         updateSuccess: false,
         errorMessage: action.payload,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_VETS):
     case SUCCESS(ACTION_TYPES.FETCH_VET_LIST):
       return {
         ...state,
@@ -100,14 +96,8 @@ export default (state: VetState = initialState, action): VetState => {
 };
 
 const apiUrl = 'api/vets';
-const apiSearchUrl = 'api/_search/vets';
 
 // Actions
-
-export const getSearchEntities: ICrudSearchAction<IVet> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_VETS,
-  payload: axios.get<IVet>(`${apiSearchUrl}?query=${query}`),
-});
 
 export const getEntities: ICrudGetAllAction<IVet> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_VET_LIST,

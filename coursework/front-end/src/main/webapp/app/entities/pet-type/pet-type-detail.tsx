@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col } from 'reactstrap';
-import { ICrudGetAction } from 'react-jhipster';
+import { Translate, ICrudGetAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
@@ -22,20 +22,28 @@ export const PetTypeDetail = (props: IPetTypeDetailProps) => {
     <Row>
       <Col md="8">
         <h2>
-          PetType [<b>{petTypeEntity.id}</b>]
+          <Translate contentKey="courseworkApp.petType.detail.title">PetType</Translate> [<b>{petTypeEntity.id}</b>]
         </h2>
         <dl className="jh-entity-details">
           <dt>
-            <span id="type">Type</span>
+            <span id="type">
+              <Translate contentKey="courseworkApp.petType.type">Type</Translate>
+            </span>
           </dt>
           <dd>{petTypeEntity.type}</dd>
         </dl>
         <Button tag={Link} to="/pet-type" replace color="info">
-          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>
+          <FontAwesomeIcon icon="arrow-left" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.back">Back</Translate>
+          </span>
         </Button>
         &nbsp;
         <Button tag={Link} to={`/pet-type/${petTypeEntity.id}/edit`} replace color="primary">
-          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+          <FontAwesomeIcon icon="pencil-alt" />{' '}
+          <span className="d-none d-md-inline">
+            <Translate contentKey="entity.action.edit">Edit</Translate>
+          </span>
         </Button>
       </Col>
     </Row>

@@ -36,7 +36,7 @@
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20201208214218",
+  "changelogDate": "20201219122547",
   "entityTableName": "visit",
   "dto": "no",
   "pagination": "no",

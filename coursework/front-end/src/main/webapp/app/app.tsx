@@ -11,6 +11,7 @@ import { hot } from 'react-hot-loader';
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
+import { setLocale } from 'app/shared/reducers/locale';
 import Header from 'app/shared/layout/header/header';
 import Footer from 'app/shared/layout/footer/footer';
 import { hasAnyAuthority } from 'app/shared/auth/private-route';
@@ -37,6 +38,8 @@ export const App = (props: IAppProps) => {
           <Header
             isAuthenticated={props.isAuthenticated}
             isAdmin={props.isAdmin}
+            currentLocale={props.currentLocale}
+            onLocaleChange={props.setLocale}
             ribbonEnv={props.ribbonEnv}
             isInProduction={props.isInProduction}
             isSwaggerEnabled={props.isSwaggerEnabled}
@@ -55,7 +58,8 @@ export const App = (props: IAppProps) => {
   );
 };
 
-const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => ({
+const mapStateToProps = ({ authentication, applicationProfile, locale }: IRootState) => ({
+  currentLocale: locale.currentLocale,
   isAuthenticated: authentication.isAuthenticated,
   isAdmin: hasAnyAuthority(authentication.account.authorities, [AUTHORITIES.ADMIN]),
   ribbonEnv: applicationProfile.ribbonEnv,
@@ -63,7 +67,7 @@ const mapStateToProps = ({ authentication, applicationProfile }: IRootState) => 
   isSwaggerEnabled: applicationProfile.isSwaggerEnabled,
 });
 
-const mapDispatchToProps = { getSession, getProfile };
+const mapDispatchToProps = { setLocale, getSession, getProfile };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

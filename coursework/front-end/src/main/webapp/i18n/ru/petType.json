@@ -1,0 +1,22 @@
+{
+  "courseworkApp": {
+    "petType": {
+      "home": {
+        "title": "Pet Types",
+        "createLabel": "Создать новый Pet Type",
+        "createOrEditLabel": "Создать или отредактировать Pet Type",
+        "notFound": "No Pet Types found"
+      },
+      "created": "Новый Pet Type создан с идентификатором {{ param }}",
+      "updated": "Pet Type обновлен с идентификатором {{ param }}",
+      "deleted": "Pet Type удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Pet Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Pet Type"
+      },
+      "type": "Type"
+    }
+  }
+}

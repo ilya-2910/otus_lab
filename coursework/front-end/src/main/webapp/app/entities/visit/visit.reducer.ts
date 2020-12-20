@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -7,7 +7,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IVisit, defaultValue } from 'app/shared/model/visit.model';
 
 export const ACTION_TYPES = {
-  SEARCH_VISITS: 'visit/SEARCH_VISITS',
   FETCH_VISIT_LIST: 'visit/FETCH_VISIT_LIST',
   FETCH_VISIT: 'visit/FETCH_VISIT',
   CREATE_VISIT: 'visit/CREATE_VISIT',
@@ -32,7 +31,6 @@ export type VisitState = Readonly<typeof initialState>;
 
 export default (state: VisitState = initialState, action): VisitState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_VISITS):
     case REQUEST(ACTION_TYPES.FETCH_VISIT_LIST):
     case REQUEST(ACTION_TYPES.FETCH_VISIT):
       return {
@@ -50,7 +48,6 @@ export default (state: VisitState = initialState, action): VisitState => {
         updateSuccess: false,
         updating: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_VISITS):
     case FAILURE(ACTION_TYPES.FETCH_VISIT_LIST):
     case FAILURE(ACTION_TYPES.FETCH_VISIT):
     case FAILURE(ACTION_TYPES.CREATE_VISIT):
@@ -63,7 +60,6 @@ export default (state: VisitState = initialState, action): VisitState => {
         updateSuccess: false,
         errorMessage: action.payload,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_VISITS):
     case SUCCESS(ACTION_TYPES.FETCH_VISIT_LIST):
       return {
         ...state,
@@ -112,14 +108,8 @@ export default (state: VisitState = initialState, action): VisitState => {
 };
 
 const apiUrl = 'api/visits';
-const apiSearchUrl = 'api/_search/visits';
 
 // Actions
-
-export const getSearchEntities: ICrudSearchAction<IVisit> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_VISITS,
-  payload: axios.get<IVisit>(`${apiSearchUrl}?query=${query}`),
-});
 
 export const getEntities: ICrudGetAllAction<IVisit> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_VISIT_LIST,

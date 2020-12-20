@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Row, Col, Label } from 'reactstrap';
 import { AvFeedback, AvForm, AvGroup, AvInput, AvField } from 'availity-reactstrap-validation';
-import { ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
+import { Translate, translate, ICrudGetAction, ICrudGetAllAction, setFileData, byteSize, ICrudPutAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
@@ -78,7 +78,9 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h2 id="courseworkApp.visit.home.createOrEditLabel">Create or edit a Visit</h2>
+          <h2 id="courseworkApp.visit.home.createOrEditLabel">
+            <Translate contentKey="courseworkApp.visit.home.createOrEditLabel">Create or edit a Visit</Translate>
+          </h2>
         </Col>
       </Row>
       <Row className="justify-content-center">
@@ -89,13 +91,15 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
             <AvForm model={isNew ? {} : visitEntity} onSubmit={saveEntity}>
               {!isNew ? (
                 <AvGroup>
-                  <Label for="visit-id">ID</Label>
+                  <Label for="visit-id">
+                    <Translate contentKey="global.field.id">ID</Translate>
+                  </Label>
                   <AvInput id="visit-id" type="text" className="form-control" name="id" required readOnly />
                 </AvGroup>
               ) : null}
               <AvGroup>
                 <Label id="startDateLabel" for="visit-startDate">
-                  Start Date
+                  <Translate contentKey="courseworkApp.visit.startDate">Start Date</Translate>
                 </Label>
                 <AvInput
                   id="visit-startDate"
@@ -108,7 +112,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
               </AvGroup>
               <AvGroup>
                 <Label id="endDateLabel" for="visit-endDate">
-                  End Date
+                  <Translate contentKey="courseworkApp.visit.endDate">End Date</Translate>
                 </Label>
                 <AvInput
                   id="visit-endDate"
@@ -121,13 +125,13 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
               </AvGroup>
               <AvGroup>
                 <Label id="descriptionLabel" for="visit-description">
-                  Description
+                  <Translate contentKey="courseworkApp.visit.description">Description</Translate>
                 </Label>
                 <AvInput id="visit-description" type="textarea" name="description" />
               </AvGroup>
               <AvGroup>
                 <Label id="statusLabel" for="visit-status">
-                  Status
+                  <Translate contentKey="courseworkApp.visit.status">Status</Translate>
                 </Label>
                 <AvInput
                   id="visit-status"
@@ -136,13 +140,15 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                   name="status"
                   value={(!isNew && visitEntity.status) || 'NEW'}
                 >
-                  <option value="NEW">NEW</option>
-                  <option value="DONE">DONE</option>
-                  <option value="REJECT">REJECT</option>
+                  <option value="NEW">{translate('courseworkApp.VisitStatus.NEW')}</option>
+                  <option value="DONE">{translate('courseworkApp.VisitStatus.DONE')}</option>
+                  <option value="REJECT">{translate('courseworkApp.VisitStatus.REJECT')}</option>
                 </AvInput>
               </AvGroup>
               <AvGroup>
-                <Label for="visit-pet">Pet</Label>
+                <Label for="visit-pet">
+                  <Translate contentKey="courseworkApp.visit.pet">Pet</Translate>
+                </Label>
                 <AvInput id="visit-pet" type="select" className="form-control" name="pet.id">
                   <option value="" key="0" />
                   {pets
@@ -155,7 +161,9 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                 </AvInput>
               </AvGroup>
               <AvGroup>
-                <Label for="visit-vet">Vet</Label>
+                <Label for="visit-vet">
+                  <Translate contentKey="courseworkApp.visit.vet">Vet</Translate>
+                </Label>
                 <AvInput id="visit-vet" type="select" className="form-control" name="vet.id">
                   <option value="" key="0" />
                   {vets
@@ -170,12 +178,15 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
               <Button tag={Link} id="cancel-save" to="/visit" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
-                <span className="d-none d-md-inline">Back</span>
+                <span className="d-none d-md-inline">
+                  <Translate contentKey="entity.action.back">Back</Translate>
+                </span>
               </Button>
               &nbsp;
               <Button color="primary" id="save-entity" type="submit" disabled={updating}>
                 <FontAwesomeIcon icon="save" />
-                &nbsp; Save
+                &nbsp;
+                <Translate contentKey="entity.action.save">Save</Translate>
               </Button>
             </AvForm>
           )}

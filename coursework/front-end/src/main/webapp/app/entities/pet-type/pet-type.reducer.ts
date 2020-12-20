@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudSearchAction, ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -7,7 +7,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import { IPetType, defaultValue } from 'app/shared/model/pet-type.model';
 
 export const ACTION_TYPES = {
-  SEARCH_PETTYPES: 'petType/SEARCH_PETTYPES',
   FETCH_PETTYPE_LIST: 'petType/FETCH_PETTYPE_LIST',
   FETCH_PETTYPE: 'petType/FETCH_PETTYPE',
   CREATE_PETTYPE: 'petType/CREATE_PETTYPE',
@@ -31,7 +30,6 @@ export type PetTypeState = Readonly<typeof initialState>;
 
 export default (state: PetTypeState = initialState, action): PetTypeState => {
   switch (action.type) {
-    case REQUEST(ACTION_TYPES.SEARCH_PETTYPES):
     case REQUEST(ACTION_TYPES.FETCH_PETTYPE_LIST):
     case REQUEST(ACTION_TYPES.FETCH_PETTYPE):
       return {
@@ -49,7 +47,6 @@ export default (state: PetTypeState = initialState, action): PetTypeState => {
         updateSuccess: false,
         updating: true,
       };
-    case FAILURE(ACTION_TYPES.SEARCH_PETTYPES):
     case FAILURE(ACTION_TYPES.FETCH_PETTYPE_LIST):
     case FAILURE(ACTION_TYPES.FETCH_PETTYPE):
     case FAILURE(ACTION_TYPES.CREATE_PETTYPE):
@@ -62,7 +59,6 @@ export default (state: PetTypeState = initialState, action): PetTypeState => {
         updateSuccess: false,
         errorMessage: action.payload,
       };
-    case SUCCESS(ACTION_TYPES.SEARCH_PETTYPES):
     case SUCCESS(ACTION_TYPES.FETCH_PETTYPE_LIST):
       return {
         ...state,
@@ -100,14 +96,8 @@ export default (state: PetTypeState = initialState, action): PetTypeState => {
 };
 
 const apiUrl = 'api/pet-types';
-const apiSearchUrl = 'api/_search/pet-types';
 
 // Actions
-
-export const getSearchEntities: ICrudSearchAction<IPetType> = (query, page, size, sort) => ({
-  type: ACTION_TYPES.SEARCH_PETTYPES,
-  payload: axios.get<IPetType>(`${apiSearchUrl}?query=${query}`),
-});
 
 export const getEntities: ICrudGetAllAction<IPetType> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_PETTYPE_LIST,

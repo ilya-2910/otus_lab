@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
+import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IVisit } from 'app/shared/model/visit.model';
@@ -33,16 +33,24 @@ export const VisitDeleteDialog = (props: IVisitDeleteDialogProps) => {
   const { visitEntity } = props;
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>Confirm delete operation</ModalHeader>
-      <ModalBody id="courseworkApp.visit.delete.question">Are you sure you want to delete this Visit?</ModalBody>
+      <ModalHeader toggle={handleClose}>
+        <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
+      </ModalHeader>
+      <ModalBody id="courseworkApp.visit.delete.question">
+        <Translate contentKey="courseworkApp.visit.delete.question" interpolate={{ id: visitEntity.id }}>
+          Are you sure you want to delete this Visit?
+        </Translate>
+      </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban" />
-          &nbsp; Cancel
+          &nbsp;
+          <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
         <Button id="jhi-confirm-delete-visit" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />
-          &nbsp; Delete
+          &nbsp;
+          <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
       </ModalFooter>
     </Modal>

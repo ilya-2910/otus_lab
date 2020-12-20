@@ -1,74 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, InputGroup, Col, Row, Table } from 'reactstrap';
-import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
-import { ICrudSearchAction, ICrudGetAllAction, TextFormat } from 'react-jhipster';
+import { Button, Col, Row, Table } from 'reactstrap';
+import { Translate, ICrudGetAllAction, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getSearchEntities, getEntities } from './vet-schedule.reducer';
+import { getEntities } from './vet-schedule.reducer';
 import { IVetSchedule } from 'app/shared/model/vet-schedule.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 
 export interface IVetScheduleProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {}
 
 export const VetSchedule = (props: IVetScheduleProps) => {
-  const [search, setSearch] = useState('');
-
   useEffect(() => {
     props.getEntities();
   }, []);
-
-  const startSearching = () => {
-    if (search) {
-      props.getSearchEntities(search);
-    }
-  };
-
-  const clear = () => {
-    setSearch('');
-    props.getEntities();
-  };
-
-  const handleSearch = event => setSearch(event.target.value);
 
   const { vetScheduleList, match, loading } = props;
   return (
     <div>
       <h2 id="vet-schedule-heading">
-        Vet Schedules
+        <Translate contentKey="courseworkApp.vetSchedule.home.title">Vet Schedules</Translate>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />
-          &nbsp; Create new Vet Schedule
+          &nbsp;
+          <Translate contentKey="courseworkApp.vetSchedule.home.createLabel">Create new Vet Schedule</Translate>
         </Link>
       </h2>
-      <Row>
-        <Col sm="12">
-          <AvForm onSubmit={startSearching}>
-            <AvGroup>
-              <InputGroup>
-                <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />
-                <Button className="input-group-addon">
-                  <FontAwesomeIcon icon="search" />
-                </Button>
-                <Button type="reset" className="input-group-addon" onClick={clear}>
-                  <FontAwesomeIcon icon="trash" />
-                </Button>
-              </InputGroup>
-            </AvGroup>
-          </AvForm>
-        </Col>
-      </Row>
       <div className="table-responsive">
         {vetScheduleList && vetScheduleList.length > 0 ? (
           <Table responsive>
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Vet</th>
+                <th>
+                  <Translate contentKey="global.field.id">ID</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.vetSchedule.startDate">Start Date</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.vetSchedule.endDate">End Date</Translate>
+                </th>
+                <th>
+                  <Translate contentKey="courseworkApp.vetSchedule.vet">Vet</Translate>
+                </th>
                 <th />
               </tr>
             </thead>
@@ -88,13 +64,22 @@ export const VetSchedule = (props: IVetScheduleProps) => {
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${vetSchedule.id}`} color="info" size="sm">
-                        <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline">View</span>
+                        <FontAwesomeIcon icon="eye" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.view">View</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${vetSchedule.id}/edit`} color="primary" size="sm">
-                        <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline">Edit</span>
+                        <FontAwesomeIcon icon="pencil-alt" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.edit">Edit</Translate>
+                        </span>
                       </Button>
                       <Button tag={Link} to={`${match.url}/${vetSchedule.id}/delete`} color="danger" size="sm">
-                        <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline">Delete</span>
+                        <FontAwesomeIcon icon="trash" />{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="entity.action.delete">Delete</Translate>
+                        </span>
                       </Button>
                     </div>
                   </td>
@@ -103,7 +88,11 @@ export const VetSchedule = (props: IVetScheduleProps) => {
             </tbody>
           </Table>
         ) : (
-          !loading && <div className="alert alert-warning">No Vet Schedules found</div>
+          !loading && (
+            <div className="alert alert-warning">
+              <Translate contentKey="courseworkApp.vetSchedule.home.notFound">No Vet Schedules found</Translate>
+            </div>
+          )
         )}
       </div>
     </div>
@@ -116,7 +105,6 @@ const mapStateToProps = ({ vetSchedule }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getSearchEntities,
   getEntities,
 };
 

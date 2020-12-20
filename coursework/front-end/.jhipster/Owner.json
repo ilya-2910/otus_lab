@@ -22,7 +22,7 @@
       "relationshipName": "pets"
     }
   ],
-  "changelogDate": "20201208214418",
+  "changelogDate": "20201219122847",
   "entityTableName": "owner",
   "dto": "no",
   "pagination": "no",
