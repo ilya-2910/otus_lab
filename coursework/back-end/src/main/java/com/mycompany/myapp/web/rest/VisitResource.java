@@ -1,7 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Visit;
-import com.mycompany.myapp.service.TimeVisitService;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 
@@ -17,9 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Visit}.
@@ -36,12 +32,9 @@ public class VisitResource {
     private String applicationName;
 
     private final VisitService visitService;
-    private final TimeVisitService timeVisitService;
 
-
-    public VisitResource(VisitService visitService, TimeVisitService timeVisitService) {
+    public VisitResource(VisitService visitService) {
         this.visitService = visitService;
-        this.timeVisitService = timeVisitService;
     }
 
     /**
@@ -57,14 +50,14 @@ public class VisitResource {
         if (visit.getId() != null) {
             throw new BadRequestAlertException("A new visit cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        boolean isVisitTimeOverlap = timeVisitService.isVisitTimeOverlap(visit);
+        boolean isVisitTimeOverlap = visitService.isVisitTimeOverlap(visit);
         if (isVisitTimeOverlap) {
             throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
         }
 
         Visit result = visitService.save(visit);
         return ResponseEntity.created(new URI("/api/visits/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -83,13 +76,13 @@ public class VisitResource {
         if (visit.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        boolean isVisitTimeOverlap = timeVisitService.isVisitTimeOverlap(visit);
+        boolean isVisitTimeOverlap = visitService.isVisitTimeOverlap(visit);
         if (isVisitTimeOverlap) {
             throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
         }
         Visit result = visitService.save(visit);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, visit.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, visit.getId().toString()))
             .body(result);
     }
 
@@ -128,19 +121,6 @@ public class VisitResource {
         log.debug("REST request to delete Visit : {}", id);
 
         visitService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/visits?query=:query} : search for the visit corresponding
-     * to the query.
-     *
-     * @param query the query of the visit search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/visits")
-    public List<Visit> searchVisits(@RequestParam String query) {
-        log.debug("REST request to search Visits for query {}", query);
-        return visitService.search(query);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

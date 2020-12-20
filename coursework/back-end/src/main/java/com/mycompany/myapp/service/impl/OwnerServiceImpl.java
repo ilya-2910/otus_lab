@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.OwnerService;
 import com.mycompany.myapp.domain.Owner;
 import com.mycompany.myapp.repository.OwnerRepository;
-import com.mycompany.myapp.repository.search.OwnerSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Owner}.
@@ -28,11 +23,8 @@ public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
 
-    private final OwnerSearchRepository ownerSearchRepository;
-
-    public OwnerServiceImpl(OwnerRepository ownerRepository, OwnerSearchRepository ownerSearchRepository) {
+    public OwnerServiceImpl(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
-        this.ownerSearchRepository = ownerSearchRepository;
     }
 
     /**
@@ -44,9 +36,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Owner save(Owner owner) {
         log.debug("Request to save Owner : {}", owner);
-        Owner result = ownerRepository.save(owner);
-        ownerSearchRepository.save(result);
-        return result;
+        return ownerRepository.save(owner);
     }
 
     /**
@@ -85,21 +75,5 @@ public class OwnerServiceImpl implements OwnerService {
         log.debug("Request to delete Owner : {}", id);
 
         ownerRepository.deleteById(id);
-        ownerSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the owner corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Owner> search(String query) {
-        log.debug("Request to search Owners for query {}", query);
-        return StreamSupport
-            .stream(ownerSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

@@ -3,7 +3,6 @@ package com.mycompany.myapp.domain;
 
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +12,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "vet")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "vet")
 public class Vet implements Serializable {
 
     private static final long serialVersionUID = 1L;

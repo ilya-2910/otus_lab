@@ -5,7 +5,6 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -16,7 +15,6 @@ import com.mycompany.myapp.domain.enumeration.VisitStatus;
  */
 @Entity
 @Table(name = "visit")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "visit")
 public class Visit implements Serializable {
 
     private static final long serialVersionUID = 1L;

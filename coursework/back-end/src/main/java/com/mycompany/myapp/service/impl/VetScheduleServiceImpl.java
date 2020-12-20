@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.domain.VetSchedule;
 import com.mycompany.myapp.repository.VetScheduleRepository;
-import com.mycompany.myapp.repository.search.VetScheduleSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link VetSchedule}.
@@ -28,11 +23,8 @@ public class VetScheduleServiceImpl implements VetScheduleService {
 
     private final VetScheduleRepository vetScheduleRepository;
 
-    private final VetScheduleSearchRepository vetScheduleSearchRepository;
-
-    public VetScheduleServiceImpl(VetScheduleRepository vetScheduleRepository, VetScheduleSearchRepository vetScheduleSearchRepository) {
+    public VetScheduleServiceImpl(VetScheduleRepository vetScheduleRepository) {
         this.vetScheduleRepository = vetScheduleRepository;
-        this.vetScheduleSearchRepository = vetScheduleSearchRepository;
     }
 
     /**
@@ -44,9 +36,7 @@ public class VetScheduleServiceImpl implements VetScheduleService {
     @Override
     public VetSchedule save(VetSchedule vetSchedule) {
         log.debug("Request to save VetSchedule : {}", vetSchedule);
-        VetSchedule result = vetScheduleRepository.save(vetSchedule);
-        vetScheduleSearchRepository.save(result);
-        return result;
+        return vetScheduleRepository.save(vetSchedule);
     }
 
     /**
@@ -85,21 +75,5 @@ public class VetScheduleServiceImpl implements VetScheduleService {
         log.debug("Request to delete VetSchedule : {}", id);
 
         vetScheduleRepository.deleteById(id);
-        vetScheduleSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the vetSchedule corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<VetSchedule> search(String query) {
-        log.debug("Request to search VetSchedules for query {}", query);
-        return StreamSupport
-            .stream(vetScheduleSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

@@ -5,7 +5,6 @@ import com.mycompany.myapp.config.Constants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -23,7 +22,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "jhi_user")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

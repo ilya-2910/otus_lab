@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.PetTypeService;
 import com.mycompany.myapp.domain.PetType;
 import com.mycompany.myapp.repository.PetTypeRepository;
-import com.mycompany.myapp.repository.search.PetTypeSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link PetType}.
@@ -28,11 +23,8 @@ public class PetTypeServiceImpl implements PetTypeService {
 
     private final PetTypeRepository petTypeRepository;
 
-    private final PetTypeSearchRepository petTypeSearchRepository;
-
-    public PetTypeServiceImpl(PetTypeRepository petTypeRepository, PetTypeSearchRepository petTypeSearchRepository) {
+    public PetTypeServiceImpl(PetTypeRepository petTypeRepository) {
         this.petTypeRepository = petTypeRepository;
-        this.petTypeSearchRepository = petTypeSearchRepository;
     }
 
     /**
@@ -44,9 +36,7 @@ public class PetTypeServiceImpl implements PetTypeService {
     @Override
     public PetType save(PetType petType) {
         log.debug("Request to save PetType : {}", petType);
-        PetType result = petTypeRepository.save(petType);
-        petTypeSearchRepository.save(result);
-        return result;
+        return petTypeRepository.save(petType);
     }
 
     /**
@@ -85,21 +75,5 @@ public class PetTypeServiceImpl implements PetTypeService {
         log.debug("Request to delete PetType : {}", id);
 
         petTypeRepository.deleteById(id);
-        petTypeSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the petType corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<PetType> search(String query) {
-        log.debug("Request to search PetTypes for query {}", query);
-        return StreamSupport
-            .stream(petTypeSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

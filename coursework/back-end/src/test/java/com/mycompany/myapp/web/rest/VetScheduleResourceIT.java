@@ -3,14 +3,10 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.VetSchedule;
 import com.mycompany.myapp.repository.VetScheduleRepository;
-import com.mycompany.myapp.repository.search.VetScheduleSearchRepository;
 import com.mycompany.myapp.service.VetScheduleService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,13 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link VetScheduleResource} REST controller.
  */
 @SpringBootTest(classes = CourseworkApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class VetScheduleResourceIT {
@@ -51,14 +43,6 @@ public class VetScheduleResourceIT {
 
     @Autowired
     private VetScheduleService vetScheduleService;
-
-    /**
-     * This repository is mocked in the com.mycompany.myapp.repository.search test package.
-     *
-     * @see com.mycompany.myapp.repository.search.VetScheduleSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private VetScheduleSearchRepository mockVetScheduleSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -114,9 +98,6 @@ public class VetScheduleResourceIT {
         VetSchedule testVetSchedule = vetScheduleList.get(vetScheduleList.size() - 1);
         assertThat(testVetSchedule.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testVetSchedule.getEndDate()).isEqualTo(DEFAULT_END_DATE);
-
-        // Validate the VetSchedule in Elasticsearch
-        verify(mockVetScheduleSearchRepository, times(1)).save(testVetSchedule);
     }
 
     @Test
@@ -136,9 +117,6 @@ public class VetScheduleResourceIT {
         // Validate the VetSchedule in the database
         List<VetSchedule> vetScheduleList = vetScheduleRepository.findAll();
         assertThat(vetScheduleList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the VetSchedule in Elasticsearch
-        verify(mockVetScheduleSearchRepository, times(0)).save(vetSchedule);
     }
 
 
@@ -206,9 +184,6 @@ public class VetScheduleResourceIT {
         VetSchedule testVetSchedule = vetScheduleList.get(vetScheduleList.size() - 1);
         assertThat(testVetSchedule.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testVetSchedule.getEndDate()).isEqualTo(UPDATED_END_DATE);
-
-        // Validate the VetSchedule in Elasticsearch
-        verify(mockVetScheduleSearchRepository, times(2)).save(testVetSchedule);
     }
 
     @Test
@@ -225,9 +200,6 @@ public class VetScheduleResourceIT {
         // Validate the VetSchedule in the database
         List<VetSchedule> vetScheduleList = vetScheduleRepository.findAll();
         assertThat(vetScheduleList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the VetSchedule in Elasticsearch
-        verify(mockVetScheduleSearchRepository, times(0)).save(vetSchedule);
     }
 
     @Test
@@ -246,26 +218,5 @@ public class VetScheduleResourceIT {
         // Validate the database contains one less item
         List<VetSchedule> vetScheduleList = vetScheduleRepository.findAll();
         assertThat(vetScheduleList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the VetSchedule in Elasticsearch
-        verify(mockVetScheduleSearchRepository, times(1)).deleteById(vetSchedule.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchVetSchedule() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        vetScheduleService.save(vetSchedule);
-        when(mockVetScheduleSearchRepository.search(queryStringQuery("id:" + vetSchedule.getId())))
-            .thenReturn(Collections.singletonList(vetSchedule));
-
-        // Search the vetSchedule
-        restVetScheduleMockMvc.perform(get("/api/_search/vet-schedules?query=id:" + vetSchedule.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(vetSchedule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 }

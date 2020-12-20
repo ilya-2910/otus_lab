@@ -16,9 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Pet}.
@@ -55,7 +52,7 @@ public class PetResource {
         }
         Pet result = petService.save(pet);
         return ResponseEntity.created(new URI("/api/pets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -76,7 +73,7 @@ public class PetResource {
         }
         Pet result = petService.save(pet);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, pet.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, pet.getId().toString()))
             .body(result);
     }
 
@@ -115,19 +112,6 @@ public class PetResource {
         log.debug("REST request to delete Pet : {}", id);
 
         petService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/pets?query=:query} : search for the pet corresponding
-     * to the query.
-     *
-     * @param query the query of the pet search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/pets")
-    public List<Pet> searchPets(@RequestParam String query) {
-        log.debug("REST request to search Pets for query {}", query);
-        return petService.search(query);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

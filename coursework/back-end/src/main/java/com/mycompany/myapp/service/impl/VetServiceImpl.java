@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VetService;
 import com.mycompany.myapp.domain.Vet;
 import com.mycompany.myapp.repository.VetRepository;
-import com.mycompany.myapp.repository.search.VetSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Vet}.
@@ -28,11 +23,8 @@ public class VetServiceImpl implements VetService {
 
     private final VetRepository vetRepository;
 
-    private final VetSearchRepository vetSearchRepository;
-
-    public VetServiceImpl(VetRepository vetRepository, VetSearchRepository vetSearchRepository) {
+    public VetServiceImpl(VetRepository vetRepository) {
         this.vetRepository = vetRepository;
-        this.vetSearchRepository = vetSearchRepository;
     }
 
     /**
@@ -44,9 +36,7 @@ public class VetServiceImpl implements VetService {
     @Override
     public Vet save(Vet vet) {
         log.debug("Request to save Vet : {}", vet);
-        Vet result = vetRepository.save(vet);
-        vetSearchRepository.save(result);
-        return result;
+        return vetRepository.save(vet);
     }
 
     /**
@@ -85,21 +75,5 @@ public class VetServiceImpl implements VetService {
         log.debug("Request to delete Vet : {}", id);
 
         vetRepository.deleteById(id);
-        vetSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the vet corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Vet> search(String query) {
-        log.debug("Request to search Vets for query {}", query);
-        return StreamSupport
-            .stream(vetSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

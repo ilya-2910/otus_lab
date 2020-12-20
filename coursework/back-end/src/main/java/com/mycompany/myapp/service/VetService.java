@@ -40,13 +40,4 @@ public interface VetService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-
-    /**
-     * Search for the vet corresponding to the query.
-     *
-     * @param query the query of the search.
-     * 
-     * @return the list of entities.
-     */
-    List<Vet> search(String query);
 }

@@ -16,9 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.PetType}.
@@ -55,7 +52,7 @@ public class PetTypeResource {
         }
         PetType result = petTypeService.save(petType);
         return ResponseEntity.created(new URI("/api/pet-types/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -76,7 +73,7 @@ public class PetTypeResource {
         }
         PetType result = petTypeService.save(petType);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, petType.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, petType.getId().toString()))
             .body(result);
     }
 
@@ -115,19 +112,6 @@ public class PetTypeResource {
         log.debug("REST request to delete PetType : {}", id);
 
         petTypeService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/pet-types?query=:query} : search for the petType corresponding
-     * to the query.
-     *
-     * @param query the query of the petType search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/pet-types")
-    public List<PetType> searchPetTypes(@RequestParam String query) {
-        log.debug("REST request to search PetTypes for query {}", query);
-        return petTypeService.search(query);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

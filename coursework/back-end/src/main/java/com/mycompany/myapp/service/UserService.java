@@ -5,7 +5,6 @@ import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.AuthorityRepository;
 import com.mycompany.myapp.repository.UserRepository;
-import com.mycompany.myapp.repository.search.UserSearchRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.dto.UserDTO;
@@ -39,14 +38,11 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final UserSearchRepository userSearchRepository;
-
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserSearchRepository userSearchRepository, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userSearchRepository = userSearchRepository;
         this.authorityRepository = authorityRepository;
     }
 
@@ -57,7 +53,6 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
-                userSearchRepository.save(user);
                 log.debug("Activated user: {}", user);
                 return user;
             });
@@ -118,7 +113,6 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
-        userSearchRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -160,7 +154,6 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
-        userSearchRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
@@ -193,7 +186,6 @@ public class UserService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
-                userSearchRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
@@ -203,7 +195,6 @@ public class UserService {
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
-            userSearchRepository.delete(user);
             log.debug("Deleted User: {}", user);
         });
     }
@@ -228,7 +219,6 @@ public class UserService {
                 }
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
-                userSearchRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
             });
     }
@@ -276,7 +266,6 @@ public class UserService {
             .forEach(user -> {
                 log.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
-                userSearchRepository.delete(user);
             });
     }
 

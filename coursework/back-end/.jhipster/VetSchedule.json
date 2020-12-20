@@ -19,7 +19,7 @@
       "otherEntityField": "id"
     }
   ],
-  "changelogDate": "20201212124339",
+  "changelogDate": "20201219113858",
   "entityTableName": "vet_schedule",
   "dto": "no",
   "pagination": "no",

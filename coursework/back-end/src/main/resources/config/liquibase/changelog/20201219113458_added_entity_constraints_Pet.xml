@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity Pet.
     -->
-    <changeSet id="20201208214505-2" author="jhipster">
+    <changeSet id="20201219113458-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="type_id"
                                  baseTableName="pet"

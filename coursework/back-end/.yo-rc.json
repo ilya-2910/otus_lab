@@ -1,7 +1,8 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "com.mycompany.myapp"
+      "packageName": "com.mycompany.myapp",
+      "nativeLanguage": "ru"
     },
     "jhipsterVersion": "6.9.0",
     "applicationType": "monolith",
@@ -15,21 +16,23 @@
     "databaseType": "sql",
     "devDatabaseType": "postgresql",
     "prodDatabaseType": "postgresql",
-    "searchEngine": "elasticsearch",
+    "searchEngine": false,
     "messageBroker": false,
-    "serviceDiscoveryType": false,
+    "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "MDAzODllOTllNmJmNGRiYzRmMTRjMjdjZWEwZjA0NDNkOTYzYTA3MWYxMjM2OGJhNzAyMGU0ZmE3OWIxZTU4MzlkZmE5NjExYmI5NDY0OGFjYzc4MzQ4YTdjNTYxMjBlODY5ZTg5ZTIxZGQzOGIyMDM2Nzc1YzY4YWJlN2YwMGQ=",
+    "jwtSecretKey": "Y2M4MGUyZGZmOTA1M2I4NzIxODRjY2Y1NDI1ZjEyNmVlOTY3NTU5YTI1ZjEwMGY3ZTdiNGRkYmZkOTE3Mjg2YTg4MDI0OTA5NDg4OTAyNDljYmNiZDc1NTJhYTliNTI4Njg1NjMxOWU2NjRiNjhhZWZlMmY2ODUzYjgzZTdiMGE=",
     "embeddableLaunchScript": false,
-    "creationTimestamp": 1607463496001,
+    "creationTimestamp": 1608376200626,
     "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "enableTranslation": false,
+    "enableTranslation": true,
     "clientPackageManager": "npm",
+    "nativeLanguage": "ru",
+    "languages": ["ru"],
     "blueprints": [],
     "skipClient": true
   }

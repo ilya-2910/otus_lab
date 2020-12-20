@@ -16,9 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.VetSchedule}.
@@ -55,7 +52,7 @@ public class VetScheduleResource {
         }
         VetSchedule result = vetScheduleService.save(vetSchedule);
         return ResponseEntity.created(new URI("/api/vet-schedules/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -76,7 +73,7 @@ public class VetScheduleResource {
         }
         VetSchedule result = vetScheduleService.save(vetSchedule);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, vetSchedule.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, vetSchedule.getId().toString()))
             .body(result);
     }
 
@@ -115,19 +112,6 @@ public class VetScheduleResource {
         log.debug("REST request to delete VetSchedule : {}", id);
 
         vetScheduleService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/vet-schedules?query=:query} : search for the vetSchedule corresponding
-     * to the query.
-     *
-     * @param query the query of the vetSchedule search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/vet-schedules")
-    public List<VetSchedule> searchVetSchedules(@RequestParam String query) {
-        log.debug("REST request to search VetSchedules for query {}", query);
-        return vetScheduleService.search(query);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

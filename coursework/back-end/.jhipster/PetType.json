@@ -7,7 +7,7 @@
     }
   ],
   "relationships": [],
-  "changelogDate": "20201213194303",
+  "changelogDate": "20201219113558",
   "entityTableName": "pet_type",
   "dto": "no",
   "pagination": "no",

@@ -19,6 +19,13 @@ logging:
     io.github.jhipster: INFO
     com.mycompany.myapp: INFO
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
+
 management:
   metrics:
     export:
@@ -42,13 +49,6 @@ spring:
   jpa:
     database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
     show-sql: false
-  data:
-    jest:
-      uri: http://localhost:9200
-  # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
-  elasticsearch:
-    rest:
-      uris: http://localhost:9200
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
@@ -59,6 +59,15 @@ spring:
     password:
   thymeleaf:
     cache: true
+  sleuth:
+    sampler:
+      probability: 1 # report 100% of traces
+  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
+    base-url: http://localhost:9411
+    enabled: false
+    locator:
+      discovery:
+        enabled: true
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
@@ -104,7 +113,7 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: MDAzODllOTllNmJmNGRiYzRmMTRjMjdjZWEwZjA0NDNkOTYzYTA3MWYxMjM2OGJhNzAyMGU0ZmE3OWIxZTU4MzlkZmE5NjExYmI5NDY0OGFjYzc4MzQ4YTdjNTYxMjBlODY5ZTg5ZTIxZGQzOGIyMDM2Nzc1YzY4YWJlN2YwMGQ=
+        base64-secret: Y2M4MGUyZGZmOTA1M2I4NzIxODRjY2Y1NDI1ZjEyNmVlOTY3NTU5YTI1ZjEwMGY3ZTdiNGRkYmZkOTE3Mjg2YTg4MDI0OTA5NDg4OTAyNDljYmNiZDc1NTJhYTliNTI4Njg1NjMxOWU2NjRiNjhhZWZlMmY2ODUzYjgzZTdiMGE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

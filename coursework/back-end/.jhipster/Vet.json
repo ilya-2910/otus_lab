@@ -24,7 +24,7 @@
       "relationshipName": "schedules"
     }
   ],
-  "changelogDate": "20201208214705",
+  "changelogDate": "20201219113758",
   "entityTableName": "vet",
   "dto": "no",
   "pagination": "no",

@@ -3,14 +3,10 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.Pet;
 import com.mycompany.myapp.repository.PetRepository;
-import com.mycompany.myapp.repository.search.PetSearchRepository;
 import com.mycompany.myapp.service.PetService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,13 +15,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link PetResource} REST controller.
  */
 @SpringBootTest(classes = CourseworkApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class PetResourceIT {
@@ -46,14 +38,6 @@ public class PetResourceIT {
 
     @Autowired
     private PetService petService;
-
-    /**
-     * This repository is mocked in the com.mycompany.myapp.repository.search test package.
-     *
-     * @see com.mycompany.myapp.repository.search.PetSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private PetSearchRepository mockPetSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -106,9 +90,6 @@ public class PetResourceIT {
         assertThat(petList).hasSize(databaseSizeBeforeCreate + 1);
         Pet testPet = petList.get(petList.size() - 1);
         assertThat(testPet.getName()).isEqualTo(DEFAULT_NAME);
-
-        // Validate the Pet in Elasticsearch
-        verify(mockPetSearchRepository, times(1)).save(testPet);
     }
 
     @Test
@@ -128,9 +109,6 @@ public class PetResourceIT {
         // Validate the Pet in the database
         List<Pet> petList = petRepository.findAll();
         assertThat(petList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Pet in Elasticsearch
-        verify(mockPetSearchRepository, times(0)).save(pet);
     }
 
 
@@ -194,9 +172,6 @@ public class PetResourceIT {
         assertThat(petList).hasSize(databaseSizeBeforeUpdate);
         Pet testPet = petList.get(petList.size() - 1);
         assertThat(testPet.getName()).isEqualTo(UPDATED_NAME);
-
-        // Validate the Pet in Elasticsearch
-        verify(mockPetSearchRepository, times(2)).save(testPet);
     }
 
     @Test
@@ -213,9 +188,6 @@ public class PetResourceIT {
         // Validate the Pet in the database
         List<Pet> petList = petRepository.findAll();
         assertThat(petList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Pet in Elasticsearch
-        verify(mockPetSearchRepository, times(0)).save(pet);
     }
 
     @Test
@@ -234,25 +206,5 @@ public class PetResourceIT {
         // Validate the database contains one less item
         List<Pet> petList = petRepository.findAll();
         assertThat(petList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Pet in Elasticsearch
-        verify(mockPetSearchRepository, times(1)).deleteById(pet.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchPet() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        petService.save(pet);
-        when(mockPetSearchRepository.search(queryStringQuery("id:" + pet.getId())))
-            .thenReturn(Collections.singletonList(pet));
-
-        // Search the pet
-        restPetMockMvc.perform(get("/api/_search/pets?query=id:" + pet.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(pet.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 }

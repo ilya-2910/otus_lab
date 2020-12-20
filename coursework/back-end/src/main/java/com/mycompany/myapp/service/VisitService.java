@@ -41,12 +41,7 @@ public interface VisitService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the visit corresponding to the query.
-     *
-     * @param query the query of the search.
-     * 
-     * @return the list of entities.
-     */
-    List<Visit> search(String query);
+    // custom user methods
+
+    boolean isVisitTimeOverlap(Visit visit);
 }

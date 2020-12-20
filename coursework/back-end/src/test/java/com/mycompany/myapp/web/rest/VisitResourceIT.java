@@ -3,14 +3,10 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.Visit;
 import com.mycompany.myapp.repository.VisitRepository;
-import com.mycompany.myapp.repository.search.VisitSearchRepository;
 import com.mycompany.myapp.service.VisitService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,13 +18,10 @@ import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,7 +30,6 @@ import com.mycompany.myapp.domain.enumeration.VisitStatus;
  * Integration tests for the {@link VisitResource} REST controller.
  */
 @SpringBootTest(classes = CourseworkApp.class)
-@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class VisitResourceIT {
@@ -59,14 +51,6 @@ public class VisitResourceIT {
 
     @Autowired
     private VisitService visitService;
-
-    /**
-     * This repository is mocked in the com.mycompany.myapp.repository.search test package.
-     *
-     * @see com.mycompany.myapp.repository.search.VisitSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private VisitSearchRepository mockVisitSearchRepository;
 
     @Autowired
     private EntityManager em;
@@ -128,9 +112,6 @@ public class VisitResourceIT {
         assertThat(testVisit.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testVisit.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testVisit.getStatus()).isEqualTo(DEFAULT_STATUS);
-
-        // Validate the Visit in Elasticsearch
-        verify(mockVisitSearchRepository, times(1)).save(testVisit);
     }
 
     @Test
@@ -150,9 +131,6 @@ public class VisitResourceIT {
         // Validate the Visit in the database
         List<Visit> visitList = visitRepository.findAll();
         assertThat(visitList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the Visit in Elasticsearch
-        verify(mockVisitSearchRepository, times(0)).save(visit);
     }
 
 
@@ -228,9 +206,6 @@ public class VisitResourceIT {
         assertThat(testVisit.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testVisit.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testVisit.getStatus()).isEqualTo(UPDATED_STATUS);
-
-        // Validate the Visit in Elasticsearch
-        verify(mockVisitSearchRepository, times(2)).save(testVisit);
     }
 
     @Test
@@ -247,9 +222,6 @@ public class VisitResourceIT {
         // Validate the Visit in the database
         List<Visit> visitList = visitRepository.findAll();
         assertThat(visitList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the Visit in Elasticsearch
-        verify(mockVisitSearchRepository, times(0)).save(visit);
     }
 
     @Test
@@ -268,28 +240,5 @@ public class VisitResourceIT {
         // Validate the database contains one less item
         List<Visit> visitList = visitRepository.findAll();
         assertThat(visitList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the Visit in Elasticsearch
-        verify(mockVisitSearchRepository, times(1)).deleteById(visit.getId());
-    }
-
-    @Test
-    @Transactional
-    public void searchVisit() throws Exception {
-        // Configure the mock search repository
-        // Initialize the database
-        visitService.save(visit);
-        when(mockVisitSearchRepository.search(queryStringQuery("id:" + visit.getId())))
-            .thenReturn(Collections.singletonList(visit));
-
-        // Search the visit
-        restVisitMockMvc.perform(get("/api/_search/visits?query=id:" + visit.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(visit.getId().intValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 }

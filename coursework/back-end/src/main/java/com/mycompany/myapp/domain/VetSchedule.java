@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -13,7 +12,6 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "vet_schedule")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "vetschedule")
 public class VetSchedule implements Serializable {
 
     private static final long serialVersionUID = 1L;

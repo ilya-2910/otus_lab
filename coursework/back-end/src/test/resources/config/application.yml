@@ -13,6 +13,13 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+eureka:
+  client:
+    enabled: false
+  instance:
+    appname: coursework
+    instanceId: coursework:${spring.application.instance-id:${random.value}}
+
 spring:
   profiles:
   # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
@@ -47,11 +54,6 @@ spring:
       hibernate.generate_statistics: false
       hibernate.hbm2ddl.auto: validate
       hibernate.jdbc.time_zone: UTC
-  data:
-    elasticsearch:
-      properties:
-        path:
-          home: target/elasticsearch
   liquibase:
     contexts: test
   mail:
@@ -105,7 +107,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: MDAzODllOTllNmJmNGRiYzRmMTRjMjdjZWEwZjA0NDNkOTYzYTA3MWYxMjM2OGJhNzAyMGU0ZmE3OWIxZTU4MzlkZmE5NjExYmI5NDY0OGFjYzc4MzQ4YTdjNTYxMjBlODY5ZTg5ZTIxZGQzOGIyMDM2Nzc1YzY4YWJlN2YwMGQ=
+        base64-secret: Y2M4MGUyZGZmOTA1M2I4NzIxODRjY2Y1NDI1ZjEyNmVlOTY3NTU5YTI1ZjEwMGY3ZTdiNGRkYmZkOTE3Mjg2YTg4MDI0OTA5NDg4OTAyNDljYmNiZDc1NTJhYTliNTI4Njg1NjMxOWU2NjRiNjhhZWZlMmY2ODUzYjgzZTdiMGE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
   metrics:

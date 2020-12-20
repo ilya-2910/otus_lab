@@ -3,7 +3,6 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.PetService;
 import com.mycompany.myapp.domain.Pet;
 import com.mycompany.myapp.repository.PetRepository;
-import com.mycompany.myapp.repository.search.PetSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Pet}.
@@ -28,11 +23,8 @@ public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
 
-    private final PetSearchRepository petSearchRepository;
-
-    public PetServiceImpl(PetRepository petRepository, PetSearchRepository petSearchRepository) {
+    public PetServiceImpl(PetRepository petRepository) {
         this.petRepository = petRepository;
-        this.petSearchRepository = petSearchRepository;
     }
 
     /**
@@ -44,9 +36,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public Pet save(Pet pet) {
         log.debug("Request to save Pet : {}", pet);
-        Pet result = petRepository.save(pet);
-        petSearchRepository.save(result);
-        return result;
+        return petRepository.save(pet);
     }
 
     /**
@@ -85,21 +75,5 @@ public class PetServiceImpl implements PetService {
         log.debug("Request to delete Pet : {}", id);
 
         petRepository.deleteById(id);
-        petSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the pet corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Pet> search(String query) {
-        log.debug("Request to search Pets for query {}", query);
-        return StreamSupport
-            .stream(petSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
     }
 }

@@ -3,19 +3,17 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.domain.Visit;
 import com.mycompany.myapp.repository.VisitRepository;
-import com.mycompany.myapp.repository.search.VisitSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link Visit}.
@@ -28,11 +26,8 @@ public class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
 
-    private final VisitSearchRepository visitSearchRepository;
-
-    public VisitServiceImpl(VisitRepository visitRepository, VisitSearchRepository visitSearchRepository) {
+    public VisitServiceImpl(VisitRepository visitRepository) {
         this.visitRepository = visitRepository;
-        this.visitSearchRepository = visitSearchRepository;
     }
 
     /**
@@ -44,9 +39,7 @@ public class VisitServiceImpl implements VisitService {
     @Override
     public Visit save(Visit visit) {
         log.debug("Request to save Visit : {}", visit);
-        Visit result = visitRepository.save(visit);
-        visitSearchRepository.save(result);
-        return result;
+        return visitRepository.save(visit);
     }
 
     /**
@@ -85,21 +78,16 @@ public class VisitServiceImpl implements VisitService {
         log.debug("Request to delete Visit : {}", id);
 
         visitRepository.deleteById(id);
-        visitSearchRepository.deleteById(id);
     }
 
-    /**
-     * Search for the visit corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
     @Override
-    @Transactional(readOnly = true)
-    public List<Visit> search(String query) {
-        log.debug("Request to search Visits for query {}", query);
-        return StreamSupport
-            .stream(visitSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-        .collect(Collectors.toList());
-    }
+    public boolean isVisitTimeOverlap(Visit visit) {
+        if (visit.getVet() == null) return true;
+
+        List<Visit> visits = visitRepository.findByVetAndStartDateBeforeAndEndDateAfter(visit.getVet(), visit.getEndDate(), visit.getStartDate());
+        return visits.stream()
+            .filter(visit1 -> !visit1.getId().equals(visit.getId()))
+            .findFirst().isPresent();
+   }
+
 }

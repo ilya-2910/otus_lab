@@ -4,7 +4,6 @@ import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
-import com.mycompany.myapp.repository.search.UserSearchRepository;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.UserMapper;
@@ -64,14 +63,6 @@ public class UserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
-
-    /**
-     * This repository is mocked in the com.mycompany.myapp.repository.search test package.
-     *
-     * @see com.mycompany.myapp.repository.search.UserSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -177,7 +168,6 @@ public class UserResourceIT {
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
-        mockUserSearchRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -206,7 +196,6 @@ public class UserResourceIT {
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
-        mockUserSearchRepository.save(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -254,7 +243,6 @@ public class UserResourceIT {
     public void getUser() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
-        mockUserSearchRepository.save(user);
 
         // Get the user
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
@@ -368,7 +356,6 @@ public class UserResourceIT {
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.saveAndFlush(user);
-        mockUserSearchRepository.save(user);
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -380,7 +367,6 @@ public class UserResourceIT {
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
         userRepository.saveAndFlush(anotherUser);
-        mockUserSearchRepository.save(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();
@@ -412,7 +398,6 @@ public class UserResourceIT {
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
-        mockUserSearchRepository.save(user);
 
         User anotherUser = new User();
         anotherUser.setLogin("jhipster");
@@ -424,7 +409,6 @@ public class UserResourceIT {
         anotherUser.setImageUrl("");
         anotherUser.setLangKey("en");
         userRepository.saveAndFlush(anotherUser);
-        mockUserSearchRepository.save(anotherUser);
 
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).get();

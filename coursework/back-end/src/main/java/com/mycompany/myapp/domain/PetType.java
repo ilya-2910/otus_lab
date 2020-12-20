@@ -3,7 +3,6 @@ package com.mycompany.myapp.domain;
 
 import javax.persistence.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 
 /**
@@ -11,7 +10,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "pet_type")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "pettype")
 public class PetType implements Serializable {
 
     private static final long serialVersionUID = 1L;

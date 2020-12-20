@@ -16,9 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Owner}.
@@ -55,7 +52,7 @@ public class OwnerResource {
         }
         Owner result = ownerService.save(owner);
         return ResponseEntity.created(new URI("/api/owners/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -76,7 +73,7 @@ public class OwnerResource {
         }
         Owner result = ownerService.save(owner);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, owner.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, owner.getId().toString()))
             .body(result);
     }
 
@@ -115,19 +112,6 @@ public class OwnerResource {
         log.debug("REST request to delete Owner : {}", id);
 
         ownerService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString())).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/owners?query=:query} : search for the owner corresponding
-     * to the query.
-     *
-     * @param query the query of the owner search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/owners")
-    public List<Owner> searchOwners(@RequestParam String query) {
-        log.debug("REST request to search Owners for query {}", query);
-        return ownerService.search(query);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }
