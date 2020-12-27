@@ -1,8 +1,8 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Owner;
 import com.mycompany.myapp.service.OwnerService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.service.dto.OwnerDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -40,17 +40,17 @@ public class OwnerResource {
     /**
      * {@code POST  /owners} : Create a new owner.
      *
-     * @param owner the owner to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new owner, or with status {@code 400 (Bad Request)} if the owner has already an ID.
+     * @param ownerDTO the ownerDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ownerDTO, or with status {@code 400 (Bad Request)} if the owner has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/owners")
-    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) throws URISyntaxException {
-        log.debug("REST request to save Owner : {}", owner);
-        if (owner.getId() != null) {
+    public ResponseEntity<OwnerDTO> createOwner(@RequestBody OwnerDTO ownerDTO) throws URISyntaxException {
+        log.debug("REST request to save Owner : {}", ownerDTO);
+        if (ownerDTO.getId() != null) {
             throw new BadRequestAlertException("A new owner cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Owner result = ownerService.save(owner);
+        OwnerDTO result = ownerService.save(ownerDTO);
         return ResponseEntity.created(new URI("/api/owners/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -59,21 +59,21 @@ public class OwnerResource {
     /**
      * {@code PUT  /owners} : Updates an existing owner.
      *
-     * @param owner the owner to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated owner,
-     * or with status {@code 400 (Bad Request)} if the owner is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the owner couldn't be updated.
+     * @param ownerDTO the ownerDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ownerDTO,
+     * or with status {@code 400 (Bad Request)} if the ownerDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the ownerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/owners")
-    public ResponseEntity<Owner> updateOwner(@RequestBody Owner owner) throws URISyntaxException {
-        log.debug("REST request to update Owner : {}", owner);
-        if (owner.getId() == null) {
+    public ResponseEntity<OwnerDTO> updateOwner(@RequestBody OwnerDTO ownerDTO) throws URISyntaxException {
+        log.debug("REST request to update Owner : {}", ownerDTO);
+        if (ownerDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Owner result = ownerService.save(owner);
+        OwnerDTO result = ownerService.save(ownerDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, owner.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ownerDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,7 +83,7 @@ public class OwnerResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of owners in body.
      */
     @GetMapping("/owners")
-    public List<Owner> getAllOwners() {
+    public List<OwnerDTO> getAllOwners() {
         log.debug("REST request to get all Owners");
         return ownerService.findAll();
     }
@@ -91,20 +91,20 @@ public class OwnerResource {
     /**
      * {@code GET  /owners/:id} : get the "id" owner.
      *
-     * @param id the id of the owner to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the owner, or with status {@code 404 (Not Found)}.
+     * @param id the id of the ownerDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ownerDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/owners/{id}")
-    public ResponseEntity<Owner> getOwner(@PathVariable Long id) {
+    public ResponseEntity<OwnerDTO> getOwner(@PathVariable Long id) {
         log.debug("REST request to get Owner : {}", id);
-        Optional<Owner> owner = ownerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(owner);
+        Optional<OwnerDTO> ownerDTO = ownerService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(ownerDTO);
     }
 
     /**
      * {@code DELETE  /owners/:id} : delete the "id" owner.
      *
-     * @param id the id of the owner to delete.
+     * @param id the id of the ownerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/owners/{id}")

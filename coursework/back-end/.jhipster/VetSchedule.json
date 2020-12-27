@@ -21,7 +21,7 @@
   ],
   "changelogDate": "20201219113858",
   "entityTableName": "vet_schedule",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,

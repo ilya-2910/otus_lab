@@ -4,6 +4,8 @@ import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.Owner;
 import com.mycompany.myapp.repository.OwnerRepository;
 import com.mycompany.myapp.service.OwnerService;
+import com.mycompany.myapp.service.dto.OwnerDTO;
+import com.mycompany.myapp.service.mapper.OwnerMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class OwnerResourceIT {
 
     @Autowired
     private OwnerRepository ownerRepository;
+
+    @Autowired
+    private OwnerMapper ownerMapper;
 
     @Autowired
     private OwnerService ownerService;
@@ -90,9 +95,10 @@ public class OwnerResourceIT {
     public void createOwner() throws Exception {
         int databaseSizeBeforeCreate = ownerRepository.findAll().size();
         // Create the Owner
+        OwnerDTO ownerDTO = ownerMapper.toDto(owner);
         restOwnerMockMvc.perform(post("/api/owners")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(owner)))
+            .content(TestUtil.convertObjectToJsonBytes(ownerDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Owner in the database
@@ -111,11 +117,12 @@ public class OwnerResourceIT {
 
         // Create the Owner with an existing ID
         owner.setId(1L);
+        OwnerDTO ownerDTO = ownerMapper.toDto(owner);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOwnerMockMvc.perform(post("/api/owners")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(owner)))
+            .content(TestUtil.convertObjectToJsonBytes(ownerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Owner in the database
@@ -167,7 +174,7 @@ public class OwnerResourceIT {
     @Transactional
     public void updateOwner() throws Exception {
         // Initialize the database
-        ownerService.save(owner);
+        ownerRepository.saveAndFlush(owner);
 
         int databaseSizeBeforeUpdate = ownerRepository.findAll().size();
 
@@ -179,10 +186,11 @@ public class OwnerResourceIT {
             .name(UPDATED_NAME)
             .address(UPDATED_ADDRESS)
             .phone(UPDATED_PHONE);
+        OwnerDTO ownerDTO = ownerMapper.toDto(updatedOwner);
 
         restOwnerMockMvc.perform(put("/api/owners")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedOwner)))
+            .content(TestUtil.convertObjectToJsonBytes(ownerDTO)))
             .andExpect(status().isOk());
 
         // Validate the Owner in the database
@@ -199,10 +207,13 @@ public class OwnerResourceIT {
     public void updateNonExistingOwner() throws Exception {
         int databaseSizeBeforeUpdate = ownerRepository.findAll().size();
 
+        // Create the Owner
+        OwnerDTO ownerDTO = ownerMapper.toDto(owner);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restOwnerMockMvc.perform(put("/api/owners")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(owner)))
+            .content(TestUtil.convertObjectToJsonBytes(ownerDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Owner in the database
@@ -214,7 +225,7 @@ public class OwnerResourceIT {
     @Transactional
     public void deleteOwner() throws Exception {
         // Initialize the database
-        ownerService.save(owner);
+        ownerRepository.saveAndFlush(owner);
 
         int databaseSizeBeforeDelete = ownerRepository.findAll().size();
 

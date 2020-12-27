@@ -3,14 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.PetService;
 import com.mycompany.myapp.domain.Pet;
 import com.mycompany.myapp.repository.PetRepository;
+import com.mycompany.myapp.service.dto.PetDTO;
+import com.mycompany.myapp.service.mapper.PetMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Pet}.
@@ -23,20 +27,25 @@ public class PetServiceImpl implements PetService {
 
     private final PetRepository petRepository;
 
-    public PetServiceImpl(PetRepository petRepository) {
+    private final PetMapper petMapper;
+
+    public PetServiceImpl(PetRepository petRepository, PetMapper petMapper) {
         this.petRepository = petRepository;
+        this.petMapper = petMapper;
     }
 
     /**
      * Save a pet.
      *
-     * @param pet the entity to save.
+     * @param petDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public Pet save(Pet pet) {
-        log.debug("Request to save Pet : {}", pet);
-        return petRepository.save(pet);
+    public PetDTO save(PetDTO petDTO) {
+        log.debug("Request to save Pet : {}", petDTO);
+        Pet pet = petMapper.toEntity(petDTO);
+        pet = petRepository.save(pet);
+        return petMapper.toDto(pet);
     }
 
     /**
@@ -46,9 +55,11 @@ public class PetServiceImpl implements PetService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Pet> findAll() {
+    public List<PetDTO> findAll() {
         log.debug("Request to get all Pets");
-        return petRepository.findAll();
+        return petRepository.findAll().stream()
+            .map(petMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -60,9 +71,10 @@ public class PetServiceImpl implements PetService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Pet> findOne(Long id) {
+    public Optional<PetDTO> findOne(Long id) {
         log.debug("Request to get Pet : {}", id);
-        return petRepository.findById(id);
+        return petRepository.findById(id)
+            .map(petMapper::toDto);
     }
 
     /**

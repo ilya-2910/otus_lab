@@ -1,29 +1,29 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.VetSchedule;
+import com.mycompany.myapp.service.dto.VetScheduleDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link VetSchedule}.
+ * Service Interface for managing {@link com.mycompany.myapp.domain.VetSchedule}.
  */
 public interface VetScheduleService {
 
     /**
      * Save a vetSchedule.
      *
-     * @param vetSchedule the entity to save.
+     * @param vetScheduleDTO the entity to save.
      * @return the persisted entity.
      */
-    VetSchedule save(VetSchedule vetSchedule);
+    VetScheduleDTO save(VetScheduleDTO vetScheduleDTO);
 
     /**
      * Get all the vetSchedules.
      *
      * @return the list of entities.
      */
-    List<VetSchedule> findAll();
+    List<VetScheduleDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface VetScheduleService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<VetSchedule> findOne(Long id);
+    Optional<VetScheduleDTO> findOne(Long id);
 
     /**
      * Delete the "id" vetSchedule.

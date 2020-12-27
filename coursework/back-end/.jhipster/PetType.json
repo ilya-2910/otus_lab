@@ -9,7 +9,7 @@
   "relationships": [],
   "changelogDate": "20201219113558",
   "entityTableName": "pet_type",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,

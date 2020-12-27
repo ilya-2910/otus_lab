@@ -4,6 +4,8 @@ import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.PetType;
 import com.mycompany.myapp.repository.PetTypeRepository;
 import com.mycompany.myapp.service.PetTypeService;
+import com.mycompany.myapp.service.dto.PetTypeDTO;
+import com.mycompany.myapp.service.mapper.PetTypeMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,9 @@ public class PetTypeResourceIT {
 
     @Autowired
     private PetTypeRepository petTypeRepository;
+
+    @Autowired
+    private PetTypeMapper petTypeMapper;
 
     @Autowired
     private PetTypeService petTypeService;
@@ -80,9 +85,10 @@ public class PetTypeResourceIT {
     public void createPetType() throws Exception {
         int databaseSizeBeforeCreate = petTypeRepository.findAll().size();
         // Create the PetType
+        PetTypeDTO petTypeDTO = petTypeMapper.toDto(petType);
         restPetTypeMockMvc.perform(post("/api/pet-types")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(petType)))
+            .content(TestUtil.convertObjectToJsonBytes(petTypeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the PetType in the database
@@ -99,11 +105,12 @@ public class PetTypeResourceIT {
 
         // Create the PetType with an existing ID
         petType.setId(1L);
+        PetTypeDTO petTypeDTO = petTypeMapper.toDto(petType);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restPetTypeMockMvc.perform(post("/api/pet-types")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(petType)))
+            .content(TestUtil.convertObjectToJsonBytes(petTypeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the PetType in the database
@@ -151,7 +158,7 @@ public class PetTypeResourceIT {
     @Transactional
     public void updatePetType() throws Exception {
         // Initialize the database
-        petTypeService.save(petType);
+        petTypeRepository.saveAndFlush(petType);
 
         int databaseSizeBeforeUpdate = petTypeRepository.findAll().size();
 
@@ -161,10 +168,11 @@ public class PetTypeResourceIT {
         em.detach(updatedPetType);
         updatedPetType
             .type(UPDATED_TYPE);
+        PetTypeDTO petTypeDTO = petTypeMapper.toDto(updatedPetType);
 
         restPetTypeMockMvc.perform(put("/api/pet-types")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedPetType)))
+            .content(TestUtil.convertObjectToJsonBytes(petTypeDTO)))
             .andExpect(status().isOk());
 
         // Validate the PetType in the database
@@ -179,10 +187,13 @@ public class PetTypeResourceIT {
     public void updateNonExistingPetType() throws Exception {
         int databaseSizeBeforeUpdate = petTypeRepository.findAll().size();
 
+        // Create the PetType
+        PetTypeDTO petTypeDTO = petTypeMapper.toDto(petType);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restPetTypeMockMvc.perform(put("/api/pet-types")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(petType)))
+            .content(TestUtil.convertObjectToJsonBytes(petTypeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the PetType in the database
@@ -194,7 +205,7 @@ public class PetTypeResourceIT {
     @Transactional
     public void deletePetType() throws Exception {
         // Initialize the database
-        petTypeService.save(petType);
+        petTypeRepository.saveAndFlush(petType);
 
         int databaseSizeBeforeDelete = petTypeRepository.findAll().size();
 

@@ -3,17 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.domain.Visit;
 import com.mycompany.myapp.repository.VisitRepository;
+import com.mycompany.myapp.service.dto.VisitDTO;
+import com.mycompany.myapp.service.mapper.VisitMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Visit}.
@@ -26,20 +27,25 @@ public class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
 
-    public VisitServiceImpl(VisitRepository visitRepository) {
+    private final VisitMapper visitMapper;
+
+    public VisitServiceImpl(VisitRepository visitRepository, VisitMapper visitMapper) {
         this.visitRepository = visitRepository;
+        this.visitMapper = visitMapper;
     }
 
     /**
      * Save a visit.
      *
-     * @param visit the entity to save.
+     * @param visitDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public Visit save(Visit visit) {
-        log.debug("Request to save Visit : {}", visit);
-        return visitRepository.save(visit);
+    public VisitDTO save(VisitDTO visitDTO) {
+        log.debug("Request to save Visit : {}", visitDTO);
+        Visit visit = visitMapper.toEntity(visitDTO);
+        visit = visitRepository.save(visit);
+        return visitMapper.toDto(visit);
     }
 
     /**
@@ -49,9 +55,11 @@ public class VisitServiceImpl implements VisitService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Visit> findAll() {
+    public List<VisitDTO> findAll() {
         log.debug("Request to get all Visits");
-        return visitRepository.findAll();
+        return visitRepository.findAll().stream()
+            .map(visitMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -63,9 +71,10 @@ public class VisitServiceImpl implements VisitService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Visit> findOne(Long id) {
+    public Optional<VisitDTO> findOne(Long id) {
         log.debug("Request to get Visit : {}", id);
-        return visitRepository.findById(id);
+        return visitRepository.findById(id)
+            .map(visitMapper::toDto);
     }
 
     /**
@@ -81,8 +90,10 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public boolean isVisitTimeOverlap(Visit visit) {
-        if (visit.getVet() == null) return true;
+    public boolean isVisitTimeOverlap(VisitDTO visitDTO) {
+        if (visitDTO.getVetId() == null) return true;
+        Visit visit = visitMapper.toEntity(visitDTO);
+
 
         List<Visit> visits = visitRepository.findByVetAndStartDateBeforeAndEndDateAfter(visit.getVet(), visit.getEndDate(), visit.getStartDate());
         return visits.stream()

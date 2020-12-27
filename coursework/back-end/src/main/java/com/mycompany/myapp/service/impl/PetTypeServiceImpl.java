@@ -3,14 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.PetTypeService;
 import com.mycompany.myapp.domain.PetType;
 import com.mycompany.myapp.repository.PetTypeRepository;
+import com.mycompany.myapp.service.dto.PetTypeDTO;
+import com.mycompany.myapp.service.mapper.PetTypeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link PetType}.
@@ -23,20 +27,25 @@ public class PetTypeServiceImpl implements PetTypeService {
 
     private final PetTypeRepository petTypeRepository;
 
-    public PetTypeServiceImpl(PetTypeRepository petTypeRepository) {
+    private final PetTypeMapper petTypeMapper;
+
+    public PetTypeServiceImpl(PetTypeRepository petTypeRepository, PetTypeMapper petTypeMapper) {
         this.petTypeRepository = petTypeRepository;
+        this.petTypeMapper = petTypeMapper;
     }
 
     /**
      * Save a petType.
      *
-     * @param petType the entity to save.
+     * @param petTypeDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public PetType save(PetType petType) {
-        log.debug("Request to save PetType : {}", petType);
-        return petTypeRepository.save(petType);
+    public PetTypeDTO save(PetTypeDTO petTypeDTO) {
+        log.debug("Request to save PetType : {}", petTypeDTO);
+        PetType petType = petTypeMapper.toEntity(petTypeDTO);
+        petType = petTypeRepository.save(petType);
+        return petTypeMapper.toDto(petType);
     }
 
     /**
@@ -46,9 +55,11 @@ public class PetTypeServiceImpl implements PetTypeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<PetType> findAll() {
+    public List<PetTypeDTO> findAll() {
         log.debug("Request to get all PetTypes");
-        return petTypeRepository.findAll();
+        return petTypeRepository.findAll().stream()
+            .map(petTypeMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -60,9 +71,10 @@ public class PetTypeServiceImpl implements PetTypeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<PetType> findOne(Long id) {
+    public Optional<PetTypeDTO> findOne(Long id) {
         log.debug("Request to get PetType : {}", id);
-        return petTypeRepository.findById(id);
+        return petTypeRepository.findById(id)
+            .map(petTypeMapper::toDto);
     }
 
     /**

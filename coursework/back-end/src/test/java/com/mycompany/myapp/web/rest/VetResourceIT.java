@@ -4,6 +4,8 @@ import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.Vet;
 import com.mycompany.myapp.repository.VetRepository;
 import com.mycompany.myapp.service.VetService;
+import com.mycompany.myapp.service.dto.VetDTO;
+import com.mycompany.myapp.service.mapper.VetMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,9 @@ public class VetResourceIT {
 
     @Autowired
     private VetRepository vetRepository;
+
+    @Autowired
+    private VetMapper vetMapper;
 
     @Autowired
     private VetService vetService;
@@ -85,9 +90,10 @@ public class VetResourceIT {
     public void createVet() throws Exception {
         int databaseSizeBeforeCreate = vetRepository.findAll().size();
         // Create the Vet
+        VetDTO vetDTO = vetMapper.toDto(vet);
         restVetMockMvc.perform(post("/api/vets")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vet)))
+            .content(TestUtil.convertObjectToJsonBytes(vetDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Vet in the database
@@ -105,11 +111,12 @@ public class VetResourceIT {
 
         // Create the Vet with an existing ID
         vet.setId(1L);
+        VetDTO vetDTO = vetMapper.toDto(vet);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restVetMockMvc.perform(post("/api/vets")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vet)))
+            .content(TestUtil.convertObjectToJsonBytes(vetDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Vet in the database
@@ -159,7 +166,7 @@ public class VetResourceIT {
     @Transactional
     public void updateVet() throws Exception {
         // Initialize the database
-        vetService.save(vet);
+        vetRepository.saveAndFlush(vet);
 
         int databaseSizeBeforeUpdate = vetRepository.findAll().size();
 
@@ -170,10 +177,11 @@ public class VetResourceIT {
         updatedVet
             .name(UPDATED_NAME)
             .phone(UPDATED_PHONE);
+        VetDTO vetDTO = vetMapper.toDto(updatedVet);
 
         restVetMockMvc.perform(put("/api/vets")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedVet)))
+            .content(TestUtil.convertObjectToJsonBytes(vetDTO)))
             .andExpect(status().isOk());
 
         // Validate the Vet in the database
@@ -189,10 +197,13 @@ public class VetResourceIT {
     public void updateNonExistingVet() throws Exception {
         int databaseSizeBeforeUpdate = vetRepository.findAll().size();
 
+        // Create the Vet
+        VetDTO vetDTO = vetMapper.toDto(vet);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restVetMockMvc.perform(put("/api/vets")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vet)))
+            .content(TestUtil.convertObjectToJsonBytes(vetDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Vet in the database
@@ -204,7 +215,7 @@ public class VetResourceIT {
     @Transactional
     public void deleteVet() throws Exception {
         // Initialize the database
-        vetService.save(vet);
+        vetRepository.saveAndFlush(vet);
 
         int databaseSizeBeforeDelete = vetRepository.findAll().size();
 

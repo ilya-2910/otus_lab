@@ -1,29 +1,29 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.Owner;
+import com.mycompany.myapp.service.dto.OwnerDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link Owner}.
+ * Service Interface for managing {@link com.mycompany.myapp.domain.Owner}.
  */
 public interface OwnerService {
 
     /**
      * Save a owner.
      *
-     * @param owner the entity to save.
+     * @param ownerDTO the entity to save.
      * @return the persisted entity.
      */
-    Owner save(Owner owner);
+    OwnerDTO save(OwnerDTO ownerDTO);
 
     /**
      * Get all the owners.
      *
      * @return the list of entities.
      */
-    List<Owner> findAll();
+    List<OwnerDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface OwnerService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<Owner> findOne(Long id);
+    Optional<OwnerDTO> findOne(Long id);
 
     /**
      * Delete the "id" owner.

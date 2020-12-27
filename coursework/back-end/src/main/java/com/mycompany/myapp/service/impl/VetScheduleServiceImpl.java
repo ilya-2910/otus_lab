@@ -3,14 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.domain.VetSchedule;
 import com.mycompany.myapp.repository.VetScheduleRepository;
+import com.mycompany.myapp.service.dto.VetScheduleDTO;
+import com.mycompany.myapp.service.mapper.VetScheduleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link VetSchedule}.
@@ -23,20 +27,25 @@ public class VetScheduleServiceImpl implements VetScheduleService {
 
     private final VetScheduleRepository vetScheduleRepository;
 
-    public VetScheduleServiceImpl(VetScheduleRepository vetScheduleRepository) {
+    private final VetScheduleMapper vetScheduleMapper;
+
+    public VetScheduleServiceImpl(VetScheduleRepository vetScheduleRepository, VetScheduleMapper vetScheduleMapper) {
         this.vetScheduleRepository = vetScheduleRepository;
+        this.vetScheduleMapper = vetScheduleMapper;
     }
 
     /**
      * Save a vetSchedule.
      *
-     * @param vetSchedule the entity to save.
+     * @param vetScheduleDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public VetSchedule save(VetSchedule vetSchedule) {
-        log.debug("Request to save VetSchedule : {}", vetSchedule);
-        return vetScheduleRepository.save(vetSchedule);
+    public VetScheduleDTO save(VetScheduleDTO vetScheduleDTO) {
+        log.debug("Request to save VetSchedule : {}", vetScheduleDTO);
+        VetSchedule vetSchedule = vetScheduleMapper.toEntity(vetScheduleDTO);
+        vetSchedule = vetScheduleRepository.save(vetSchedule);
+        return vetScheduleMapper.toDto(vetSchedule);
     }
 
     /**
@@ -46,9 +55,11 @@ public class VetScheduleServiceImpl implements VetScheduleService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<VetSchedule> findAll() {
+    public List<VetScheduleDTO> findAll() {
         log.debug("Request to get all VetSchedules");
-        return vetScheduleRepository.findAll();
+        return vetScheduleRepository.findAll().stream()
+            .map(vetScheduleMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -60,9 +71,10 @@ public class VetScheduleServiceImpl implements VetScheduleService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<VetSchedule> findOne(Long id) {
+    public Optional<VetScheduleDTO> findOne(Long id) {
         log.debug("Request to get VetSchedule : {}", id);
-        return vetScheduleRepository.findById(id);
+        return vetScheduleRepository.findById(id)
+            .map(vetScheduleMapper::toDto);
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.PetType;
 import com.mycompany.myapp.service.PetTypeService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.service.dto.PetTypeDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -40,17 +40,17 @@ public class PetTypeResource {
     /**
      * {@code POST  /pet-types} : Create a new petType.
      *
-     * @param petType the petType to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new petType, or with status {@code 400 (Bad Request)} if the petType has already an ID.
+     * @param petTypeDTO the petTypeDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new petTypeDTO, or with status {@code 400 (Bad Request)} if the petType has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/pet-types")
-    public ResponseEntity<PetType> createPetType(@RequestBody PetType petType) throws URISyntaxException {
-        log.debug("REST request to save PetType : {}", petType);
-        if (petType.getId() != null) {
+    public ResponseEntity<PetTypeDTO> createPetType(@RequestBody PetTypeDTO petTypeDTO) throws URISyntaxException {
+        log.debug("REST request to save PetType : {}", petTypeDTO);
+        if (petTypeDTO.getId() != null) {
             throw new BadRequestAlertException("A new petType cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PetType result = petTypeService.save(petType);
+        PetTypeDTO result = petTypeService.save(petTypeDTO);
         return ResponseEntity.created(new URI("/api/pet-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -59,21 +59,21 @@ public class PetTypeResource {
     /**
      * {@code PUT  /pet-types} : Updates an existing petType.
      *
-     * @param petType the petType to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated petType,
-     * or with status {@code 400 (Bad Request)} if the petType is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the petType couldn't be updated.
+     * @param petTypeDTO the petTypeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated petTypeDTO,
+     * or with status {@code 400 (Bad Request)} if the petTypeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the petTypeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/pet-types")
-    public ResponseEntity<PetType> updatePetType(@RequestBody PetType petType) throws URISyntaxException {
-        log.debug("REST request to update PetType : {}", petType);
-        if (petType.getId() == null) {
+    public ResponseEntity<PetTypeDTO> updatePetType(@RequestBody PetTypeDTO petTypeDTO) throws URISyntaxException {
+        log.debug("REST request to update PetType : {}", petTypeDTO);
+        if (petTypeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PetType result = petTypeService.save(petType);
+        PetTypeDTO result = petTypeService.save(petTypeDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, petType.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, petTypeDTO.getId().toString()))
             .body(result);
     }
 
@@ -83,7 +83,7 @@ public class PetTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of petTypes in body.
      */
     @GetMapping("/pet-types")
-    public List<PetType> getAllPetTypes() {
+    public List<PetTypeDTO> getAllPetTypes() {
         log.debug("REST request to get all PetTypes");
         return petTypeService.findAll();
     }
@@ -91,20 +91,20 @@ public class PetTypeResource {
     /**
      * {@code GET  /pet-types/:id} : get the "id" petType.
      *
-     * @param id the id of the petType to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the petType, or with status {@code 404 (Not Found)}.
+     * @param id the id of the petTypeDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the petTypeDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/pet-types/{id}")
-    public ResponseEntity<PetType> getPetType(@PathVariable Long id) {
+    public ResponseEntity<PetTypeDTO> getPetType(@PathVariable Long id) {
         log.debug("REST request to get PetType : {}", id);
-        Optional<PetType> petType = petTypeService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(petType);
+        Optional<PetTypeDTO> petTypeDTO = petTypeService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(petTypeDTO);
     }
 
     /**
      * {@code DELETE  /pet-types/:id} : delete the "id" petType.
      *
-     * @param id the id of the petType to delete.
+     * @param id the id of the petTypeDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/pet-types/{id}")

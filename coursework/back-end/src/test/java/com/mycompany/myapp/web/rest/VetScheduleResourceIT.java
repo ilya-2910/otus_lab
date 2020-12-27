@@ -4,6 +4,8 @@ import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.VetSchedule;
 import com.mycompany.myapp.repository.VetScheduleRepository;
 import com.mycompany.myapp.service.VetScheduleService;
+import com.mycompany.myapp.service.dto.VetScheduleDTO;
+import com.mycompany.myapp.service.mapper.VetScheduleMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +42,9 @@ public class VetScheduleResourceIT {
 
     @Autowired
     private VetScheduleRepository vetScheduleRepository;
+
+    @Autowired
+    private VetScheduleMapper vetScheduleMapper;
 
     @Autowired
     private VetScheduleService vetScheduleService;
@@ -87,9 +92,10 @@ public class VetScheduleResourceIT {
     public void createVetSchedule() throws Exception {
         int databaseSizeBeforeCreate = vetScheduleRepository.findAll().size();
         // Create the VetSchedule
+        VetScheduleDTO vetScheduleDTO = vetScheduleMapper.toDto(vetSchedule);
         restVetScheduleMockMvc.perform(post("/api/vet-schedules")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vetSchedule)))
+            .content(TestUtil.convertObjectToJsonBytes(vetScheduleDTO)))
             .andExpect(status().isCreated());
 
         // Validate the VetSchedule in the database
@@ -107,11 +113,12 @@ public class VetScheduleResourceIT {
 
         // Create the VetSchedule with an existing ID
         vetSchedule.setId(1L);
+        VetScheduleDTO vetScheduleDTO = vetScheduleMapper.toDto(vetSchedule);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restVetScheduleMockMvc.perform(post("/api/vet-schedules")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vetSchedule)))
+            .content(TestUtil.convertObjectToJsonBytes(vetScheduleDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the VetSchedule in the database
@@ -161,7 +168,7 @@ public class VetScheduleResourceIT {
     @Transactional
     public void updateVetSchedule() throws Exception {
         // Initialize the database
-        vetScheduleService.save(vetSchedule);
+        vetScheduleRepository.saveAndFlush(vetSchedule);
 
         int databaseSizeBeforeUpdate = vetScheduleRepository.findAll().size();
 
@@ -172,10 +179,11 @@ public class VetScheduleResourceIT {
         updatedVetSchedule
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
+        VetScheduleDTO vetScheduleDTO = vetScheduleMapper.toDto(updatedVetSchedule);
 
         restVetScheduleMockMvc.perform(put("/api/vet-schedules")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedVetSchedule)))
+            .content(TestUtil.convertObjectToJsonBytes(vetScheduleDTO)))
             .andExpect(status().isOk());
 
         // Validate the VetSchedule in the database
@@ -191,10 +199,13 @@ public class VetScheduleResourceIT {
     public void updateNonExistingVetSchedule() throws Exception {
         int databaseSizeBeforeUpdate = vetScheduleRepository.findAll().size();
 
+        // Create the VetSchedule
+        VetScheduleDTO vetScheduleDTO = vetScheduleMapper.toDto(vetSchedule);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restVetScheduleMockMvc.perform(put("/api/vet-schedules")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(vetSchedule)))
+            .content(TestUtil.convertObjectToJsonBytes(vetScheduleDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the VetSchedule in the database
@@ -206,7 +217,7 @@ public class VetScheduleResourceIT {
     @Transactional
     public void deleteVetSchedule() throws Exception {
         // Initialize the database
-        vetScheduleService.save(vetSchedule);
+        vetScheduleRepository.saveAndFlush(vetSchedule);
 
         int databaseSizeBeforeDelete = vetScheduleRepository.findAll().size();
 

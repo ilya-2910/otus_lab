@@ -3,14 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.OwnerService;
 import com.mycompany.myapp.domain.Owner;
 import com.mycompany.myapp.repository.OwnerRepository;
+import com.mycompany.myapp.service.dto.OwnerDTO;
+import com.mycompany.myapp.service.mapper.OwnerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Owner}.
@@ -23,20 +27,25 @@ public class OwnerServiceImpl implements OwnerService {
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerServiceImpl(OwnerRepository ownerRepository) {
+    private final OwnerMapper ownerMapper;
+
+    public OwnerServiceImpl(OwnerRepository ownerRepository, OwnerMapper ownerMapper) {
         this.ownerRepository = ownerRepository;
+        this.ownerMapper = ownerMapper;
     }
 
     /**
      * Save a owner.
      *
-     * @param owner the entity to save.
+     * @param ownerDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public Owner save(Owner owner) {
-        log.debug("Request to save Owner : {}", owner);
-        return ownerRepository.save(owner);
+    public OwnerDTO save(OwnerDTO ownerDTO) {
+        log.debug("Request to save Owner : {}", ownerDTO);
+        Owner owner = ownerMapper.toEntity(ownerDTO);
+        owner = ownerRepository.save(owner);
+        return ownerMapper.toDto(owner);
     }
 
     /**
@@ -46,9 +55,11 @@ public class OwnerServiceImpl implements OwnerService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Owner> findAll() {
+    public List<OwnerDTO> findAll() {
         log.debug("Request to get all Owners");
-        return ownerRepository.findAll();
+        return ownerRepository.findAll().stream()
+            .map(ownerMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -60,9 +71,10 @@ public class OwnerServiceImpl implements OwnerService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Owner> findOne(Long id) {
+    public Optional<OwnerDTO> findOne(Long id) {
         log.debug("Request to get Owner : {}", id);
-        return ownerRepository.findById(id);
+        return ownerRepository.findById(id)
+            .map(ownerMapper::toDto);
     }
 
     /**

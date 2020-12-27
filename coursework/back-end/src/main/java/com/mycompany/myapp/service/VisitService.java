@@ -1,29 +1,29 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.Visit;
+import com.mycompany.myapp.service.dto.VisitDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link Visit}.
+ * Service Interface for managing {@link com.mycompany.myapp.domain.Visit}.
  */
 public interface VisitService {
 
     /**
      * Save a visit.
      *
-     * @param visit the entity to save.
+     * @param visitDTO the entity to save.
      * @return the persisted entity.
      */
-    Visit save(Visit visit);
+    VisitDTO save(VisitDTO visitDTO);
 
     /**
      * Get all the visits.
      *
      * @return the list of entities.
      */
-    List<Visit> findAll();
+    List<VisitDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface VisitService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<Visit> findOne(Long id);
+    Optional<VisitDTO> findOne(Long id);
 
     /**
      * Delete the "id" visit.
@@ -43,5 +43,5 @@ public interface VisitService {
 
     // custom user methods
 
-    boolean isVisitTimeOverlap(Visit visit);
+    boolean isVisitTimeOverlap(VisitDTO visit);
 }

@@ -1,29 +1,29 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.Vet;
+import com.mycompany.myapp.service.dto.VetDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link Vet}.
+ * Service Interface for managing {@link com.mycompany.myapp.domain.Vet}.
  */
 public interface VetService {
 
     /**
      * Save a vet.
      *
-     * @param vet the entity to save.
+     * @param vetDTO the entity to save.
      * @return the persisted entity.
      */
-    Vet save(Vet vet);
+    VetDTO save(VetDTO vetDTO);
 
     /**
      * Get all the vets.
      *
      * @return the list of entities.
      */
-    List<Vet> findAll();
+    List<VetDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface VetService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<Vet> findOne(Long id);
+    Optional<VetDTO> findOne(Long id);
 
     /**
      * Delete the "id" vet.

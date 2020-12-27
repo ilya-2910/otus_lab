@@ -47,3 +47,7 @@ relationship OneToMany {
 }
 
 service all with serviceImpl
+
+filter Visit
+
+dto * with mapstruct

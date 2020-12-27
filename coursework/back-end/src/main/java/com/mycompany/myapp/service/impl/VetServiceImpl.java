@@ -3,14 +3,18 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.service.VetService;
 import com.mycompany.myapp.domain.Vet;
 import com.mycompany.myapp.repository.VetRepository;
+import com.mycompany.myapp.service.dto.VetDTO;
+import com.mycompany.myapp.service.mapper.VetMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Vet}.
@@ -23,20 +27,25 @@ public class VetServiceImpl implements VetService {
 
     private final VetRepository vetRepository;
 
-    public VetServiceImpl(VetRepository vetRepository) {
+    private final VetMapper vetMapper;
+
+    public VetServiceImpl(VetRepository vetRepository, VetMapper vetMapper) {
         this.vetRepository = vetRepository;
+        this.vetMapper = vetMapper;
     }
 
     /**
      * Save a vet.
      *
-     * @param vet the entity to save.
+     * @param vetDTO the entity to save.
      * @return the persisted entity.
      */
     @Override
-    public Vet save(Vet vet) {
-        log.debug("Request to save Vet : {}", vet);
-        return vetRepository.save(vet);
+    public VetDTO save(VetDTO vetDTO) {
+        log.debug("Request to save Vet : {}", vetDTO);
+        Vet vet = vetMapper.toEntity(vetDTO);
+        vet = vetRepository.save(vet);
+        return vetMapper.toDto(vet);
     }
 
     /**
@@ -46,9 +55,11 @@ public class VetServiceImpl implements VetService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Vet> findAll() {
+    public List<VetDTO> findAll() {
         log.debug("Request to get all Vets");
-        return vetRepository.findAll();
+        return vetRepository.findAll().stream()
+            .map(vetMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
 
@@ -60,9 +71,10 @@ public class VetServiceImpl implements VetService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Vet> findOne(Long id) {
+    public Optional<VetDTO> findOne(Long id) {
         log.debug("Request to get Vet : {}", id);
-        return vetRepository.findById(id);
+        return vetRepository.findById(id)
+            .map(vetMapper::toDto);
     }
 
     /**

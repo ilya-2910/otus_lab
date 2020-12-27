@@ -1,29 +1,29 @@
 package com.mycompany.myapp.service;
 
-import com.mycompany.myapp.domain.PetType;
+import com.mycompany.myapp.service.dto.PetTypeDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link PetType}.
+ * Service Interface for managing {@link com.mycompany.myapp.domain.PetType}.
  */
 public interface PetTypeService {
 
     /**
      * Save a petType.
      *
-     * @param petType the entity to save.
+     * @param petTypeDTO the entity to save.
      * @return the persisted entity.
      */
-    PetType save(PetType petType);
+    PetTypeDTO save(PetTypeDTO petTypeDTO);
 
     /**
      * Get all the petTypes.
      *
      * @return the list of entities.
      */
-    List<PetType> findAll();
+    List<PetTypeDTO> findAll();
 
 
     /**
@@ -32,7 +32,7 @@ public interface PetTypeService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<PetType> findOne(Long id);
+    Optional<PetTypeDTO> findOne(Long id);
 
     /**
      * Delete the "id" petType.
