@@ -7,7 +7,8 @@ import { byteSize, Translate, ICrudGetAllAction, TextFormat } from 'react-jhipst
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
-import { getEntities } from './visit.reducer';
+import {getEntities, getEntitiesFilter} from './visit.reducer';
+import { getEntitiesFilter as getVetScheduleEntitiesFilter} from '../vet-schedule/vet-schedule.reducer';
 import { IVisit } from 'app/shared/model/visit.model';
 import { APP_DATE_FORMAT} from 'app/config/constants';
 
@@ -22,14 +23,27 @@ export const Visit = (props: IVisitProps) => {
 
   const [date, setDate] = useState(moment().startOf('day'));
 
+  const searchEntities = () => {
+    props.getEntitiesFilter(
+      {'startDate.lessThan': moment(date.clone().add(1, 'day').clone()).toDate(),
+      'endDate.greaterThan': date.clone().add(0, 'day').toDate()});
+  }
+
+  const searchVetSchedulesEntities = () => {
+    props.getVetScheduleEntitiesFilter(
+      {'startDate.lessThan': moment(date.clone().add(1, 'day').clone()).toDate(),
+        'endDate.greaterThan': date.clone().add(0, 'day').toDate()});
+  }
+
   useEffect(() => {
-    props.getEntities();
-  }, []);
+    searchEntities();
+    searchVetSchedulesEntities();
+
+  }, [date]);
 
   const changeDate = (dayDiff: number) => {
     if (date) {
       setDate(moment(date).add(dayDiff, 'days'));
-      //props.getSearchEntities(search);
     }
   };
 
@@ -76,8 +90,8 @@ export const Visit = (props: IVisitProps) => {
         <Timeline
           itemsSorted
           itemTouchSendsClick={false}
-          canMove={true}
-          canResize={true}
+          canMove={false}
+          canResize={false}
           minZoom={60 * 1000 * 1000}
           groups={groups}
           items={visitItems}
@@ -102,24 +116,24 @@ export const Visit = (props: IVisitProps) => {
                 className="form-control"
                 name="startDate"
                 value={date.format().slice(0, 10)}
-                onChange={ (e) => {
-                  setDate(moment(e.target.value));
-//                  startSearching();
-                }}
+//                 onChange={ (e) => {
+//                   setDate(moment(e.target.value));
+// //                  startSearching();
+//                 }}
                 />
               <Button color={'btn btn-primary'} onClick={() => changeDate(-1)}>
                 &lt;
               </Button>
-              <Button color={'btn btn-primary'} onClick={() => changeDate(1)}>
+              <Button color={'btn btn-primary'} onClick={() => changeDate( +1)}>
                 &gt;
               </Button>
                 </InputGroup>
             </AvGroup>
             {/*<AvGroup>*/}
             {/*  <InputGroup>*/}
-            {/*    <AvInput type="text" name="search" value={search} onChange={handleSearch} placeholder="Search" />*/}
+            {/*    <AvInput type="text" name="searchEntities" value={searchEntities} onChange={handleSearch} placeholder="Search" />*/}
             {/*    <Button className="input-group-addon">*/}
-            {/*      <FontAwesomeIcon icon="search" />*/}
+            {/*      <FontAwesomeIcon icon="searchEntities" />*/}
             {/*    </Button>*/}
             {/*    <Button type="reset" className="input-group-addon" onClick={clear}>*/}
             {/*      <FontAwesomeIcon icon="trash" />*/}
@@ -219,7 +233,7 @@ const mapStateToProps = ({ visit }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getEntities,
+  getEntities, getEntitiesFilter, getVetScheduleEntitiesFilter
 };
 
 type StateProps = ReturnType<typeof mapStateToProps>;

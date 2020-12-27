@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, ICrudSearchAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
@@ -110,6 +110,11 @@ export default (state: VisitState = initialState, action): VisitState => {
 const apiUrl = 'api/visits';
 
 // Actions
+
+export const getEntitiesFilter = params => ({
+  type: ACTION_TYPES.FETCH_VISIT_LIST,
+  payload: axios.get<IVisit>(`${apiUrl}`, { params }),
+});
 
 export const getEntities: ICrudGetAllAction<IVisit> = (page, size, sort) => ({
   type: ACTION_TYPES.FETCH_VISIT_LIST,
