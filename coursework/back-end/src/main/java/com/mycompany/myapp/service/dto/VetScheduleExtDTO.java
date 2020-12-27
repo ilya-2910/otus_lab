@@ -1,12 +1,12 @@
 package com.mycompany.myapp.service.dto;
 
-import java.time.Instant;
 import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.VetSchedule} entity.
  */
-public class VetScheduleDTO implements Serializable {
+public class VetScheduleExtDTO implements Serializable {
 
     private Long id;
 
@@ -14,8 +14,7 @@ public class VetScheduleDTO implements Serializable {
 
     private Instant endDate;
 
-
-    private Long vetId;
+    private VetDTO vet;
 
     public Long getId() {
         return id;
@@ -41,12 +40,12 @@ public class VetScheduleDTO implements Serializable {
         this.endDate = endDate;
     }
 
-    public Long getVetId() {
-        return vetId;
+    public VetDTO getVet() {
+        return vet;
     }
 
-    public void setVetId(Long vetId) {
-        this.vetId = vetId;
+    public void setVet(VetDTO vet) {
+        this.vet = vet;
     }
 
     @Override
@@ -54,11 +53,11 @@ public class VetScheduleDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof VetScheduleDTO)) {
+        if (!(o instanceof VetScheduleExtDTO)) {
             return false;
         }
 
-        return id != null && id.equals(((VetScheduleDTO) o).id);
+        return id != null && id.equals(((VetScheduleExtDTO) o).id);
     }
 
     @Override
@@ -67,13 +66,13 @@ public class VetScheduleDTO implements Serializable {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "VetScheduleDTO{" +
-            "id=" + getId() +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", vetId=" + getVetId() +
-            "}";
-    }
+//    @Override
+//    public String toString() {
+//        return "VetScheduleDTO{" +
+//            "id=" + getId() +
+//            ", startDate='" + getStartDate() + "'" +
+//            ", endDate='" + getEndDate() + "'" +
+//            ", vetId=" + getVetId() +
+//            "}";
+//    }
 }

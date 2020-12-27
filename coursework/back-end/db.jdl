@@ -49,5 +49,6 @@ relationship OneToMany {
 service all with serviceImpl
 
 filter Visit
+filter VetSchedule
 
 dto * with mapstruct

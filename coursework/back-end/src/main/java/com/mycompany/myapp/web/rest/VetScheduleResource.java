@@ -3,6 +3,8 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.VetScheduleDTO;
+import com.mycompany.myapp.service.dto.VetScheduleCriteria;
+import com.mycompany.myapp.service.VetScheduleQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -33,8 +35,11 @@ public class VetScheduleResource {
 
     private final VetScheduleService vetScheduleService;
 
-    public VetScheduleResource(VetScheduleService vetScheduleService) {
+    private final VetScheduleQueryService vetScheduleQueryService;
+
+    public VetScheduleResource(VetScheduleService vetScheduleService, VetScheduleQueryService vetScheduleQueryService) {
         this.vetScheduleService = vetScheduleService;
+        this.vetScheduleQueryService = vetScheduleQueryService;
     }
 
     /**
@@ -80,12 +85,26 @@ public class VetScheduleResource {
     /**
      * {@code GET  /vet-schedules} : get all the vetSchedules.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vetSchedules in body.
      */
     @GetMapping("/vet-schedules")
-    public List<VetScheduleDTO> getAllVetSchedules() {
-        log.debug("REST request to get all VetSchedules");
-        return vetScheduleService.findAll();
+    public ResponseEntity<List<VetScheduleDTO>> getAllVetSchedules(VetScheduleCriteria criteria) {
+        log.debug("REST request to get VetSchedules by criteria: {}", criteria);
+        List<VetScheduleDTO> entityList = vetScheduleQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /vet-schedules/count} : count all the vetSchedules.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/vet-schedules/count")
+    public ResponseEntity<Long> countVetSchedules(VetScheduleCriteria criteria) {
+        log.debug("REST request to count VetSchedules by criteria: {}", criteria);
+        return ResponseEntity.ok().body(vetScheduleQueryService.countByCriteria(criteria));
     }
 
     /**

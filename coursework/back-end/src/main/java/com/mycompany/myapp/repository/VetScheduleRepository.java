@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface VetScheduleRepository extends JpaRepository<VetSchedule, Long> {
+public interface VetScheduleRepository extends JpaRepository<VetSchedule, Long>, JpaSpecificationExecutor<VetSchedule> {
 }

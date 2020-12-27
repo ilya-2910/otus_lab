@@ -2,10 +2,13 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.CourseworkApp;
 import com.mycompany.myapp.domain.VetSchedule;
+import com.mycompany.myapp.domain.Vet;
 import com.mycompany.myapp.repository.VetScheduleRepository;
 import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.service.dto.VetScheduleDTO;
 import com.mycompany.myapp.service.mapper.VetScheduleMapper;
+import com.mycompany.myapp.service.dto.VetScheduleCriteria;
+import com.mycompany.myapp.service.VetScheduleQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +51,9 @@ public class VetScheduleResourceIT {
 
     @Autowired
     private VetScheduleService vetScheduleService;
+
+    @Autowired
+    private VetScheduleQueryService vetScheduleQueryService;
 
     @Autowired
     private EntityManager em;
@@ -156,6 +162,185 @@ public class VetScheduleResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
+
+
+    @Test
+    @Transactional
+    public void getVetSchedulesByIdFiltering() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        Long id = vetSchedule.getId();
+
+        defaultVetScheduleShouldBeFound("id.equals=" + id);
+        defaultVetScheduleShouldNotBeFound("id.notEquals=" + id);
+
+        defaultVetScheduleShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultVetScheduleShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultVetScheduleShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultVetScheduleShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where startDate equals to DEFAULT_START_DATE
+        defaultVetScheduleShouldBeFound("startDate.equals=" + DEFAULT_START_DATE);
+
+        // Get all the vetScheduleList where startDate equals to UPDATED_START_DATE
+        defaultVetScheduleShouldNotBeFound("startDate.equals=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where startDate not equals to DEFAULT_START_DATE
+        defaultVetScheduleShouldNotBeFound("startDate.notEquals=" + DEFAULT_START_DATE);
+
+        // Get all the vetScheduleList where startDate not equals to UPDATED_START_DATE
+        defaultVetScheduleShouldBeFound("startDate.notEquals=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where startDate in DEFAULT_START_DATE or UPDATED_START_DATE
+        defaultVetScheduleShouldBeFound("startDate.in=" + DEFAULT_START_DATE + "," + UPDATED_START_DATE);
+
+        // Get all the vetScheduleList where startDate equals to UPDATED_START_DATE
+        defaultVetScheduleShouldNotBeFound("startDate.in=" + UPDATED_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where startDate is not null
+        defaultVetScheduleShouldBeFound("startDate.specified=true");
+
+        // Get all the vetScheduleList where startDate is null
+        defaultVetScheduleShouldNotBeFound("startDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where endDate equals to DEFAULT_END_DATE
+        defaultVetScheduleShouldBeFound("endDate.equals=" + DEFAULT_END_DATE);
+
+        // Get all the vetScheduleList where endDate equals to UPDATED_END_DATE
+        defaultVetScheduleShouldNotBeFound("endDate.equals=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where endDate not equals to DEFAULT_END_DATE
+        defaultVetScheduleShouldNotBeFound("endDate.notEquals=" + DEFAULT_END_DATE);
+
+        // Get all the vetScheduleList where endDate not equals to UPDATED_END_DATE
+        defaultVetScheduleShouldBeFound("endDate.notEquals=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where endDate in DEFAULT_END_DATE or UPDATED_END_DATE
+        defaultVetScheduleShouldBeFound("endDate.in=" + DEFAULT_END_DATE + "," + UPDATED_END_DATE);
+
+        // Get all the vetScheduleList where endDate equals to UPDATED_END_DATE
+        defaultVetScheduleShouldNotBeFound("endDate.in=" + UPDATED_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+
+        // Get all the vetScheduleList where endDate is not null
+        defaultVetScheduleShouldBeFound("endDate.specified=true");
+
+        // Get all the vetScheduleList where endDate is null
+        defaultVetScheduleShouldNotBeFound("endDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllVetSchedulesByVetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+        Vet vet = VetResourceIT.createEntity(em);
+        em.persist(vet);
+        em.flush();
+        vetSchedule.setVet(vet);
+        vetScheduleRepository.saveAndFlush(vetSchedule);
+        Long vetId = vet.getId();
+
+        // Get all the vetScheduleList where vet equals to vetId
+        defaultVetScheduleShouldBeFound("vetId.equals=" + vetId);
+
+        // Get all the vetScheduleList where vet equals to vetId + 1
+        defaultVetScheduleShouldNotBeFound("vetId.equals=" + (vetId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned.
+     */
+    private void defaultVetScheduleShouldBeFound(String filter) throws Exception {
+        restVetScheduleMockMvc.perform(get("/api/vet-schedules?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(vetSchedule.getId().intValue())))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+
+        // Check, that the count call also returns 1
+        restVetScheduleMockMvc.perform(get("/api/vet-schedules/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned.
+     */
+    private void defaultVetScheduleShouldNotBeFound(String filter) throws Exception {
+        restVetScheduleMockMvc.perform(get("/api/vet-schedules?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restVetScheduleMockMvc.perform(get("/api/vet-schedules/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().string("0"));
+    }
+
     @Test
     @Transactional
     public void getNonExistingVetSchedule() throws Exception {
