@@ -91,7 +91,7 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public boolean isVisitTimeOverlap(VisitDTO visitDTO) {
-        if (visitDTO.getVetId() == null) return true;
+        if (visitDTO.getVet() == null && visitDTO.getVet().getId() == null) return true;
         Visit visit = visitMapper.toEntity(visitDTO);
 
 

@@ -15,7 +15,7 @@ public class VetScheduleDTO implements Serializable {
     private Instant endDate;
 
 
-    private Long vetId;
+    private VetDTO vet;
 
     public Long getId() {
         return id;
@@ -41,12 +41,12 @@ public class VetScheduleDTO implements Serializable {
         this.endDate = endDate;
     }
 
-    public Long getVetId() {
-        return vetId;
+    public VetDTO getVet() {
+        return vet;
     }
 
-    public void setVetId(Long vetId) {
-        this.vetId = vetId;
+    public void setVet(VetDTO vet) {
+        this.vet = vet;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class VetScheduleDTO implements Serializable {
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
-            ", vetId=" + getVetId() +
+//            ", vetId=" + getVetId() +
             "}";
     }
 }

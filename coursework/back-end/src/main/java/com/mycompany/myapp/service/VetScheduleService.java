@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.VetScheduleDTO;
+import com.mycompany.myapp.service.dto.VisitDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,4 +41,6 @@ public interface VetScheduleService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    boolean isVetTimeAllow(VisitDTO visitDTO);
 }

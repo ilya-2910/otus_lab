@@ -1,9 +1,12 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.domain.Vet;
+import com.mycompany.myapp.domain.Visit;
 import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.domain.VetSchedule;
 import com.mycompany.myapp.repository.VetScheduleRepository;
 import com.mycompany.myapp.service.dto.VetScheduleDTO;
+import com.mycompany.myapp.service.dto.VisitDTO;
 import com.mycompany.myapp.service.mapper.VetScheduleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,4 +91,13 @@ public class VetScheduleServiceImpl implements VetScheduleService {
 
         vetScheduleRepository.deleteById(id);
     }
+
+    @Override
+    public boolean isVetTimeAllow(VisitDTO visitDTO) {
+        if (visitDTO.getVet() == null || visitDTO.getVet().getId() == null) return true;
+        Vet vet = new Vet();
+        vet.setId(visitDTO.getVet().getId());
+        return vetScheduleRepository.existsByVetAndStartDateBeforeAndEndDateAfter(vet, visitDTO.getStartDate(), visitDTO.getEndDate());
+    }
+
 }

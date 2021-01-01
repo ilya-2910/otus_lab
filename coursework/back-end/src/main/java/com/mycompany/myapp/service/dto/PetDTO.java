@@ -6,16 +6,15 @@ import java.io.Serializable;
  * A DTO for the {@link com.mycompany.myapp.domain.Pet} entity.
  */
 public class PetDTO implements Serializable {
-    
+
     private Long id;
 
     private String name;
 
+    private PetTypeDTO type;
 
-    private Long typeId;
+    private OwnerDTO owner;
 
-    private Long ownerId;
-    
     public Long getId() {
         return id;
     }
@@ -32,20 +31,20 @@ public class PetDTO implements Serializable {
         this.name = name;
     }
 
-    public Long getTypeId() {
-        return typeId;
+    public PetTypeDTO getType() {
+        return type;
     }
 
-    public void setTypeId(Long petTypeId) {
-        this.typeId = petTypeId;
+    public void setType(PetTypeDTO type) {
+        this.type = type;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public OwnerDTO getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(OwnerDTO owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -71,8 +70,8 @@ public class PetDTO implements Serializable {
         return "PetDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", typeId=" + getTypeId() +
-            ", ownerId=" + getOwnerId() +
+//            ", typeId=" + getTypeId() +
+//            ", ownerId=" + getOwnerId() +
             "}";
     }
 }

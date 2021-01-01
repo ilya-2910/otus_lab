@@ -12,14 +12,14 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {PetTypeMapper.class, OwnerMapper.class})
 public interface PetMapper extends EntityMapper<PetDTO, Pet> {
 
-    @Mapping(source = "type.id", target = "typeId")
-    @Mapping(source = "owner.id", target = "ownerId")
+//    @Mapping(source = "type.id", target = "typeId")
+//    @Mapping(source = "owner.id", target = "ownerId")
     PetDTO toDto(Pet pet);
 
     @Mapping(target = "visits", ignore = true)
     @Mapping(target = "removeVisits", ignore = true)
-    @Mapping(source = "typeId", target = "type")
-    @Mapping(source = "ownerId", target = "owner")
+//    @Mapping(source = "typeId", target = "type")
+//    @Mapping(source = "ownerId", target = "owner")
     Pet toEntity(PetDTO petDTO);
 
     default Pet fromId(Long id) {

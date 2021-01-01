@@ -1,11 +1,2 @@
 id;start_date;end_date;description;status
-1;2020-12-19T11:06:48;2020-12-18T14:59:44;../fake-data/blob/hipster.txt;REJECT
-2;2020-12-18T17:13:07;2020-12-18T13:35:13;../fake-data/blob/hipster.txt;NEW
-3;2020-12-18T19:36:27;2020-12-19T07:57:46;../fake-data/blob/hipster.txt;NEW
-4;2020-12-19T04:11:04;2020-12-19T01:28:11;../fake-data/blob/hipster.txt;NEW
-5;2020-12-19T08:40:42;2020-12-19T10:23:39;../fake-data/blob/hipster.txt;REJECT
-6;2020-12-19T01:44:19;2020-12-18T12:09:00;../fake-data/blob/hipster.txt;REJECT
-7;2020-12-18T22:41:39;2020-12-18T16:46:19;../fake-data/blob/hipster.txt;NEW
-8;2020-12-19T08:41:41;2020-12-18T18:58:18;../fake-data/blob/hipster.txt;NEW
-9;2020-12-18T21:29:11;2020-12-19T10:22:13;../fake-data/blob/hipster.txt;DONE
-10;2020-12-19T03:22:42;2020-12-19T05:57:16;../fake-data/blob/hipster.txt;NEW
+

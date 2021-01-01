@@ -12,12 +12,12 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {PetMapper.class, VetMapper.class})
 public interface VisitMapper extends EntityMapper<VisitDTO, Visit> {
 
-    @Mapping(source = "pet.id", target = "petId")
-    @Mapping(source = "vet.id", target = "vetId")
+//    @Mapping(source = "pet.id", target = "petId")
+//    @Mapping(source = "vet.id", target = "vetId")
     VisitDTO toDto(Visit visit);
 
-    @Mapping(source = "petId", target = "pet")
-    @Mapping(source = "vetId", target = "vet")
+//    @Mapping(source = "petId", target = "pet")
+//    @Mapping(source = "vetId", target = "vet")
     Visit toEntity(VisitDTO visitDTO);
 
     default Visit fromId(Long id) {

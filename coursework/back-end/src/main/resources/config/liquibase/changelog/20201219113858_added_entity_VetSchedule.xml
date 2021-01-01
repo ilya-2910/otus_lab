@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity VetSchedule.
     -->
@@ -49,6 +49,7 @@
                   separator=";"
                   tableName="vet_schedule">
             <column name="id" type="numeric"/>
+            <column name="vet_id" type="numeric"/>
             <column name="start_date" type="datetime"/>
             <column name="end_date" type="datetime"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->

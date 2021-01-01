@@ -1,11 +1,3 @@
-id;name
-1;Movies Cotton
-2;Way
-3;Puerto Rico Assistant
-4;Checking Account teal
-5;ADP
-6;Stream
-7;XML Investment Account Alabama
-8;override indexing Station
-9;Computers Versatile withdrawal
-10;Ergonomic discrete
+id;name;owner_id;type_id
+1;Жучка;1;1
+2;Филя;2;2

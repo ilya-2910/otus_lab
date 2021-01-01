@@ -9,7 +9,7 @@ import com.mycompany.myapp.domain.enumeration.VisitStatus;
  * A DTO for the {@link com.mycompany.myapp.domain.Visit} entity.
  */
 public class VisitDTO implements Serializable {
-    
+
     private Long id;
 
     private Instant startDate;
@@ -22,10 +22,10 @@ public class VisitDTO implements Serializable {
     private VisitStatus status;
 
 
-    private Long petId;
+    private PetDTO pet;
 
-    private Long vetId;
-    
+    private VetDTO vet;
+
     public Long getId() {
         return id;
     }
@@ -66,20 +66,20 @@ public class VisitDTO implements Serializable {
         this.status = status;
     }
 
-    public Long getPetId() {
-        return petId;
+    public PetDTO getPet() {
+        return pet;
     }
 
-    public void setPetId(Long petId) {
-        this.petId = petId;
+    public void setPet(PetDTO pet) {
+        this.pet = pet;
     }
 
-    public Long getVetId() {
-        return vetId;
+    public VetDTO getVet() {
+        return vet;
     }
 
-    public void setVetId(Long vetId) {
-        this.vetId = vetId;
+    public void setVet(VetDTO vet) {
+        this.vet = vet;
     }
 
     @Override
@@ -108,8 +108,8 @@ public class VisitDTO implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", description='" + getDescription() + "'" +
             ", status='" + getStatus() + "'" +
-            ", petId=" + getPetId() +
-            ", vetId=" + getVetId() +
+//            ", petId=" + getPetId() +
+//            ", vetId=" + getVetId() +
             "}";
     }
 }

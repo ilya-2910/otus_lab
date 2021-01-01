@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.service.VetScheduleService;
 import com.mycompany.myapp.service.VisitService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.VisitDTO;
@@ -35,10 +36,13 @@ public class VisitResource {
 
     private final VisitService visitService;
 
+    private final VetScheduleService vetScheduleService;
+
     private final VisitQueryService visitQueryService;
 
-    public VisitResource(VisitService visitService, VisitQueryService visitQueryService) {
+    public VisitResource(VisitService visitService, VetScheduleService vetScheduleService, VisitQueryService visitQueryService) {
         this.visitService = visitService;
+        this.vetScheduleService = vetScheduleService;
         this.visitQueryService = visitQueryService;
     }
 
@@ -56,11 +60,7 @@ public class VisitResource {
             throw new BadRequestAlertException("A new visit cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        boolean isVisitTimeOverlap = visitService.isVisitTimeOverlap(visitDTO);
-        if (isVisitTimeOverlap) {
-            throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
-        }
-
+        checkAllowTime(visitDTO);
 
         VisitDTO result = visitService.save(visitDTO);
         return ResponseEntity.created(new URI("/api/visits/" + result.getId()))
@@ -84,15 +84,29 @@ public class VisitResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        boolean isVisitTimeOverlap = visitService.isVisitTimeOverlap(visitDTO);
-        if (isVisitTimeOverlap) {
-            throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
-        }
+        checkAllowTime(visitDTO);
 
         VisitDTO result = visitService.save(visitDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, visitDTO.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * Проверка доступности расписания у вет врача и пересечения с другими визитами
+     *
+     * @param visitDTO
+     */
+    private void checkAllowTime(VisitDTO visitDTO) {
+        boolean isVetAllow = vetScheduleService.isVetTimeAllow(visitDTO);
+        if (!isVetAllow) {
+            throw new BadRequestAlertException("vet time is not allow", ENTITY_NAME, "vetnotallow");
+        }
+
+        boolean isVisitTimeOverlap = visitService.isVisitTimeOverlap(visitDTO);
+        if (isVisitTimeOverlap) {
+            throw new BadRequestAlertException("visit time is overlap", ENTITY_NAME, "overlap");
+        }
     }
 
     /**
