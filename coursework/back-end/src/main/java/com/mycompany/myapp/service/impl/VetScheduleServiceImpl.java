@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  * Service Implementation for managing {@link VetSchedule}.
  */
 @Service
-@Transactional
 public class VetScheduleServiceImpl implements VetScheduleService {
 
     private final Logger log = LoggerFactory.getLogger(VetScheduleServiceImpl.class);
@@ -44,6 +43,7 @@ public class VetScheduleServiceImpl implements VetScheduleService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public VetScheduleDTO save(VetScheduleDTO vetScheduleDTO) {
         log.debug("Request to save VetSchedule : {}", vetScheduleDTO);
         VetSchedule vetSchedule = vetScheduleMapper.toEntity(vetScheduleDTO);
@@ -86,6 +86,7 @@ public class VetScheduleServiceImpl implements VetScheduleService {
      * @param id the id of the entity.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         log.debug("Request to delete VetSchedule : {}", id);
 
@@ -93,6 +94,7 @@ public class VetScheduleServiceImpl implements VetScheduleService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isVetTimeAllow(VisitDTO visitDTO) {
         if (visitDTO.getVet() == null || visitDTO.getVet().getId() == null) return true;
         Vet vet = new Vet();

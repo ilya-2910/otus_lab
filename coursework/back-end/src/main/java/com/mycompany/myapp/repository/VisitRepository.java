@@ -24,6 +24,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long>, JpaSpecific
      * @param endDate
      * @return
      */
-    List<Visit> findByVetAndStartDateBeforeAndEndDateAfter(Vet vet, Instant startDate, Instant endDate);
+    Visit findFirstByVetAndStartDateBeforeAndEndDateAfter(Vet vet, Instant startDate, Instant endDate);
 
 }

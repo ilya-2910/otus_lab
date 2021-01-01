@@ -187,3 +187,9 @@ jhipster:
 # ===================================================================
 
 # application:
+
+audit:
+  remove-old-events-cron: 0 0 12 * * ?
+
+user:
+  remove-not-activated-user-cron: 0 0 1 * * ?

@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * Service Implementation for managing {@link Visit}.
  */
 @Service
-@Transactional
 public class VisitServiceImpl implements VisitService {
 
     private final Logger log = LoggerFactory.getLogger(VisitServiceImpl.class);
@@ -41,6 +40,7 @@ public class VisitServiceImpl implements VisitService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public VisitDTO save(VisitDTO visitDTO) {
         log.debug("Request to save Visit : {}", visitDTO);
         Visit visit = visitMapper.toEntity(visitDTO);
@@ -83,6 +83,7 @@ public class VisitServiceImpl implements VisitService {
      * @param id the id of the entity.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Visit : {}", id);
 
@@ -90,15 +91,13 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isVisitTimeOverlap(VisitDTO visitDTO) {
         if (visitDTO.getVet() == null && visitDTO.getVet().getId() == null) return true;
         Visit visit = visitMapper.toEntity(visitDTO);
 
-
-        List<Visit> visits = visitRepository.findByVetAndStartDateBeforeAndEndDateAfter(visit.getVet(), visit.getEndDate(), visit.getStartDate());
-        return visits.stream()
-            .filter(visit1 -> !visit1.getId().equals(visit.getId()))
-            .findFirst().isPresent();
+        Visit existVisit = visitRepository.findFirstByVetAndStartDateBeforeAndEndDateAfter(visit.getVet(), visit.getEndDate(), visit.getStartDate());
+        return existVisit != null && !existVisit.getId().equals(visit.getId());
    }
 
 }

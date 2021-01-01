@@ -4,6 +4,7 @@ import com.mycompany.myapp.service.VetService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.VetDTO;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -28,13 +29,14 @@ public class VetResource {
 
     private static final String ENTITY_NAME = "vet";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    private final JHipsterProperties jHipsterProperties;
+
 
     private final VetService vetService;
 
-    public VetResource(VetService vetService) {
+    public VetResource(VetService vetService, JHipsterProperties jHipsterProperties) {
         this.vetService = vetService;
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     /**
@@ -52,7 +54,7 @@ public class VetResource {
         }
         VetDTO result = vetService.save(vetDTO);
         return ResponseEntity.created(new URI("/api/vets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -73,7 +75,7 @@ public class VetResource {
         }
         VetDTO result = vetService.save(vetDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, vetDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, vetDTO.getId().toString()))
             .body(result);
     }
 
@@ -112,6 +114,6 @@ public class VetResource {
         log.debug("REST request to delete Vet : {}", id);
 
         vetService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, id.toString())).build();
     }
 }

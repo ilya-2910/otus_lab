@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * Service Implementation for managing {@link Pet}.
  */
 @Service
-@Transactional
 public class PetServiceImpl implements PetService {
 
     private final Logger log = LoggerFactory.getLogger(PetServiceImpl.class);
@@ -41,6 +40,7 @@ public class PetServiceImpl implements PetService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public PetDTO save(PetDTO petDTO) {
         log.debug("Request to save Pet : {}", petDTO);
         Pet pet = petMapper.toEntity(petDTO);
@@ -83,6 +83,7 @@ public class PetServiceImpl implements PetService {
      * @param id the id of the entity.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Pet : {}", id);
 

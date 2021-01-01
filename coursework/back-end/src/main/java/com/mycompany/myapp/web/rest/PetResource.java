@@ -4,11 +4,11 @@ import com.mycompany.myapp.service.PetService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.PetDTO;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +28,12 @@ public class PetResource {
 
     private static final String ENTITY_NAME = "pet";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    private final JHipsterProperties jHipsterProperties;
 
     private final PetService petService;
 
-    public PetResource(PetService petService) {
+    public PetResource(JHipsterProperties jHipsterProperties, PetService petService) {
+        this.jHipsterProperties = jHipsterProperties;
         this.petService = petService;
     }
 
@@ -52,7 +52,7 @@ public class PetResource {
         }
         PetDTO result = petService.save(petDTO);
         return ResponseEntity.created(new URI("/api/pets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -73,7 +73,7 @@ public class PetResource {
         }
         PetDTO result = petService.save(petDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, petDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, petDTO.getId().toString()))
             .body(result);
     }
 
@@ -112,6 +112,6 @@ public class PetResource {
         log.debug("REST request to delete Pet : {}", id);
 
         petService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, id.toString())).build();
     }
 }

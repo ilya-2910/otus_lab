@@ -6,11 +6,11 @@ import com.mycompany.myapp.service.dto.VetScheduleDTO;
 import com.mycompany.myapp.service.dto.VetScheduleCriteria;
 import com.mycompany.myapp.service.VetScheduleQueryService;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +30,17 @@ public class VetScheduleResource {
 
     private static final String ENTITY_NAME = "vetSchedule";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+//    @Value("${jhipster.clientApp.name}")
+//    private String applicationName;
+    private final JHipsterProperties jHipsterProperties;
+
 
     private final VetScheduleService vetScheduleService;
 
     private final VetScheduleQueryService vetScheduleQueryService;
 
-    public VetScheduleResource(VetScheduleService vetScheduleService, VetScheduleQueryService vetScheduleQueryService) {
+    public VetScheduleResource(JHipsterProperties jHipsterProperties, VetScheduleService vetScheduleService, VetScheduleQueryService vetScheduleQueryService) {
+        this.jHipsterProperties = jHipsterProperties;
         this.vetScheduleService = vetScheduleService;
         this.vetScheduleQueryService = vetScheduleQueryService;
     }
@@ -57,7 +60,7 @@ public class VetScheduleResource {
         }
         VetScheduleDTO result = vetScheduleService.save(vetScheduleDTO);
         return ResponseEntity.created(new URI("/api/vet-schedules/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -78,7 +81,7 @@ public class VetScheduleResource {
         }
         VetScheduleDTO result = vetScheduleService.save(vetScheduleDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, vetScheduleDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, vetScheduleDTO.getId().toString()))
             .body(result);
     }
 
@@ -131,6 +134,6 @@ public class VetScheduleResource {
         log.debug("REST request to delete VetSchedule : {}", id);
 
         vetScheduleService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -4,11 +4,11 @@ import com.mycompany.myapp.service.OwnerService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.service.dto.OwnerDTO;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +28,13 @@ public class OwnerResource {
 
     private static final String ENTITY_NAME = "owner";
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    private final JHipsterProperties jHipsterProperties;
+
 
     private final OwnerService ownerService;
 
-    public OwnerResource(OwnerService ownerService) {
+    public OwnerResource(JHipsterProperties jHipsterProperties, OwnerService ownerService) {
+        this.jHipsterProperties = jHipsterProperties;
         this.ownerService = ownerService;
     }
 
@@ -52,7 +53,7 @@ public class OwnerResource {
         }
         OwnerDTO result = ownerService.save(ownerDTO);
         return ResponseEntity.created(new URI("/api/owners/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -73,7 +74,7 @@ public class OwnerResource {
         }
         OwnerDTO result = ownerService.save(ownerDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ownerDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, ownerDTO.getId().toString()))
             .body(result);
     }
 
@@ -112,6 +113,6 @@ public class OwnerResource {
         log.debug("REST request to delete Owner : {}", id);
 
         ownerService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(jHipsterProperties.getClientApp().getName(), true, ENTITY_NAME, id.toString())).build();
     }
 }

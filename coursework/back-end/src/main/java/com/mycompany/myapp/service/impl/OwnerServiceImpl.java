@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * Service Implementation for managing {@link Owner}.
  */
 @Service
-@Transactional
 public class OwnerServiceImpl implements OwnerService {
 
     private final Logger log = LoggerFactory.getLogger(OwnerServiceImpl.class);
@@ -41,6 +40,7 @@ public class OwnerServiceImpl implements OwnerService {
      * @return the persisted entity.
      */
     @Override
+    @Transactional
     public OwnerDTO save(OwnerDTO ownerDTO) {
         log.debug("Request to save Owner : {}", ownerDTO);
         Owner owner = ownerMapper.toEntity(ownerDTO);
@@ -83,6 +83,7 @@ public class OwnerServiceImpl implements OwnerService {
      * @param id the id of the entity.
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         log.debug("Request to delete Owner : {}", id);
 

@@ -11,6 +11,7 @@ import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import com.mycompany.myapp.web.rest.errors.EmailAlreadyUsedException;
 import com.mycompany.myapp.web.rest.errors.LoginAlreadyUsedException;
 
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -62,8 +63,7 @@ public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
+    private final JHipsterProperties jHipsterProperties;
 
     private final UserService userService;
 
@@ -71,10 +71,11 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    public UserResource(UserService userService, UserRepository userRepository, MailService mailService, JHipsterProperties jHipsterProperties) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.jHipsterProperties = jHipsterProperties;
     }
 
     /**
@@ -105,7 +106,7 @@ public class UserResource {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(applicationName,  "userManagement.created", newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(jHipsterProperties.getClientApp().getName(),  "userManagement.created", newUser.getLogin()))
                 .body(newUser);
         }
     }
@@ -133,7 +134,7 @@ public class UserResource {
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
-            HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin()));
+            HeaderUtil.createAlert(jHipsterProperties.getClientApp().getName(), "userManagement.updated", userDTO.getLogin()));
     }
 
     /**
@@ -184,6 +185,6 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName,  "userManagement.deleted", login)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(jHipsterProperties.getClientApp().getName(),  "userManagement.deleted", login)).build();
     }
 }
