@@ -1,0 +1,11 @@
+version: '2'
+services:
+  coursework-postgresql:
+    image: postgres:12.1
+    # volumes:
+    #     - ~/volumes/jhipster/coursework/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=coursework
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432

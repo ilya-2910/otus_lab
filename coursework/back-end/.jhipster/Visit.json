@@ -1,0 +1,50 @@
+{
+  "name": "Visit",
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "VisitStatus",
+      "fieldValues": "NEW,DONE,REJECT"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "pet",
+      "otherEntityRelationshipName": "visits",
+      "relationshipName": "pet",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "vet",
+      "otherEntityRelationshipName": "visits",
+      "relationshipName": "vet",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201219113358",
+  "entityTableName": "visit",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

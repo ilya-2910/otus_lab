@@ -1,0 +1,54 @@
+
+entity Visit {
+	startDate Instant,
+	endDate Instant,
+	description TextBlob,
+	status VisitStatus
+}
+
+enum VisitStatus {
+    NEW, DONE, REJECT
+}
+
+entity Pet {
+	name String,
+}
+
+entity PetType {
+    type String
+}
+
+entity Owner {
+	name String,
+    address String,
+    phone String
+}
+
+entity Vet {
+	name String,
+    phone String
+}
+
+entity VetSchedule {
+	startDate Instant,
+  	endDate Instant
+}
+
+relationship ManyToOne {
+    Pet{type} to PetType
+}
+
+
+relationship OneToMany {
+	Owner{pets} to Pet{owner},
+	Pet{visits} to Visit{pet},
+	Vet{visits} to Visit{vet},
+	Vet{schedules} to VetSchedule{vet}
+}
+
+service all with serviceImpl
+
+filter Visit
+filter VetSchedule
+
+dto * with mapstruct

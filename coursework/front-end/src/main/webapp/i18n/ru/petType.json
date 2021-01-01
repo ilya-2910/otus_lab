@@ -1,0 +1,22 @@
+{
+  "courseworkApp": {
+    "petType": {
+      "home": {
+        "title": "Вид животного",
+        "createLabel": "Создать новый Вид",
+        "createOrEditLabel": "Создать или отредактировать Вид",
+        "notFound": "No Видs found"
+      },
+      "created": "Новый Вид создан с идентификатором {{ param }}",
+      "updated": "Вид обновлен с идентификатором {{ param }}",
+      "deleted": "Вид удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Вид {{ id }}?"
+      },
+      "detail": {
+        "title": "Вид"
+      },
+      "type": "Type"
+    }
+  }
+}

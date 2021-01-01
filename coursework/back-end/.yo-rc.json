@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.myapp",
+      "nativeLanguage": "ru"
+    },
+    "jhipsterVersion": "6.9.0",
+    "applicationType": "monolith",
+    "baseName": "coursework",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "Y2M4MGUyZGZmOTA1M2I4NzIxODRjY2Y1NDI1ZjEyNmVlOTY3NTU5YTI1ZjEwMGY3ZTdiNGRkYmZkOTE3Mjg2YTg4MDI0OTA5NDg4OTAyNDljYmNiZDc1NTJhYTliNTI4Njg1NjMxOWU2NjRiNjhhZWZlMmY2ODUzYjgzZTdiMGE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1608376200626,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "ru",
+    "languages": ["ru"],
+    "blueprints": [],
+    "skipClient": true
+  }
+}
