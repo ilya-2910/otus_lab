@@ -26,7 +26,7 @@
   ],
   "changelogDate": "20201219122947",
   "entityTableName": "vet",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,

@@ -33,9 +33,9 @@ export const Pet = (props: IPetProps) => {
           <Table responsive>
             <thead>
               <tr>
-                <th>
-                  <Translate contentKey="global.field.id">ID</Translate>
-                </th>
+                {/*<th>*/}
+                {/*  <Translate contentKey="global.field.id">ID</Translate>*/}
+                {/*</th>*/}
                 <th>
                   <Translate contentKey="courseworkApp.pet.name">Name</Translate>
                 </th>
@@ -51,14 +51,14 @@ export const Pet = (props: IPetProps) => {
             <tbody>
               {petList.map((pet, i) => (
                 <tr key={`entity-${i}`}>
-                  <td>
-                    <Button tag={Link} to={`${match.url}/${pet.id}`} color="link" size="sm">
-                      {pet.id}
-                    </Button>
-                  </td>
+                  {/*<td>*/}
+                  {/*  <Button tag={Link} to={`${match.url}/${pet.id}`} color="link" size="sm">*/}
+                  {/*    {pet.id}*/}
+                  {/*  </Button>*/}
+                  {/*</td>*/}
                   <td>{pet.name}</td>
-                  <td>{pet.type ? <Link to={`pet-type/${pet.type.id}`}>{pet.type.id}</Link> : ''}</td>
-                  <td>{pet.owner ? <Link to={`owner/${pet.owner.id}`}>{pet.owner.id}</Link> : ''}</td>
+                  <td>{pet.type ? <Link to={`pet-type/${pet.type.id}`}>{pet.type.type}</Link> : ''}</td>
+                  <td>{pet.owner ? <Link to={`owner/${pet.owner.id}`}>{pet.owner.name}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${pet.id}`} color="info" size="sm">

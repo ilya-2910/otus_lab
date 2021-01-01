@@ -118,7 +118,7 @@ export const VetScheduleUpdate = (props: IVetScheduleUpdateProps) => {
                   {vets
                     ? vets.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}

@@ -5,7 +5,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IVetSchedule, defaultValue } from 'app/shared/model/vet-schedule.model';
-import { IVisit } from 'app/shared/model/visit.model';
+import { IVetScheduleExt } from 'app/shared/model/vet-schedule-ext.model';
 
 export const ACTION_TYPES = {
   FETCH_VETSCHEDULE_LIST: 'vetSchedule/FETCH_VETSCHEDULE_LIST',

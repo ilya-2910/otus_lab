@@ -2,22 +2,22 @@
   "courseworkApp": {
     "vet": {
       "home": {
-        "title": "Vets",
-        "createLabel": "Создать новый Vet",
-        "createOrEditLabel": "Создать или отредактировать Vet",
-        "notFound": "No Vets found"
+        "title": "Врач",
+        "createLabel": "Создать новый Вет. врача",
+        "createOrEditLabel": "Создать или отредактировать Вет. врача",
+        "notFound": "Не найден"
       },
-      "created": "Новый Vet создан с идентификатором {{ param }}",
-      "updated": "Vet обновлен с идентификатором {{ param }}",
-      "deleted": "Vet удален с идентификатором {{ param }}",
+      "created": "Новый Вет. врач создан с идентификатором {{ param }}",
+      "updated": "Вет. врач обновлен с идентификатором {{ param }}",
+      "deleted": "Вет. врач удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Vet {{ id }}?"
+        "question": "Вы уверены что хотите удалить Вет. врача {{ id }}?"
       },
       "detail": {
-        "title": "Vet"
+        "title": "Вет. врач"
       },
-      "name": "Name",
-      "phone": "Phone",
+      "name": "ФИО",
+      "phone": "Телефон",
       "visits": "Visits",
       "schedules": "Schedules"
     }

@@ -38,7 +38,7 @@
   ],
   "changelogDate": "20201219122547",
   "entityTableName": "visit",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

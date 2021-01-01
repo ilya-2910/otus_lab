@@ -35,10 +35,69 @@ export const Visit = (props: IVisitProps) => {
         'endDate.greaterThan': date.clone().add(0, 'day').toDate()});
   }
 
-  useEffect(() => {
-    searchEntities();
-    searchVetSchedulesEntities();
+  const itemRenderer = ({
+                   item,
+                   itemContext,
+                   getItemProps,
+                   getResizeProps
+                 }) => {
+    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
+    return (
+      <div {...getItemProps({style: {backgroundColor: item.color}})}>
+        {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
 
+        <div
+          className="rct-item-content"
+          style={{ maxHeight: `${itemContext.dimensions.height}` }}
+        >
+          {itemContext.title}
+        </div>
+
+        {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
+      </div>
+    )}
+
+  // const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
+  //   const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
+  //   const backgroundColor = itemContext.selected ? (itemContext.dragging ? "red" : item.selectedBgColor) : item.bgColor;
+  //   const borderColor = itemContext.resizing ? "red" : item.color;
+  //   const props1 = getItemProps({
+  //     style: {
+  //       backgroundColor,
+  //       color: item.color,
+  //       borderColor,
+  //       borderStyle: "solid",
+  //       borderWidth: 1,
+  //       borderRadius: 4,
+  //       borderLeftWidth: itemContext.selected ? 3 : 1,
+  //       borderRightWidth: itemContext.selected ? 3 : 1
+  //     },
+  //   });
+  //   props1.style.height = Math.random() * 30;
+  //   return (
+  //     <div {...props1}>
+  //       {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
+  //
+  //       <div
+  //         style={{
+  //           height: itemContext.dimensions.height,
+  //           overflow: "hidden",
+  //           paddingLeft: 3,
+  //           textOverflow: "ellipsis",
+  //           whiteSpace: "nowrap"
+  //         }}
+  //       >
+  //         {itemContext.title}
+  //       </div>
+  //
+  //       {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
+  //     </div>
+  //   );
+  // };
+
+  useEffect(() => {
+    searchVetSchedulesEntities();
+    searchEntities();
   }, [date]);
 
   const changeDate = (dayDiff: number) => {
@@ -47,21 +106,21 @@ export const Visit = (props: IVisitProps) => {
     }
   };
 
-  const { visitList, match, loading } = props;
+  const { visitList, vetScheduleList, match, loading } = props;
 
 
   const visits = visitList.filter(value => !!value.vet && !!value.pet);
-  const vets = visits.map(value => value.vet);
 
-  const groups = vets.map((value, index) => {
-    return {id: value.id, title: value.name};
+  const vetScheduleGroup = vetScheduleList.map((value, index) => {
+    return {id: value.vet.id, title: value.vet.name};
   }).filter((value, index, self) => self.map(x => x.id).indexOf(value.id) === index);
 
-  const visitItems = visits.map((value, index) => {
+  let vetScheduleItems = vetScheduleList.map((value, index) => {
     return {
       id: index,
       group: value.vet.id,
-      title: value.pet.name,
+      title: '',
+      color: 'rgba(0, 0, 0, 0.05)',
       // eslint-disable-next-line @typescript-eslint/camelcase
       start_time: moment(value.startDate),
       // eslint-disable-next-line @typescript-eslint/camelcase
@@ -70,11 +129,30 @@ export const Visit = (props: IVisitProps) => {
       canMove: true,
       maxZoom: 60 * 60 * 1000,
       style: {
-        background: 'fuchsia'
+        background: 'indigo'
       }
+    }
+  })
 
+  const visitItems = visits.map((value, index) => {
+    return {
+      id: index + 1000,
+      group: value.vet.id,
+      title: value.pet.name,
+      color : 'rgba(244,0,40,0.6)',
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      start_time: moment(value.startDate),
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      end_time: moment(value.endDate),
+      canResize: true,
+      canMove: true,
+      maxZoom: 60 * 60 * 1000,
+      style: {
+        background: 'indigo'
+      }
     }
   });
+  vetScheduleItems = vetScheduleItems.concat(visitItems);
 
   return (
     <div>
@@ -88,13 +166,14 @@ export const Visit = (props: IVisitProps) => {
       </h2>
       {!loading ? (
         <Timeline
+          itemRenderer={itemRenderer}
           itemsSorted
           itemTouchSendsClick={false}
           canMove={false}
           canResize={false}
           minZoom={60 * 1000 * 1000}
-          groups={groups}
-          items={visitItems}
+          groups={vetScheduleGroup}
+          items={vetScheduleItems}
           visibleTimeStart={moment(date).startOf('day')}
           visibleTimeEnd={moment(date).add(1, 'day').startOf('day')}
           sidebarWidth={250}
@@ -187,8 +266,8 @@ export const Visit = (props: IVisitProps) => {
                   <td>
                     <Translate contentKey={`courseworkApp.VisitStatus.${visit.status}`} />
                   </td>
-                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.id}</Link> : ''}</td>
-                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.id}</Link> : ''}</td>
+                  <td>{visit.pet ? <Link to={`pet/${visit.pet.id}`}>{visit.pet.name}</Link> : ''}</td>
+                  <td>{visit.vet ? <Link to={`vet/${visit.vet.id}`}>{visit.vet.name}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${visit.id}`} color="info" size="sm">
@@ -227,8 +306,9 @@ export const Visit = (props: IVisitProps) => {
   );
 };
 
-const mapStateToProps = ({ visit }: IRootState) => ({
+const mapStateToProps = ({ visit , vetSchedule}: IRootState) => ({
   visitList: visit.entities,
+  vetScheduleList: vetSchedule.entities,
   loading: visit.loading,
 });
 

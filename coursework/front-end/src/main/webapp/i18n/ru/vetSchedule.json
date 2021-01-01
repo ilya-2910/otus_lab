@@ -2,23 +2,23 @@
   "courseworkApp": {
     "vetSchedule": {
       "home": {
-        "title": "Vet Schedules",
-        "createLabel": "Создать новый Vet Schedule",
-        "createOrEditLabel": "Создать или отредактировать Vet Schedule",
-        "notFound": "No Vet Schedules found"
+        "title": "Расписание ветеринарного врача",
+        "createLabel": "Создать расписание",
+        "createOrEditLabel": "Создать или отредактировать расписание",
+        "notFound": "Расписание не найдено"
       },
-      "created": "Новый Vet Schedule создан с идентификатором {{ param }}",
-      "updated": "Vet Schedule обновлен с идентификатором {{ param }}",
-      "deleted": "Vet Schedule удален с идентификатором {{ param }}",
+      "created": "Новое Расписание создан с идентификатором {{ param }}",
+      "updated": "Расписание обновлено с идентификатором {{ param }}",
+      "deleted": "Расписание удалено с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Vet Schedule {{ id }}?"
+        "question": "Вы уверены что хотите удалить Расписание {{ id }}?"
       },
       "detail": {
-        "title": "Vet Schedule"
+        "title": "Расписание"
       },
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "vet": "Vet"
+      "startDate": "Время начало рабочего дня",
+      "endDate": "Время окончания рабочего дня",
+      "vet": "Вет. врач"
     }
   }
 }

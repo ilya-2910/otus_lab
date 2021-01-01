@@ -89,14 +89,14 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
             <p>Loading...</p>
           ) : (
             <AvForm model={isNew ? {} : visitEntity} onSubmit={saveEntity}>
-              {!isNew ? (
-                <AvGroup>
-                  <Label for="visit-id">
-                    <Translate contentKey="global.field.id">ID</Translate>
-                  </Label>
-                  <AvInput id="visit-id" type="text" className="form-control" name="id" required readOnly />
-                </AvGroup>
-              ) : null}
+              {/*{!isNew ? (*/}
+              {/*  <AvGroup>*/}
+              {/*    <Label for="visit-id">*/}
+              {/*      <Translate contentKey="global.field.id">ID</Translate>*/}
+              {/*    </Label>*/}
+              {/*    <AvInput id="visit-id" type="text" className="form-control" name="id" required readOnly />*/}
+              {/*  </AvGroup>*/}
+              {/*) : null}*/}
               <AvGroup>
                 <Label id="startDateLabel" for="visit-startDate">
                   <Translate contentKey="courseworkApp.visit.startDate">Start Date</Translate>
@@ -154,7 +154,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                   {pets
                     ? pets.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}
@@ -169,7 +169,7 @@ export const VisitUpdate = (props: IVisitUpdateProps) => {
                   {vets
                     ? vets.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.name}
                         </option>
                       ))
                     : null}

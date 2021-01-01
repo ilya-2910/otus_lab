@@ -34,11 +34,11 @@ export const PetDetail = (props: IPetDetailProps) => {
           <dt>
             <Translate contentKey="courseworkApp.pet.type">Type</Translate>
           </dt>
-          <dd>{petEntity.type ? petEntity.type.id : ''}</dd>
+          <dd>{petEntity.typeId ? petEntity.typeId : ''}</dd>
           <dt>
             <Translate contentKey="courseworkApp.pet.owner">Owner</Translate>
           </dt>
-          <dd>{petEntity.owner ? petEntity.owner.id : ''}</dd>
+          <dd>{petEntity.ownerId ? petEntity.ownerId : ''}</dd>
         </dl>
         <Button tag={Link} to="/pet" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}

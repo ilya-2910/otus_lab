@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction, ICrudSearchAction } from 'react-jhipster';
+import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IVisit, defaultValue } from 'app/shared/model/visit.model';
+import { IVisitExt } from 'app/shared/model/visit-ext.model';
 
 export const ACTION_TYPES = {
   FETCH_VISIT_LIST: 'visit/FETCH_VISIT_LIST',
@@ -19,7 +20,7 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  entities: [] as ReadonlyArray<IVisit>,
+  entities: [] as ReadonlyArray<IVisitExt>,
   entity: defaultValue,
   updating: false,
   updateSuccess: false,
@@ -113,7 +114,7 @@ const apiUrl = 'api/visits';
 
 export const getEntitiesFilter = params => ({
   type: ACTION_TYPES.FETCH_VISIT_LIST,
-  payload: axios.get<IVisit>(`${apiUrl}`, { params }),
+  payload: axios.get<IVisitExt>(`${apiUrl}`, { params }),
 });
 
 export const getEntities: ICrudGetAllAction<IVisit> = (page, size, sort) => ({
@@ -134,7 +135,7 @@ export const createEntity: ICrudPutAction<IVisit> = entity => async dispatch => 
     type: ACTION_TYPES.CREATE_VISIT,
     payload: axios.post(apiUrl, cleanEntity(entity)),
   });
-  dispatch(getEntities());
+  // dispatch(getEntities());
   return result;
 };
 

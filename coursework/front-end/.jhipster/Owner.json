@@ -24,7 +24,7 @@
   ],
   "changelogDate": "20201219122847",
   "entityTableName": "owner",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": false,

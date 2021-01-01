@@ -2,24 +2,24 @@
   "courseworkApp": {
     "pet": {
       "home": {
-        "title": "Pets",
-        "createLabel": "Создать новый Pet",
-        "createOrEditLabel": "Создать или отредактировать Pet",
-        "notFound": "No Pets found"
+        "title": "Пациенты",
+        "createLabel": "Создать нового Пациента",
+        "createOrEditLabel": "Создать или отредактировать Пациента",
+        "notFound": "Пациент не найдет"
       },
-      "created": "Новый Pet создан с идентификатором {{ param }}",
-      "updated": "Pet обновлен с идентификатором {{ param }}",
-      "deleted": "Pet удален с идентификатором {{ param }}",
+      "created": "Новый Пациент создан с идентификатором {{ param }}",
+      "updated": "Пациент обновлен с идентификатором {{ param }}",
+      "deleted": "Пациент удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Pet {{ id }}?"
+        "question": "Вы уверены что хотите удалить Пациент {{ id }}?"
       },
       "detail": {
-        "title": "Pet"
+        "title": "Пациенты"
       },
-      "name": "Name",
+      "name": "Имя(кличка)",
       "visits": "Visits",
-      "type": "Type",
-      "owner": "Owner"
+      "type": "Вид",
+      "owner": "Владелец"
     }
   }
 }

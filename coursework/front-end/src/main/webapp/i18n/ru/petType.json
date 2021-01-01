@@ -2,19 +2,19 @@
   "courseworkApp": {
     "petType": {
       "home": {
-        "title": "Pet Types",
-        "createLabel": "Создать новый Pet Type",
-        "createOrEditLabel": "Создать или отредактировать Pet Type",
-        "notFound": "No Pet Types found"
+        "title": "Вид животного",
+        "createLabel": "Создать новый Вид",
+        "createOrEditLabel": "Создать или отредактировать Вид",
+        "notFound": "No Видs found"
       },
-      "created": "Новый Pet Type создан с идентификатором {{ param }}",
-      "updated": "Pet Type обновлен с идентификатором {{ param }}",
-      "deleted": "Pet Type удален с идентификатором {{ param }}",
+      "created": "Новый Вид создан с идентификатором {{ param }}",
+      "updated": "Вид обновлен с идентификатором {{ param }}",
+      "deleted": "Вид удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Pet Type {{ id }}?"
+        "question": "Вы уверены что хотите удалить Вид {{ id }}?"
       },
       "detail": {
-        "title": "Pet Type"
+        "title": "Вид"
       },
       "type": "Type"
     }

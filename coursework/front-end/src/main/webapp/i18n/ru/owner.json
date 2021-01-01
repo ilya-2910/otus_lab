@@ -2,23 +2,23 @@
   "courseworkApp": {
     "owner": {
       "home": {
-        "title": "Owners",
-        "createLabel": "Создать новый Owner",
-        "createOrEditLabel": "Создать или отредактировать Owner",
-        "notFound": "No Owners found"
+        "title": "Владелец",
+        "createLabel": "Создать новый Владельца",
+        "createOrEditLabel": "Создать или отредактировать Владельца",
+        "notFound": "No Владелец found"
       },
-      "created": "Новый Owner создан с идентификатором {{ param }}",
-      "updated": "Owner обновлен с идентификатором {{ param }}",
-      "deleted": "Owner удален с идентификатором {{ param }}",
+      "created": "Новый Владелец создан с идентификатором {{ param }}",
+      "updated": "Владелец обновлен с идентификатором {{ param }}",
+      "deleted": "Владелец удален с идентификатором {{ param }}",
       "delete": {
-        "question": "Вы уверены что хотите удалить Owner {{ id }}?"
+        "question": "Вы уверены что хотите удалить Владелец {{ id }}?"
       },
       "detail": {
-        "title": "Owner"
+        "title": "Владелец"
       },
-      "name": "Name",
-      "address": "Address",
-      "phone": "Phone",
+      "name": "ФИО",
+      "address": "Адрес",
+      "phone": "Телефон",
       "pets": "Pets"
     }
   }

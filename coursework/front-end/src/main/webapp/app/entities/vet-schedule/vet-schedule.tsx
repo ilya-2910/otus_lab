@@ -60,7 +60,7 @@ export const VetSchedule = (props: IVetScheduleProps) => {
                     {vetSchedule.startDate ? <TextFormat type="date" value={vetSchedule.startDate} format={APP_DATE_FORMAT} /> : null}
                   </td>
                   <td>{vetSchedule.endDate ? <TextFormat type="date" value={vetSchedule.endDate} format={APP_DATE_FORMAT} /> : null}</td>
-                  <td>{vetSchedule.vet ? <Link to={`vet/${vetSchedule.vet.id}`}>{vetSchedule.vet.id}</Link> : ''}</td>
+                  <td>{vetSchedule.vet ? <Link to={`vet/${vetSchedule.vet.id}`}>{vetSchedule.vet.name}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${vetSchedule.id}`} color="info" size="sm">

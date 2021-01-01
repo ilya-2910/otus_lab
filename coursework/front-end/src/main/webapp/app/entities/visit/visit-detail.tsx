@@ -52,11 +52,11 @@ export const VisitDetail = (props: IVisitDetailProps) => {
           <dt>
             <Translate contentKey="courseworkApp.visit.pet">Pet</Translate>
           </dt>
-          <dd>{visitEntity.pet ? visitEntity.pet.id : ''}</dd>
+          <dd>{visitEntity.petId ? visitEntity.petId : ''}</dd>
           <dt>
             <Translate contentKey="courseworkApp.visit.vet">Vet</Translate>
           </dt>
-          <dd>{visitEntity.vet ? visitEntity.vet.id : ''}</dd>
+          <dd>{visitEntity.vetId ? visitEntity.vetId : ''}</dd>
         </dl>
         <Button tag={Link} to="/visit" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}
