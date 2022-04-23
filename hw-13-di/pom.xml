@@ -22,7 +22,7 @@
         <assertj-core.version>3.13.2</assertj-core.version>
         <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <spring.version>5.2.6.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
     </properties>
 
