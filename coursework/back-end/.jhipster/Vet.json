@@ -1,0 +1,38 @@
+{
+  "name": "Vet",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "visit",
+      "otherEntityRelationshipName": "vet",
+      "relationshipName": "visits"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "vetSchedule",
+      "otherEntityRelationshipName": "vet",
+      "relationshipName": "schedules"
+    }
+  ],
+  "changelogDate": "20201219113758",
+  "entityTableName": "vet",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

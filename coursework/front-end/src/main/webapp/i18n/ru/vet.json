@@ -1,0 +1,25 @@
+{
+  "courseworkApp": {
+    "vet": {
+      "home": {
+        "title": "Врач",
+        "createLabel": "Создать новый Вет. врача",
+        "createOrEditLabel": "Создать или отредактировать Вет. врача",
+        "notFound": "Не найден"
+      },
+      "created": "Новый Вет. врач создан с идентификатором {{ param }}",
+      "updated": "Вет. врач обновлен с идентификатором {{ param }}",
+      "deleted": "Вет. врач удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Вет. врача {{ id }}?"
+      },
+      "detail": {
+        "title": "Вет. врач"
+      },
+      "name": "ФИО",
+      "phone": "Телефон",
+      "visits": "Visits",
+      "schedules": "Schedules"
+    }
+  }
+}

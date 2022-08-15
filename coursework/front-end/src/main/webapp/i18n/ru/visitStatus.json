@@ -1,0 +1,10 @@
+{
+  "courseworkApp": {
+    "VisitStatus": {
+      "null": "",
+      "NEW": "Новая запись",
+      "DONE": "Выполнено",
+      "REJECT": "Отклонено"
+    }
+  }
+}
